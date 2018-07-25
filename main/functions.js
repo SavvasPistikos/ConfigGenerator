@@ -1,5 +1,6 @@
-var list = [];
-var api = {url: "", version: "", paths: []};
+ list = [];
+api = {url: "", version: "", paths: []};
+var apis = [];
 var verbs = ["GET", "POST", "DELETE", "PUT"];
 
 function myfunc() {
@@ -1239,7 +1240,6 @@ function myfunc() {
         '  }\n' +
         '}');
 
-
     var ul = document.getElementById("ul");
     var obj = json.paths;
 
@@ -1284,7 +1284,6 @@ function myfunc() {
         li.appendChild(iul);
         ul.appendChild(li);
     }
-
 }
 
 function generate() {
@@ -1300,8 +1299,9 @@ function generate() {
         path.method = res[1];
         path.tags.push("tag");
 
-        api.paths.push(path);
+        api.infostore.paths.push(path);
     }
+    apis.push(api);
     console.log(JSON.stringify(api));
     api = {url: "", version: "", paths: []};
 }
@@ -1362,7 +1362,7 @@ function addToList(checkboxElem) {
         }
         for (let j = 0; j < res.length - 1; j++) {
             checkboxid = pathi + "," + res[j + 1];
-            list = removeA(list, checkboxid.replace("parent=",""));
+            list = removeA(list, checkboxid.replace("parent=", ""));
             ch = document.getElementById(checkboxid);
             if (ch != null) {
                 ch.checked = false;
@@ -1401,5 +1401,10 @@ function removeA(arr) {
         }
     }
     return arr;
+}
+
+function createButton(divElement){
+    let newbutton = document.createElement("button");
+    divElement.appendChild(newbutton);
 }
 
