@@ -1,6 +1,6 @@
 var list = [];
 var api = {url: "", version: "", paths: []};
-var yaml = require('js-yaml');
+var verbs = ["GET", "POST", "DELETE", "PUT"];
 
 function myfunc() {
     var json = JSON.parse('{\n' +
@@ -1270,19 +1270,17 @@ function myfunc() {
             icheckbox.setAttribute("onchange", "addToList(this);");
             icheckbox.setAttribute("id", path + "," + method[i]);
 
-            ili.innerHTML = method[i];
             ili.appendChild(icheckbox);
+            ili.appendChild(document.createTextNode(method[i]));
             iul.appendChild(ili);
         }
 
         checkbox.setAttribute("onchange", "addToList(this);");
-        checkbox.setAttribute("id", method.length === 1 ?
-            "parent" + "=" + path + "," + method
-            : path + "," + method);
+        checkbox.setAttribute("id", "parent" + "=" + path + "," + method);
 
         text = path;
-        li.innerHTML = text;
         li.appendChild(checkbox);
+        li.appendChild(document.createTextNode(text));
         li.appendChild(iul);
         ul.appendChild(li);
     }
@@ -1290,6 +1288,8 @@ function myfunc() {
 }
 
 function generate() {
+    api.url = "http://";
+    api.version = "v1.0";
 
     for (let i in list) {
         let path = {path: "", endpoint: "", method: "", tags: []};
@@ -1301,66 +1301,95 @@ function generate() {
         path.tags.push("tag");
 
         api.paths.push(path);
-        api.url = "http://";
-        api.version = "v1.0";
     }
-    console.log(yaml.safeDump(api));
+    console.log(JSON.stringify(api));
+    api = {url: "", version: "", paths: []};
 }
 
 function addToList(checkboxElem) {
     let checkboxid;
     const res = checkboxElem.id.split(",");
     let pathi = res[0];
+    let parentpath = "parent=" + pathi;
     if (checkboxElem.checked) {
-        if (res.length === 2) {
-            let parent = pathi.includes("parent=");
-            if (parent === true) {
-                pathi = pathi.replace("parent=", "");
-                checkboxid = pathi + "," + res[1];
-                pathi = checkboxid;
-            } else {
-                checkboxid = pathi + "," + res[1];
-                checkboxid = checkboxid.replace("parent=", "");
-                pathi = "parent=" + checkboxid;
-            }
+        let chs = [];
+        let parent = pathi.includes("parent=");
+        if (parent === true) {
+            pathi = pathi.replace("parent=", "");
+            checkboxid = pathi;
+        } else {
+            checkboxid = pathi;
+            pathi = "parent=" + checkboxid;
 
-            list.push(checkboxid);
-            checkboxElem.checked = true;
-            ch = document.getElementById(pathi);
-            ch.checked = true;
+            for (let i = 0; i < verbs.length; i++) {
+                if (document.getElementById(checkboxid + "," + verbs[i]) != null) {
+                    parentpath += "," + verbs[i];
+                    chs.push(document.getElementById(checkboxid + "," + verbs[i]))
+                }
+            }
         }
-        else {
-            for (let i = 0; i < res.length - 1; i++) {
-                checkboxid = pathi + "," + res[i + 1];
-                list.push(checkboxid);
-                ch = document.getElementById(checkboxid);
+
+        for (let i = 0; i < res.length - 1; i++) {
+            list.push(checkboxid + "," + res[i + 1]);
+            checkboxElem.checked = true;
+            var ch = document.getElementById(pathi + "," + res[i + 1]);
+            if (ch != null) {
                 ch.checked = true;
             }
+
         }
+        if (checkIfparentshouldbeChecked(chs) && parent === false) {
+            ch = document.getElementById(parentpath);
+            ch.checked = true;
+        }
+
     } else {
-        if (res.length === 2) {
-            let parent = pathi.includes("parent=");
-            if (parent === true) {
-                pathi = pathi.replace("parent=", "");
-                checkboxid = pathi + "," + res[1];
-                pathi = checkboxid;
-            } else {
-                checkboxid = pathi + "," + res[1];
-                checkboxid = checkboxid.replace("parent=", "");
-                pathi = "parent=" + checkboxid;
+        let chs = [];
+        let parent = pathi.includes("parent=");
+        if (parent === true) {
+            pathi = pathi.replace("parent=", "");
+            checkboxid = pathi;
+        } else {
+            checkboxid = pathi;
+            pathi = "parent=" + checkboxid;
+
+            for (let i = 0; i < verbs.length; i++) {
+                if (document.getElementById(checkboxid + "," + verbs[i]) != null) {
+                    parentpath += "," + verbs[i];
+                    chs.push(document.getElementById(checkboxid + "," + verbs[i]))
+                }
             }
-            removeA(list, checkboxid);
-            checkboxElem.checked = false;
-            ch = document.getElementById(pathi);
-            ch.checked = false;
         }
         for (let j = 0; j < res.length - 1; j++) {
             checkboxid = pathi + "," + res[j + 1];
-            removeA(list, checkboxid);
+            list = removeA(list, checkboxid.replace("parent=",""));
             ch = document.getElementById(checkboxid);
+            if (ch != null) {
+                ch.checked = false;
+            }
+        }
+        if (!checkIfparentshouldbeUnChecked(chs) && parent === false) {
+            ch = document.getElementById(parentpath);
             ch.checked = false;
         }
     }
+    //alert(list);
+}
+
+function checkIfparentshouldbeChecked(children) {
+    var set = true;
+    for (let i = 0; i < children.length; i++) {
+        set = set & children[i].checked;
+    }
+    return set;
+}
+
+function checkIfparentshouldbeUnChecked(children) {
+    var set = false;
+    for (let i = 0; i < children.length; i++) {
+        set = set || children[i].checked;
+    }
+    return set;
 }
 
 function removeA(arr) {
