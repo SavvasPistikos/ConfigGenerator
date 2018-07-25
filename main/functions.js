@@ -1,4 +1,6 @@
 var list = [];
+var api = {url: "", version: "", paths: []};
+var yaml = require('js-yaml');
 
 function myfunc() {
     var json = JSON.parse('{\n' +
@@ -1289,7 +1291,20 @@ function myfunc() {
 
 function generate() {
 
+    for (let i in list) {
+        let path = {path: "", endpoint: "", method: "", tags: []};
+        let res = list[i].split(",");
 
+        path.path = res[0];
+        path.endpoint = res[0];
+        path.method = res[1];
+        path.tags.push("tag");
+
+        api.paths.push(path);
+        api.url = "http://";
+        api.version = "v1.0";
+    }
+    console.log(yaml.safeDump(api));
 }
 
 function addToList(checkboxElem) {
