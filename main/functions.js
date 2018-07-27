@@ -142,6 +142,8 @@ function generate(generateButton) {
     generatediv.setAttribute("id", "div=" + generateButton.id);
     generatediv.setAttribute("class", "JsonContent");
     let jsonOutput = document.createElement("textarea");
+    jsonOutput.setAttribute("rows", "30");
+    jsonOutput.setAttribute("cols", "50");
     jsonOutput.setAttribute("id", "jsonOutput");
     jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
     generatediv.appendChild(jsonOutput);
@@ -254,5 +256,3 @@ function removeA(arr) {
     }
     return arr;
 }
-
-
