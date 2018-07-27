@@ -2,6 +2,7 @@
 <html>
 <head>
     <script src="functions.js"></script>
+    <script src = "mydatabase.js"></script>
     <meta charset="UTF-8">
     <style>
         .mybutton {
@@ -10,14 +11,9 @@
     </style>
 </head>
 <body>
-<div id=" buttons" onclick=createButton(this)>
-    <button id="addJson" class="mybutton"><img src="plus.png" onclick=myfunc()></button>
-    <button id="generate" class="mybutton" onclick=generate()> Generate</button>
+<div id="buttons">
+    <button id="addJson" class="mybutton" onclick=myfunc(this)><img src="plus.png"></button>
+    <button id="generate" class="mybutton" onclick=generate(this)> Generate</button>
 </div>
-<div class="container">
-    <ul id="ul">
-    </ul>
-</div>
-
 </body>
 </html>
