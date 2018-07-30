@@ -8,7 +8,7 @@ var json2;
 var js;
 var iterattion = 0;
 
-function myfunc(buttonElement) {
+function importJson(buttonElement) {
 
     js = (iterattion) === 0 ? json : json2;
     if (document.getElementById("div=" + buttonElement.id) != null) {
@@ -91,7 +91,7 @@ function addButton() {
     let div = document.getElementById("buttons");
     let newButton = document.createElement("button");
     newButton.setAttribute("class", "mybutton");
-    newButton.setAttribute("onclick", "myfunc(this);");
+    newButton.setAttribute("onclick", "importJson(this);");
     newButton.setAttribute("id", "addJson");
     newButton.innerHTML = '<img src="plus.png"/>';
     jsonButtons.push(newButton);

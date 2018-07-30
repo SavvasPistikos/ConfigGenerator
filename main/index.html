@@ -1,19 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="mydatabase.js"></script>
     <script src="functions.js"></script>
-    <script src = "mydatabase.js"></script>
     <meta charset="UTF-8">
     <style>
         .mybutton {
             background-size: cover;
         }
     </style>
+
+    <style>
+        .dropdown-submenu {
+            position: relative;
+        }
+
+        .dropdown-submenu .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -1px;
+        }
+    </style>
 </head>
 <body>
 <div id="buttons">
-    <button id="addJson" class="mybutton" onclick=myfunc(this)><img src="plus.png"></button>
+    <!--<button id="addJson" class="mybutton" onclick=importJson(this)><img src="plus.png"></button>-->
     <button id="generate" class="mybutton" onclick=generate(this)> Generate</button>
 </div>
+<div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files
+        <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+    </ul>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.dropdown-submenu a.test').on("click", function (e) {
+            $(this).next('ul').toggle();
+            e.stopPropagation();
+            e.preventDefault();
+        });
+    });
+</script>
 </body>
 </html>
