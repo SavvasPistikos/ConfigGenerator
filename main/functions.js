@@ -1,25 +1,21 @@
 var listt = {};
 var list = [];
-var jsonButtons = [];
 var apiss = {apis: []};
 var verbs = ["GET", "POST", "DELETE", "PUT"];
-var json;
-var json2;
 var js;
-var iterattion = 0;
 
-function importJson(buttonElement) {
+function importJson(liItem) {
 
-    js = (iterattion) === 0 ? json : json2;
-    if (document.getElementById("div=" + buttonElement.id) != null) {
-        document.getElementById("div=" + buttonElement.id).style.display = "initial";
-        hideOtherTabs(buttonElement.id);
-    }
-    if (document.getElementById("div=" + js.info.title) == null && buttonElement.id === "addJson") {
+    js = readJson(liItem.id + "swagger.json");
+    var buttonElement = addButton(liItem.id);
+
+    if (document.getElementById("div=" + buttonElement.id) == null) {
         let ul = document.createElement("ul");
         let di = document.createElement("div");
         let s = document.createElement("input");
-        s.setAttribute("id", "inp=" + js.info.title.toString())
+        s.setAttribute("id", "inp=" + js.info.title.toString());
+        s.setAttribute("type", "hidden");
+        s.value = buttonElement.id.split("/")[1];
         di.appendChild(s);
         var obj = js.paths;
 
@@ -49,7 +45,7 @@ function importJson(buttonElement) {
                 icheckbox.type = "checkbox";
                 icheckbox.setAttribute("onchange", "addToList(this);");
                 icheckbox.setAttribute("id", path + "," + method[i]);
-                icheckbox.setAttribute("class", js.info.title.toString());
+                icheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
 
                 ili.appendChild(icheckbox);
                 ili.appendChild(document.createTextNode(method[i]));
@@ -58,15 +54,15 @@ function importJson(buttonElement) {
 
             checkbox.setAttribute("onchange", "addToList(this);");
             checkbox.setAttribute("id", "parent" + "=" + path + "," + method);
-            checkbox.setAttribute("class", js.info.title.toString());
+            checkbox.setAttribute("class", buttonElement.id.split("/")[1]);
 
             text = path;
             li.appendChild(checkbox);
             li.appendChild(document.createTextNode(text));
             li.appendChild(document.createTextNode("\t\t Endpoint = "));
             let endpointIn = document.createElement("input");
-            endpointIn.value = path;
-            endpointIn.setAttribute("onfocus", "this.style.width = ((this.value.length) * 7) + 'px';")
+            endpointIn.value = "";
+            endpointIn.setAttribute("onfocus", "this.style.width = ((this.value.length + 4) * 7) + 'px';")
             endpointIn.setAttribute("id", "end=" + path);
             li.appendChild(endpointIn);
             li.appendChild(iul);
@@ -74,38 +70,59 @@ function importJson(buttonElement) {
 
             di.appendChild(ul);
             di.setAttribute("class", "JsonContent");
-            di.setAttribute("id", "div=" + js.info.title);
+            di.setAttribute("id", "div=" + buttonElement.id.replace("bt=",""));
+            di.style.display = "initial";
             buttonElement.innerHTML = js.info.title;
             document.body.appendChild(di);
         }
-        if (buttonElement.id === "addJson") {
-            addButton();
-        }
-        buttonElement.setAttribute("id", js.info.title);
-        hideOtherTabs(js.info.title);
-        iterattion = 1;
+        hideOtherTabs(buttonElement.id);
     }
 }
 
-function addButton() {
+function addButton(buttonId) {
     let div = document.getElementById("buttons");
     let newButton = document.createElement("button");
     newButton.setAttribute("class", "mybutton");
-    newButton.setAttribute("onclick", "importJson(this);");
-    newButton.setAttribute("id", "addJson");
-    newButton.innerHTML = '<img src="plus.png"/>';
-    jsonButtons.push(newButton);
+    newButton.setAttribute("onclick", "hideOtherTabs(this.id);");
+    newButton.setAttribute("id", "bt=" + buttonId);
+    newButton.innerHTML = js.info.title;
+
+    let removeButton = document.createElement("button");
+    removeButton.setAttribute("class", "remove");
+    removeButton.setAttribute("onclick", "removeAssociatedItems(this.id);");
+    removeButton.setAttribute("id", "remove=" + buttonId);
+
     let generate = document.getElementById("generate");
     div.removeChild(generate);
     div.appendChild(newButton);
+    div.appendChild(removeButton);
     div.appendChild(generate);
+
+    return newButton;
+}
+
+function removeAssociatedItems(buttonId) {
+    let bId = buttonId.replace("remove=", "bt=");
+    var button = document.getElementById(bId);
+    button.parentNode.removeChild(button);
+
+    let dId = buttonId.replace("remove=", "div=");
+    var dIv = document.getElementById(dId);
+    dIv.parentNode.removeChild(dIv);
+
+    var rbutton = document.getElementById(buttonId);
+    rbutton.parentNode.removeChild(rbutton);
+
+    let apiName = bId.split("/")[1];
+    listt[apiName] = [];
 }
 
 function hideOtherTabs(jsonName) {
     var i, tabcontent;
     tabcontent = document.getElementsByClassName("JsonContent");
+    document.getElementById("div=" + jsonName.replace("bt=","")).style.display = "initial";
     for (i = 0; i < tabcontent.length; i++) {
-        if (tabcontent[i].id !== "div=" + jsonName) {
+        if (tabcontent[i].id !== "div=" + jsonName.replace("bt=","")) {
             tabcontent[i].style.display = "none";
         }
     }
@@ -114,41 +131,49 @@ function hideOtherTabs(jsonName) {
 
 function generate(generateButton) {
     for (let p in listt) {
-        let inp = document.getElementById("inp=" + p);
-        let name = inp.value;
-        eval("api" + " = " + "{" + name + ":{url: \"\", version: \"\", paths: []}}" + ";");
+        if (listt[p].length > 0) {
+            let name = p.toString();
+            eval("api" + " = " + "{" + name + ":{url: \"\", version: \"\", paths: []}}" + ";");
 
-        //let api = {api: {url: "", version: "", paths: []}};
-        this.api[name].url = "http://" + iterattion.toString();
-        this.api[name].version = "v1.0";
+            //let api = {api: {url: "", version: "", paths: []}};
+            this.api[name].url = "http://";
+            this.api[name].version = "v1.0";
 
-        for (let i in listt[p]) {
-            let path = {path: "", endpoint: "", method: "", tags: []};
-            let res = listt[p][i].split(",");
+            for (let i in listt[p]) {
+                let path = {path: "", endpoint: "", method: "", tags: []};
+                let res = listt[p][i].split(",");
 
-            path.path = res[0];
-            path.endpoint = document.getElementById("end=" + res[0]).value;
-            path.method = res[1];
-            path.tags.push("tag");
+                path.path = res[0];
+                path.endpoint = document.getElementById("end=" + res[0]).value;
+                path.method = res[1];
 
-            this.api[name].paths.push(path);
+                eval("path.tags" + " = " + "js.paths[" + res[0].toString() + "]." + res[1].toLocaleLowerCase().toString() + ".tags;");
+                //path.tags = js.paths["/auth/api/v1.0/applications"].get.tags;
+                this.api[name].paths.push(path);
+            }
+            list = [];
+
+            apiss.apis.push(api);
         }
-        list = [];
-
-        apiss.apis.push(api);
     }
 
-    let generatediv = document.createElement("div");
-    generatediv.setAttribute("id", "div=" + generateButton.id);
-    generatediv.setAttribute("class", "JsonContent");
-    let jsonOutput = document.createElement("textarea");
-    jsonOutput.setAttribute("rows", "30");
-    jsonOutput.setAttribute("cols", "50");
-    jsonOutput.setAttribute("id", "jsonOutput");
-    jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
-    generatediv.appendChild(jsonOutput);
+    let alreadyGenerated = document.getElementById("div=" + generateButton.id);
+    if (alreadyGenerated == null) {
+        let generatediv = document.createElement("div");
+        generatediv.setAttribute("id", "div=" + generateButton.id);
+        generatediv.setAttribute("class", "JsonContent");
+        let jsonOutput = document.createElement("textarea");
+        jsonOutput.setAttribute("rows", "30");
+        jsonOutput.setAttribute("cols", "50");
+        jsonOutput.setAttribute("id", "jsonOutput");
+        jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
+        generatediv.appendChild(jsonOutput);
+        document.body.appendChild(generatediv);
+    } else {
+        jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
+    }
+
     hideOtherTabs(generateButton.id);
-    document.body.appendChild(generatediv);
     console.log(JSON.stringify(apiss, null, 2));
     apiss.apis = [];
 }
@@ -227,7 +252,6 @@ function addToList(checkboxElem) {
             ch.checked = false;
         }
     }
-    //alert(list);
 }
 
 function checkIfparentshouldbeChecked(children) {

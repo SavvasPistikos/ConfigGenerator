@@ -8,12 +8,19 @@
     <script src="functions.js"></script>
     <meta charset="UTF-8">
     <style>
+        .remove {
+            background: url("trash.png");
+            background-size: cover;
+            margin: 4px 2px;
+            width: 20px;
+            height: 20px;
+        }
+
         .mybutton {
             background-size: cover;
+            margin: 4px 2px;
         }
-    </style>
 
-    <style>
         .dropdown-submenu {
             position: relative;
         }
@@ -26,17 +33,17 @@
     </style>
 </head>
 <body>
-<div id="buttons">
-    <!--<button id="addJson" class="mybutton" onclick=importJson(this)><img src="plus.png"></button>-->
-    <button id="generate" class="mybutton" onclick=generate(this)> Generate</button>
-</div>
 <div class="dropdown">
     <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files
         <span class="caret"></span></button>
     <ul class="dropdown-menu">
     </ul>
-
 </div>
+
+<div id="buttons">
+    <button id="generate" class="mybutton" onclick=generate(this)> Generate</button>
+</div>
+
 <script>
     $(document).ready(function () {
         $('.dropdown-submenu a.test').on("click", function (e) {
