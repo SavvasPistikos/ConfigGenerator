@@ -30,6 +30,13 @@ function readJson(jsonPath) {
     return jsontext;
 }
 
+$(document).ready(function () {
+    $('.dropdown-submenu a.test').on("click", function (e) {
+        $(this).next('ul').toggle();
+        e.stopPropagation();
+        e.preventDefault();
+    });
+});
 
 $(document).ready(
     function generateDropDown() {
@@ -60,7 +67,9 @@ $(document).ready(
                 }
                 else if (document.getElementById(absolutePath) === null && y === path.length - 1) {
                     let parentul = document.getElementById(absolutePath.replace(path[y] + "/", ""));
-                    if(parentul ==null){parentul = menu;}
+                    if (parentul == null) {
+                        parentul = menu;
+                    }
                     let li = document.createElement("li");
 
                     if (document.getElementById(absolutePath) === null) {

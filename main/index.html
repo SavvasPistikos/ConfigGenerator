@@ -42,16 +42,8 @@
 
 <div id="buttons">
     <button id="generate" class="mybutton" onclick=generate(this)> Generate</button>
+    <input type = "file" id = "importJsonConfiguration" onchange = "handleUpload(this.files)">
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('.dropdown-submenu a.test').on("click", function (e) {
-            $(this).next('ul').toggle();
-            e.stopPropagation();
-            e.preventDefault();
-        });
-    });
-</script>
 </body>
 </html>

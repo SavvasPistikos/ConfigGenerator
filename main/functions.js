@@ -46,6 +46,7 @@ function importJson(liItem) {
                 icheckbox.setAttribute("onchange", "addToList(this);");
                 icheckbox.setAttribute("id", path + "," + method[i]);
                 icheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
+                let id = path + "," + method[i];
 
                 ili.appendChild(icheckbox);
                 ili.appendChild(document.createTextNode(method[i]));
@@ -142,6 +143,7 @@ function generate(generateButton) {
         if (listt[p].length > 0) {
             eval("api" + " = " + "{" + p + ":{url: \"\", version: \"\", paths: []}}" + ";");
 
+
             //let api = {api: {url: "", version: "", paths: []}};
             this.api[p].url = "http://";
             this.api[p].version = "v1.0";
@@ -176,6 +178,7 @@ function generate(generateButton) {
         generatediv.appendChild(jsonOutput);
         document.body.appendChild(generatediv);
     } else {
+        jsonOutput.hidden = false;
         jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
     }
 
@@ -283,4 +286,12 @@ function removeA(arr) {
         }
     }
     return arr;
+}
+
+function handleUpload(files) {
+
+    var fileReader  = new FileReader();
+
+
+
 }
