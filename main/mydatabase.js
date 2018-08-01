@@ -3,7 +3,7 @@ var paths = [
     "swagger/auth/v1.0",
     "swagger/auth",
     "swagger/bifeed",
-    "swagger/bos-adaptorj",
+    "swagger/bos_adaptorj",
     "swagger/camelotadaptor",
     "swagger/claims",
     "swagger/consumables",

@@ -1,5 +1,5 @@
 var listt = {};
-var list = [];
+var jsonList = [];
 var apiss = {apis: []};
 var verbs = ["GET", "POST", "DELETE", "PUT"];
 var js;
@@ -8,7 +8,7 @@ function importJson(liItem) {
 
     js = readJson(liItem.id + "swagger.json");
     var buttonElement = addButton(liItem.id);
-
+    jsonList[buttonElement.id.split("/")[1]] = js;
     if (document.getElementById("div=" + buttonElement.id) == null) {
         let ul = document.createElement("ul");
         let di = document.createElement("div");
@@ -61,7 +61,7 @@ function importJson(liItem) {
             li.appendChild(document.createTextNode(text));
             li.appendChild(document.createTextNode("\t\t Endpoint = "));
             let endpointIn = document.createElement("input");
-            endpointIn.setAttribute("type","text");
+            endpointIn.setAttribute("type", "text");
             endpointIn.value = "";
             //endpointIn.setAttribute("onfocus", "this.style.width = ((this.value.length + 4) * 7) + 'px';")
             endpointIn.setAttribute("id", "end=" + path);
@@ -117,6 +117,12 @@ function removeAssociatedItems(buttonId) {
 
     let apiName = bId.split("/")[1];
     listt[apiName] = [];
+
+    if (document.getElementsByClassName("JsonContent").length === 1) {
+        document.getElementById("jsonOutput").hidden = true;
+        document.getElementById("jsonOutput").innerHTML = "";
+    }
+
 }
 
 function hideOtherTabs(jsonName) {
@@ -134,12 +140,11 @@ function hideOtherTabs(jsonName) {
 function generate(generateButton) {
     for (let p in listt) {
         if (listt[p].length > 0) {
-            let name = p.toString();
-            eval("api" + " = " + "{" + name + ":{url: \"\", version: \"\", paths: []}}" + ";");
+            eval("api" + " = " + "{" + p + ":{url: \"\", version: \"\", paths: []}}" + ";");
 
             //let api = {api: {url: "", version: "", paths: []}};
-            this.api[name].url = "http://";
-            this.api[name].version = "v1.0";
+            this.api[p].url = "http://";
+            this.api[p].version = "v1.0";
 
             for (let i in listt[p]) {
                 let path = {path: "", endpoint: "", method: "", tags: []};
@@ -149,10 +154,10 @@ function generate(generateButton) {
                 path.endpoint = document.getElementById("end=" + res[0]).value;
                 path.method = res[1];
 
-                eval("path.tags" + " = " + "js.paths[\"" + res[0] + "\"]." + res[1].toLocaleLowerCase() + ".tags;");
-                this.api[name].paths.push(path);
+                eval("path.tags" + " = " + "jsonList[\"" + p + "\"].paths[\"" + res[0] + "\"]."
+                    + res[1].toLocaleLowerCase() + ".tags;");
+                this.api[p].paths.push(path);
             }
-            list = [];
 
             apiss.apis.push(api);
         }
@@ -207,7 +212,6 @@ function addToList(checkboxElem) {
 
         for (let i = 0; i < res.length - 1; i++) {
             listt[checkboxElem.className].push(checkboxid + "," + res[i + 1]);
-            list.push(checkboxid + "," + res[i + 1]);
             checkboxElem.checked = true;
             var ch = document.getElementById(pathi + "," + res[i + 1]);
             if (ch != null) {
@@ -242,7 +246,6 @@ function addToList(checkboxElem) {
             listt[checkboxElem.className] = removeA(
                 listt[checkboxElem.className], checkboxid.replace("parent=", "")
             );
-            list = removeA(list, checkboxid.replace("parent=", ""));
             ch = document.getElementById(checkboxid);
             if (ch != null) {
                 ch.checked = false;
