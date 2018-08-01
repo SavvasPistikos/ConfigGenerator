@@ -11,7 +11,7 @@ var paths = [
     "swagger/infostore/illinois",
     "swagger/infostore/opap",
     "swagger/infostore/v1.0",
-    "swagger/promoteengine",
+    "swagger/promotionengine",
     "swagger/pulse",
     "swagger/validations"
 ];
@@ -74,3 +74,5 @@ $(document).ready(
             absolutePath = "";
         }
     });
+
+

@@ -61,8 +61,9 @@ function importJson(liItem) {
             li.appendChild(document.createTextNode(text));
             li.appendChild(document.createTextNode("\t\t Endpoint = "));
             let endpointIn = document.createElement("input");
+            endpointIn.setAttribute("type","text");
             endpointIn.value = "";
-            endpointIn.setAttribute("onfocus", "this.style.width = ((this.value.length + 4) * 7) + 'px';")
+            //endpointIn.setAttribute("onfocus", "this.style.width = ((this.value.length + 4) * 7) + 'px';")
             endpointIn.setAttribute("id", "end=" + path);
             li.appendChild(endpointIn);
             li.appendChild(iul);
@@ -70,7 +71,7 @@ function importJson(liItem) {
 
             di.appendChild(ul);
             di.setAttribute("class", "JsonContent");
-            di.setAttribute("id", "div=" + buttonElement.id.replace("bt=",""));
+            di.setAttribute("id", "div=" + buttonElement.id.replace("bt=", ""));
             di.style.display = "initial";
             buttonElement.innerHTML = js.info.title;
             document.body.appendChild(di);
@@ -78,6 +79,7 @@ function importJson(liItem) {
         hideOtherTabs(buttonElement.id);
     }
 }
+
 
 function addButton(buttonId) {
     let div = document.getElementById("buttons");
@@ -120,9 +122,9 @@ function removeAssociatedItems(buttonId) {
 function hideOtherTabs(jsonName) {
     var i, tabcontent;
     tabcontent = document.getElementsByClassName("JsonContent");
-    document.getElementById("div=" + jsonName.replace("bt=","")).style.display = "initial";
+    document.getElementById("div=" + jsonName.replace("bt=", "")).style.display = "initial";
     for (i = 0; i < tabcontent.length; i++) {
-        if (tabcontent[i].id !== "div=" + jsonName.replace("bt=","")) {
+        if (tabcontent[i].id !== "div=" + jsonName.replace("bt=", "")) {
             tabcontent[i].style.display = "none";
         }
     }
@@ -147,8 +149,7 @@ function generate(generateButton) {
                 path.endpoint = document.getElementById("end=" + res[0]).value;
                 path.method = res[1];
 
-                eval("path.tags" + " = " + "js.paths[" + res[0].toString() + "]." + res[1].toLocaleLowerCase().toString() + ".tags;");
-                //path.tags = js.paths["/auth/api/v1.0/applications"].get.tags;
+                eval("path.tags" + " = " + "js.paths[\"" + res[0] + "\"]." + res[1].toLocaleLowerCase() + ".tags;");
                 this.api[name].paths.push(path);
             }
             list = [];
