@@ -1,4 +1,5 @@
 var paths = [
+    "swagger/ats",
     "swagger/auth/illinois",
     "swagger/auth/v1.0",
     "swagger/auth",
@@ -8,12 +9,14 @@ var paths = [
     "swagger/claims",
     "swagger/consumables",
     "swagger/gamemanagement",
+    "swagger/hl",
     "swagger/infostore/illinois",
     "swagger/infostore/opap",
     "swagger/infostore/v1.0",
     "swagger/promotionengine",
     "swagger/pulse",
-    "swagger/validations"
+    "swagger/validations",
+    "swagger/voucher"
 ];
 
 function readJson(jsonPath) {
@@ -40,6 +43,7 @@ $(document).ready(function () {
 
 $(document).ready(
     function generateDropDown() {
+        document.getElementById('upload').addEventListener('change', handleFileSelect, false);
         var ulmenu = document.getElementsByClassName("dropdown-menu");
         var menu = ulmenu[0];
 
