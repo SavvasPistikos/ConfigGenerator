@@ -6,7 +6,6 @@ var js;
 var importedJsonConfig;
 
 function importJson(liItem) {
-
     js = readJson(liItem.id + "swagger.json");
     var buttonElement = addButton(liItem.id);
     jsonList[buttonElement.id.split("/")[1]] = js;
@@ -32,9 +31,17 @@ function importJson(liItem) {
         url.value = "";
         url.setAttribute("id", "url=" + buttonElement.id.split("/")[1]);
 
+
+        let version = document.createElement("input");
+        version.setAttribute("type", "text");
+        version.value = "";
+        version.setAttribute("id", "vers=" + buttonElement.id.split("/")[1]);
+
         ul.appendChild(allCheckbox);
         ul.appendChild(document.createTextNode("\t\t Url = "));
         ul.appendChild(url);
+        ul.appendChild(document.createTextNode("\t\t version = "));
+        ul.appendChild(version);
 
 
         for (var path in obj) {
@@ -62,8 +69,8 @@ function importJson(liItem) {
                 var icheckbox = document.createElement('input');
                 icheckbox.type = "checkbox";
                 icheckbox.setAttribute("onchange", "addToList(this);");
+                icheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
                 icheckbox.setAttribute("id", path + "," + method[i]);
-                icheckbox.setAttribute("class", buttonElement.id.split("/").slice(1, 15));
                 let id = path + "," + method[i];
 
                 ili.appendChild(icheckbox);
@@ -72,8 +79,8 @@ function importJson(liItem) {
             }
 
             checkbox.setAttribute("onchange", "addToList(this);");
+            checkbox.setAttribute("class", buttonElement.id.split("/")[1]);
             checkbox.setAttribute("id", "parent" + "=" + path + "," + method);
-            checkbox.setAttribute("class", buttonElement.id.split("/").slice(1, 15));
 
             text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + path : path;
             li.appendChild(checkbox);
@@ -134,7 +141,7 @@ function removeAssociatedItems(buttonId) {
     var rbutton = document.getElementById(buttonId);
     rbutton.parentNode.removeChild(rbutton);
 
-    let apiName = bId.split("/").slice(1, 15);
+    let apiName = bId.split("/")[1];
     listt[apiName] = [];
 
     if (document.getElementsByClassName("JsonContent").length === 1) {
@@ -164,11 +171,12 @@ function generate(generateButton) {
 
             //eval("api" + " = " + "{" + apiName + ":{url: \"\", version: \"\", paths: []}}" + ";");
             if (apiss.apis[apiName] == null) {
-                if (p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "") === "") {
-                    apiss.apis[apiName] = {url: "", paths: []};
-                } else {
+                if (document.getElementById("vers=" + p).value !== "") {
                     apiss.apis[apiName] = {url: "", version: "", paths: []};
-                    apiss.apis[apiName].version = p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "");
+                    apiss.apis[apiName].version = document.getElementById("vers=" + p).value;
+                }
+                else if (p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "") === "") {
+                    apiss.apis[apiName] = {url: "", paths: []};
                 }
 
                 apiss.apis[apiName].url = document.getElementById("url=" + apiName).value;
@@ -261,7 +269,6 @@ function addToList(checkboxElem) {
             ch = document.getElementById(parentpath);
             ch.checked = true;
         }
-
     } else {
         let chs = [];
         let parent = pathi.includes("parent=");
@@ -294,6 +301,7 @@ function addToList(checkboxElem) {
             ch.checked = false;
         }
     }
+    //checkIfAllCheckboxShouldBeChecked(ch);
 }
 
 function checkIfparentshouldbeChecked(children) {
@@ -302,6 +310,19 @@ function checkIfparentshouldbeChecked(children) {
         set = set & children[i].checked;
     }
     return set;
+}
+
+function checkIfAllCheckboxShouldBeChecked(ch) {
+    let counter = 0;
+    let allcheck = document.getElementsByClassName(ch.className);
+    var arrallch = Array.from(allcheck);
+
+    for (x in arrallch) {
+        if (arrallch[x].checked === false) {
+            counter++;
+        }
+    }
+    arrallch[0].checked = (counter === 1);
 }
 
 function checkIfparentshouldbeUnChecked(children) {
@@ -342,7 +363,6 @@ function handleFileSelect(evt) {
 }
 
 function importConfig(impJson) {
-
     for (a in impJson.apis) {
 
         apiss.apis[a] = impJson.apis[a];
@@ -353,37 +373,33 @@ function importConfig(impJson) {
         importJson(document.getElementById("swagger/" + a + "/" + version));
         document.getElementById("url=" + a).value = impJson.apis[a].url;
 
-        //for (s in impJson.apis[a]) {
-            for (p in impJson.apis[a].paths) {
-                let checkbox;
-                if (impJson.apis[a].paths[p].path != null && impJson.apis[a].paths[p].endpoint != null) {
-                    checkbox = document.getElementById(impJson.apis[a].paths[p].path.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method);
-                    if (checkbox == null) {
-                        checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
-                    }
-                } else {
-                    checkbox = (impJson.apis[a].paths[p].path == null) ?
-                        document.getElementById(impJson.apis[a].paths[p].endpoint.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method)
-                        : document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method)
-                    ;
+        for (p in impJson.apis[a].paths) {
+            let checkbox;
+            if (impJson.apis[a].paths[p].path != null && impJson.apis[a].paths[p].endpoint != null) {
+                checkbox = document.getElementById(impJson.apis[a].paths[p].path.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method);
+                if (checkbox == null) {
+                    checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
                 }
-                checkbox.checked = true;
-                addToList(checkbox);
+            } else {
+                checkbox = (impJson.apis[a].paths[p].path == null) ?
+                    document.getElementById(impJson.apis[a].paths[p].endpoint.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method)
+                    : document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method)
+                ;
             }
-        ///}
-
+            checkbox.checked = true;
+            addToList(checkbox);
+        }
     }
-
 }
 
 function addAllToList(allCheckBoxElement) {
-
     let checkboxes = document.getElementsByClassName(allCheckBoxElement.className);
-    let arr = Array.from(checkboxes).filter(getOnlyChildCheckboxes);
+    let arr = (allCheckBoxElement.checked === true) ? Array.from(checkboxes).filter(getOnlyChildCheckboxes)
+        : Array.from(checkboxes).filter(getOnlyChildCheckboxesToBeremoved);
+
     for (ch in arr) {
         arr[ch].checked = allCheckBoxElement.checked;
         addToList(arr[ch]);
-
     }
 }
 
@@ -394,7 +410,17 @@ function getOnlyChildCheckboxes(checkboxElem) {
         && !checkboxElem.id.includes("parent")
         && checkboxElem.checked === false
     ) {
+        return checkboxElem;
+    }
+}
 
+function getOnlyChildCheckboxesToBeremoved(checkboxElem) {
+    if (checkboxElem instanceof HTMLInputElement
+        && checkboxElem.getAttribute('type') === 'checkbox'
+        && checkboxElem.id !== ""
+        && !checkboxElem.id.includes("parent")
+        && checkboxElem.checked === true
+    ) {
         return checkboxElem;
     }
 }

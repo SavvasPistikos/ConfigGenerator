@@ -7,7 +7,7 @@
     <script src="json2yaml.js"></script>
     <script src="mydatabase.js"></script>
     <script src="functions.js"></script>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" content="width=device-width, initial-scale=1">
     <style>
         .remove {
             background: url("trash.png");
@@ -15,6 +15,7 @@
             margin: 4px 2px;
             width: 20px;
             height: 20px;
+        / \x7
         }
 
         .mybutton {
@@ -34,18 +35,17 @@
     </style>
 </head>
 <body>
-<div class="dropdown">
-    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files
-        <span class="caret"></span></button>
-    <ul class="dropdown-menu">
-    </ul>
-</div>
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+        </ul>
+    </div>
 
-<div id="buttons">
-    <button id="generate" class="mybutton" onclick=generate(this)> Generate</button>
-    <input id="upload" type=file   accept="text/html" name="files[]" size=30>
+    <div id="buttons">
+        <button id="generate" class="mybutton" onclick=generate(this)> Generate</button>
+        <input id="upload" type=file accept="text/html" name="files[]" size=30>
 
-</div>
-
+    </div>
 </body>
 </html>

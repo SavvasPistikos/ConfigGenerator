@@ -4,7 +4,7 @@ var paths = [
     "swagger/auth/v1.0",
     "swagger/auth",
     "swagger/bifeed",
-    "swagger/bos_adaptorj",
+    "swagger/bos-adaptorj",
     "swagger/camelotadaptor",
     "swagger/claims",
     "swagger/consumables",
@@ -87,5 +87,3 @@ $(document).ready(
             absolutePath = "";
         }
     });
-
-
