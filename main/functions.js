@@ -1,6 +1,6 @@
 var listt = {};
 var jsonList = [];
-var apiss = {};
+var apiss = {apis: {}};
 var verbs = ["GET", "POST", "DELETE", "PUT"];
 var js;
 var importedJsonConfig;
@@ -22,10 +22,19 @@ function importJson(liItem) {
 
         let allCheckbox = document.createElement("input");
         allCheckbox.type = "checkbox";
-        allCheckbox.setAttribute("class", buttonElement.id.split("/").slice(1, 15));
+        allCheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
         allCheckbox.setAttribute("onchange", "addAllToList(this)");
         allCheckbox.value = "Select all";
+
+
+        let url = document.createElement("input");
+        url.setAttribute("type", "text");
+        url.value = "";
+        url.setAttribute("id", "url=" + buttonElement.id.split("/")[1]);
+
         ul.appendChild(allCheckbox);
+        ul.appendChild(document.createTextNode("\t\t Url = "));
+        ul.appendChild(url);
 
 
         for (var path in obj) {
@@ -66,7 +75,7 @@ function importJson(liItem) {
             checkbox.setAttribute("id", "parent" + "=" + path + "," + method);
             checkbox.setAttribute("class", buttonElement.id.split("/").slice(1, 15));
 
-            text = (js.basePath !== "/") ? js.basePath + path : path;
+            text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + path : path;
             li.appendChild(checkbox);
             li.appendChild(document.createTextNode(text));
             li.appendChild(document.createTextNode("\t\t Endpoint = "));
@@ -150,20 +159,30 @@ function hideOtherTabs(jsonName) {
 function generate(generateButton) {
     for (let p in listt) {
         if (listt[p].length > 0) {
+            let basePath;
             let apiName = p.replace(",", "/").split("/")[0];
 
             //eval("api" + " = " + "{" + apiName + ":{url: \"\", version: \"\", paths: []}}" + ";");
-            apiss[apiName] = {url:"",version: "", paths:[]};
+            if (apiss.apis[apiName] == null) {
+                if (p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "") === "") {
+                    apiss.apis[apiName] = {url: "", paths: []};
+                } else {
+                    apiss.apis[apiName] = {url: "", version: "", paths: []};
+                    apiss.apis[apiName].version = p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "");
+                }
 
-            //let api = {api: {url: "", version: "", paths: []}};
-            apiss[apiName].url = "http://";
-            apiss[apiName].version = p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "");
+                apiss.apis[apiName].url = document.getElementById("url=" + apiName).value;
+            }
+            apiss.apis[apiName].paths = [];
 
             for (let i in listt[p]) {
                 let path = {path: "", endpoint: "", method: "", tags: [], internal: false, display: true};
                 let res = listt[p][i].split(",");
 
-                let basePath = (jsonList[apiName].basePath !== "/") ? jsonList[apiName].basePath : "";
+                basePath = (jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
+                    ? jsonList[apiName].basePath
+                    : "";
+
                 path.path = basePath + res[0];
                 path.endpoint = (document.getElementById("end=" + res[0]).value === "") ? path.path
                     : basePath + document.getElementById("end=" + res[0]).value;
@@ -171,10 +190,9 @@ function generate(generateButton) {
 
                 eval("path.tags" + " = " + "jsonList[\"" + apiName + "\"].paths[\"" + res[0] + "\"]."
                     + res[1].toLocaleLowerCase() + ".tags;");
-                apiss[apiName].paths.push(path);
+                apiss.apis[apiName].paths.push(path);
             }
 
-            //apiss.apis.push(api);
         }
     }
 
@@ -187,17 +205,21 @@ function generate(generateButton) {
         jsonOutput.setAttribute("rows", "30");
         jsonOutput.setAttribute("cols", "50");
         jsonOutput.setAttribute("id", "jsonOutput");
-        jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
+        var yaml = json2yaml(apiss);
+        //jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
+        jsonOutput.innerHTML = yaml;
         generatediv.appendChild(jsonOutput);
         document.body.appendChild(generatediv);
     } else {
         jsonOutput.hidden = false;
-        jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
+        var yaml = json2yaml(apiss);
+        //jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
+        jsonOutput.innerHTML = yaml;
     }
 
     hideOtherTabs(generateButton.id);
     console.log(JSON.stringify(apiss, null, 2));
-    apiss= {};
+    apiss = {apis: {}};
 }
 
 function addToList(checkboxElem) {
@@ -322,18 +344,23 @@ function handleFileSelect(evt) {
 function importConfig(impJson) {
 
     for (a in impJson.apis) {
+
+        apiss.apis[a] = impJson.apis[a];
+        if (a === "internalApis") {
+            continue;
+        }
         let version = (impJson.apis[a].version != null) ? impJson.apis[a].version + "/" : "";
         importJson(document.getElementById("swagger/" + a + "/" + version));
-        for (s in impJson.apis[a]) {
+        document.getElementById("url=" + a).value = impJson.apis[a].url;
+
+        //for (s in impJson.apis[a]) {
             for (p in impJson.apis[a].paths) {
                 let checkbox;
                 if (impJson.apis[a].paths[p].path != null && impJson.apis[a].paths[p].endpoint != null) {
                     checkbox = document.getElementById(impJson.apis[a].paths[p].path.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method);
-                    if(checkbox == null){
+                    if (checkbox == null) {
                         checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
                     }
-
-
                 } else {
                     checkbox = (impJson.apis[a].paths[p].path == null) ?
                         document.getElementById(impJson.apis[a].paths[p].endpoint.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method)
@@ -343,7 +370,7 @@ function importConfig(impJson) {
                 checkbox.checked = true;
                 addToList(checkbox);
             }
-        }
+        ///}
 
     }
 
@@ -364,7 +391,9 @@ function getOnlyChildCheckboxes(checkboxElem) {
     if (checkboxElem instanceof HTMLInputElement
         && checkboxElem.getAttribute('type') === 'checkbox'
         && checkboxElem.id !== ""
-        && !checkboxElem.id.includes("parent")) {
+        && !checkboxElem.id.includes("parent")
+        && checkboxElem.checked === false
+    ) {
 
         return checkboxElem;
     }
