@@ -1,0 +1,35 @@
+{
+  "wager": {
+    "dbg": [
+      {
+        "gameId": 5104,
+        "participatingDraws": {
+          "multipleDraws": 1
+        },
+        "boards": [
+          {
+            "boardId": 1,
+            "betType": 0,
+            "panels": [
+              {
+                "requested": 5,
+                "selection": [
+                  1,2,3,4,5
+                ]
+              },
+              {
+                "selection": [
+                  15
+                ]
+              }
+            ],
+            "quickPick": false
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "trnsTime": "2018-07-23T08:08:43.222Z"
+  }
+}

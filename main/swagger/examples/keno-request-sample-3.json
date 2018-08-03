@@ -1,0 +1,49 @@
+{
+  "wager": {
+    "dbg": [
+      {
+        "gameId": 1100,
+        "participatingDraws": {
+          "multipleDraws": 2
+        },
+        "boards": [
+          {
+            "boardId": 1,
+            "betType": 1,
+            "panels": [
+              {
+                "requested": 4,
+                "selection": [
+                  1,2,3,4
+                ]
+              }
+            ],
+            "quickPick": false,
+            "multipliers": [
+              3
+            ]
+          },
+          {
+            "boardId": 2,
+            "betType": 2,
+            "panels": [
+              {
+                "requested": 5,
+                "selection": [
+                  1,2,3,4,5
+                ]
+              }
+            ],
+            "quickPick": true,
+            "multipliers": [
+              1
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "trnsTime": 1532425356000
+  }
+}

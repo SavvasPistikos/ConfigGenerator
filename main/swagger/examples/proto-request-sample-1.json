@@ -1,0 +1,32 @@
+{
+  "wager": {
+    "dbg": [
+      {
+        "gameId": 2101,
+        "participatingDraws": {
+          "drawOffsets": [3],
+          "multipleDraws": 3
+        },
+        "boards": [
+          {
+            "boardId": 1,
+            "panels": [
+              {
+                "selection": [
+                  1,2,3,4,5,6,7
+                ]
+              }
+            ],
+            "quickPick": false,
+            "multipliers": [
+              1
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "trnsTime": "2018-07-23T08:08:43.222Z"
+  }
+}

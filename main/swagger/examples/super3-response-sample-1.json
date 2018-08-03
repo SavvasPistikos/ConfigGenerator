@@ -1,0 +1,43 @@
+{
+  "serialNumber": "23976026214401101037725",
+  "wager": {
+    "dbg": [
+      {
+        "boards": [
+          {
+            "betType": 1,
+            "boardId": 1,
+            "multipliers": [
+              1
+            ],
+            "panels": [
+              {
+                "selection": [
+                  1
+                ]
+              },
+              {
+                "selection": [
+                  2
+                ]
+              },
+              {
+                "selection": [
+                  3
+                ]
+              }
+            ],
+            "quickPick": false
+          }
+        ],
+        "columns": 1,
+        "cost": 0.5,
+        "gameId": 2100,
+        "multipliers": [],
+        "participatingDraws": {
+          "multipleDraws": 1
+        }
+      }
+    ]
+  }
+}

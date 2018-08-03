@@ -1,0 +1,50 @@
+{
+  "serialNumber": "16872301465602675499741",
+  "wager": {
+    "dbg": [
+      {
+        "boards": [
+          {
+            "betType": 0,
+            "boardId": 1,
+            "panels": [
+              {
+                "selection": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ]
+              }
+            ],
+            "quickPick": false
+          },
+          {
+            "betType": 0,
+            "boardId": 2,
+            "panels": [
+              {
+                "selection": [
+                  7,
+                  8,
+                  9,
+                  10,
+                  11,
+                  12,
+                  13
+                ]
+              }
+            ],
+            "quickPick": false
+          }
+        ],
+        "columns": 8,
+        "cost": 4,
+        "gameId": 5103,
+        "multipliers": []
+      }
+    ]
+  }
+}

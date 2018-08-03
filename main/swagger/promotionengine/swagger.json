@@ -1,0 +1,1654 @@
+{
+  "swagger": "2.0",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "basePath": "/api/v1.0",
+  "info": {
+    "title": "L10 Promotion Engine API",
+    "version": "1.0",
+    "description": "The HTTP API served by Lotos10 Promotions Engine. \n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:\n\n```\n{\n\n  \"code\": \"numeric code\",\n  \"message\": \"string\",\n  \"source\": \"string\",\n  \"type\": \"string\",\n  \"guid\": \"string\"\n}\n```\n\n# Application Error Codes\n\nThe following application errors are avaialble. In case of error\n\n````\n\n\nCode  Description               Http  Message\n\n96001 Invalid Input Exception    400  \"Invalid input: + {s}.\"\n\n96010 Xaction Id Exception       401  \"Transaction id error: + {s}.\"\n\n96009 Not Allowed Exception      403  \"Operation Not allowed: + {s}.\"\n\n96002 Not Found Exception        404  \"Entry not found: + {s}.\"\n\n96012 MandatoryInput Exception   405  \"{s} + parameter is mandatory.\"\n\n96000 Database Exception         500  \"Database error: + {s}.\"\n\n96005 Http Error Exception       500  \"Error in http class: + {s}.\"\n\n96006 Transaction Exception      500  \"Transaction error: + {s}.\"\n\n96007 Python Exception           500  \"Internal error in evaluator: + {s}.\"\n\n96008 Redis Exception            500  \"Redis error: + {s}.\"\n\n96011 Generic Exception          500  \"Software error: + {s}.\"\n"
+  },
+  "paths": {
+    "/promotions/creation": {
+      "post": {
+        "description": "Create vouchers",
+        "summary": "Create vouchers",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "postCreateVouchers",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object that needs to create voucher",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateVouchers"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request"
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/promotions/{promoId}/conductDraw": {
+      "post": {
+        "description": "Conduct Draw",
+        "summary": "Conduct Draw",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "postConductDraw",
+        "parameters": [
+          {
+            "name": "promoId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "The promotion id to conduct draw"
+          },
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/promotions/{promoId}/messages": {
+      "get": {
+        "description": "messages for a specific promotion",
+        "summary": "messages for a specific promotion",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "getMessagesByPromoId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "promoId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "exclusiveMaximum": false,
+            "exclusiveMinimum": false,
+            "description": "The id of the promotion to retrieve messages"
+          },
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Message"
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/promotions/{promoId}/message": {
+      "get": {
+        "description": "get a specific message by version and type",
+        "summary": "get a specific message by version and type",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "getMessageByPromoId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "promoId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "The id of the promotion to retrieve messages"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "enum": [
+              "promotionTitle",
+              "messageTitle",
+              "messageBody",
+              "messageCDU",
+              "messageTerminal"
+            ],
+            "type": "string",
+            "description": "The type of the promotion message. Available values :promotionTitle, messageTitle, messageBody, messageCDU, messageTerminal"
+          },
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "if version is not passed the latest message version will be searched"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "schema": {
+              "$ref": "#/definitions/GetMessageTextReply"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/promotions/retailer/happyhours/{retailerId}": {
+      "get": {
+        "description": "Info/messages for a specific promotions",
+        "summary": "Info/messages for a specific promotions",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "getRetailerHappyhoursByRetailerId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "retailerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "exclusiveMaximum": false,
+            "exclusiveMinimum": false,
+            "description": "The id of the retailer to retrieve hours and messages"
+          },
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetHappyHoursReply"
+              }
+            },
+            "examples": {}
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/promotions/cancellation": {
+      "put": {
+        "description": "Cancel a promotion",
+        "summary": "Cancel a promotion",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "cancelPromotion",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "xactionid",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "transaction id"
+          },
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/promotions/outcomes": {
+      "get": {
+        "description": "Query a promotion",
+        "summary": "Query a promotion",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "getPromotionsOutcomes",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          },
+          {
+            "name": "xactionid",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "transaction id"
+          },
+          {
+            "name": "outcomeid",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "outcome id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OutcomeReply"
+              }
+            },
+            "examples": {}
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Undo redeem a promotion",
+        "summary": "Undo redeem a promotion",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "deletePromotionsOutcomes",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "outcomeid",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "outcome id"
+          },
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request"
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Redeem a promotion",
+        "summary": "Redeem a promotion",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "putPromotionsOutcomes",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "outcomeid",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "outcome id"
+          },
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "schema": {
+              "$ref": "#/definitions/PromoReply"
+            },
+            "examples": {}
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/promotions": {
+      "get": {
+        "description": "get promotions from database",
+        "summary": "get promotions from database",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "getPromotions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "Active",
+              "Inactive",
+              "Suspension"
+            ],
+            "description": "promo status"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "BUYXGETY",
+              "NTICKET",
+              "IW",
+              "SC",
+              "SCD",
+              "NSVOUCHER",
+              "SVOUCHER"
+            ],
+            "description": "promo type"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "promotion id"
+          },
+          {
+            "name": "operator",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "operator"
+          },
+          {
+            "name": "channel",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "channel"
+          },
+          {
+            "name": "client",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "client"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetPromotionReply"
+              }
+            },
+            "examples": {}
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "evaluate a promotion",
+        "summary": "evaluate a promotion",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "postPromotions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "enum": [
+              "play",
+              "voucher"
+            ],
+            "type": "string",
+            "description": "The type of evaluation, default play"
+          },
+          {
+            "name": "xactionid",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "transaction id"
+          },
+          {
+            "name": "Operator",
+            "in": "header",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "Operator"
+          },
+          {
+            "name": "Client",
+            "in": "header",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "Client"
+          },
+          {
+            "name": "Channel",
+            "in": "header",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "Channel"
+          },
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          },
+          {
+            "name": "outcomeid",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "transaction id"
+          },
+          {
+            "name": "Retailer",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "Retailer"
+          },
+          {
+            "name": "PlayerId",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "PlayerId"
+          },
+          {
+            "name": "PlayerType",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "PlayerType"
+          },
+          {
+            "name": "TerminalType",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "TerminalType"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object that needs to verify promotion",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PromotionBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PromoReply"
+              }
+            },
+            "examples": {}
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/promotions/verification": {
+      "post": {
+        "description": "evaluate a promotion",
+        "summary": "evaluate a promotion",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "postPromotionsVerification",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "enum": [
+              "play",
+              "voucher"
+            ],
+            "type": "string",
+            "description": "The type of evaluation"
+          },
+          {
+            "name": "xactionid",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "transaction id"
+          },
+          {
+            "name": "Operator",
+            "in": "header",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "Operator"
+          },
+          {
+            "name": "Client",
+            "in": "header",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "Client"
+          },
+          {
+            "name": "Channel",
+            "in": "header",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "Channel"
+          },
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          },
+          {
+            "name": "outcomeid",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "transaction id"
+          },
+          {
+            "name": "Retailer",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "Retailer"
+          },
+          {
+            "name": "PlayerId",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "PlayerId"
+          },
+          {
+            "name": "PlayerType",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "PlayerType"
+          },
+          {
+            "name": "TerminalType",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "TerminalType"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object that needs to verify promotion",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PromotionBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PromoReply"
+              }
+            },
+            "examples": {}
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/promotions/vouchers/prepared": {
+      "post": {
+        "description": "redeem a prepared voucher",
+        "summary": "redeem a prepared voucher",
+        "tags": [
+          "promotions"
+        ],
+        "operationId": "redeemVouchersPrepared",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "xactionid",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "transaction id"
+          },
+          {
+            "name": "voucherid",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "voucher id"
+          },
+          {
+            "name": "Operator",
+            "in": "header",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "Operator"
+          },
+          {
+            "name": "Client",
+            "in": "header",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "Client"
+          },
+          {
+            "name": "Channel",
+            "in": "header",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "Channel"
+          },
+          {
+            "name": "Guid",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Guid"
+          },
+          {
+            "name": "Cost",
+            "in": "header",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": "cost"
+          },
+          {
+            "name": "verify",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "verify flag"
+          },
+          {
+            "name": "Retailer",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "Retailer"
+          },
+          {
+            "name": "PlayerId",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "PlayerId"
+          },
+          {
+            "name": "PlayerType",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "PlayerType"
+          },
+          {
+            "name": "TerminalType",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "TerminalType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PromoReply"
+              }
+            },
+            "examples": {}
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [],
+        "x-unitTests": [],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Error": {
+      "title": "Error",
+      "type": "object",
+      "required": [
+        "code",
+        "message",
+        "source",
+        "type",
+        "guid"
+      ],
+      "properties": {
+        "code": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "description": "",
+          "type": "string"
+        },
+        "source": {
+          "description": "",
+          "type": "string"
+        },
+        "type": {
+          "description": "",
+          "type": "string"
+        },
+        "guid": {
+          "description": "",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "GetMessageTextReply": {
+      "title": "GetMessageTextReply",
+      "type": "object",
+      "properties": {
+        "message": {
+          "description": "",
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "title": "Message",
+      "type": "object",
+      "properties": {
+        "text": {
+          "description": "",
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "promotionTitle",
+            "messageTitle",
+            "messageBody",
+            "messageCDU",
+            "messageTerminal"
+          ]
+        },
+        "version": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "GetHappyHoursReply": {
+      "title": "GetHappyHoursReply",
+      "type": "object",
+      "properties": {
+        "promotionId": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "messages": {
+          "description": "",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Message"
+          }
+        },
+        "timeRanges": {
+          "description": "",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeRanges"
+          }
+        }
+      }
+    },
+    "TimeRanges": {
+      "title": "TimeRanges",
+      "type": "object",
+      "properties": {
+        "days": {
+          "type": "string",
+          "enum": [
+            "MON",
+            "TUE",
+            "WED",
+            "THU",
+            "FRI",
+            "SAT",
+            "SUN"
+          ]
+        },
+        "times": {
+          "description": "",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeInterval"
+          }
+        }
+      }
+    },
+    "TimeInterval": {
+      "title": "TimeInterval",
+      "type": "object",
+      "properties": {
+        "from": {
+          "description": "",
+          "type": "string"
+        },
+        "to": {
+          "description": "",
+          "type": "string"
+        }
+      }
+    },
+    "OutcomeReply": {
+      "title": "OutcomeReply",
+      "type": "object",
+      "properties": {
+        "outcomeId": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "xactionId": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "isRedeemed": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "parentId": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "promotionId": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "playerId": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "outcomeType": {
+          "type": "string",
+          "enum": [
+            "CashoutTurnover",
+            "RebateDiscount",
+            "BonusMoney",
+            "RealMoney",
+            "FreeBets",
+            "NormalBets",
+            "Voucher",
+            "Gifts",
+            "IncrMultipleDraws",
+            "SecondChanceTickets",
+            "SecondChanceDrawTickets"
+          ]
+        },
+        "operator": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "client": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "channel": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "payload": {
+          "description": "",
+          "type": "string"
+        }
+      }
+    },
+    "CreateVouchers": {
+      "type": "object",
+      "required": [
+        "promotionId"
+      ],
+      "properties": {
+        "promotionId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "serialized": {
+          "title": "Serialized",
+          "type": "object",
+          "properties": {
+            "from": {
+              "description": "",
+              "type": "integer",
+              "format": "int32"
+            },
+            "to": {
+              "description": "",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "nonserialized": {
+          "title": "NonSerialized",
+          "type": "object",
+          "properties": {
+            "count": {
+              "description": "",
+              "type": "integer",
+              "format": "int32"
+            },
+            "code": {
+              "description": "",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    },
+    "GetPromotionReply": {
+      "title": "GetPromotionReply",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "description": "",
+          "type": "string"
+        },
+        "description": {
+          "description": "",
+          "type": "string"
+        },
+        "startDate": {
+          "description": "",
+          "type": "string"
+        },
+        "endDate": {
+          "description": "",
+          "type": "string"
+        },
+        "budget": {
+          "description": "",
+          "type": "string"
+        },
+        "priority": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "purgeDate": {
+          "description": "",
+          "type": "string"
+        },
+        "status": {
+          "description": "",
+          "type": "string"
+        },
+        "type": {
+          "description": "",
+          "type": "string"
+        },
+        "style": {
+          "description": "",
+          "type": "string"
+        },
+        "repeat": {
+          "description": "",
+          "type": "boolean"
+        },
+        "optIn": {
+          "description": "",
+          "type": "boolean"
+        },
+        "operator": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "client": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "channels": {
+          "description": "",
+          "type": "string"
+        },
+        "playerLimit": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "player": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "terminal": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "PromotionBody": {
+      "title": "PromotionBody",
+      "type": "object",
+      "properties": {
+        "metaData": {
+          "$ref": "#/definitions/InputMetaData"
+        },
+        "payload": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "InputMetaData": {
+      "title": "InputMetaData",
+      "type": "object",
+      "properties": {
+        "cost": {
+          "description": "",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "bundle": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "bundle id",
+              "type": "integer",
+              "format": "int32"
+            },
+            "session": {
+              "description": "bundle session",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
+      "required": [
+        "cost"
+      ]
+    },
+    "PromoReply": {
+      "title": "PromoReply",
+      "type": "object",
+      "properties": {
+        "promotionId": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "outcomeId": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "outcomeType": {
+          "type": "string",
+          "enum": [
+            "CashoutTurnover",
+            "RebateDiscount",
+            "BonusMoney",
+            "RealMoney",
+            "FreeBets",
+            "NormalBets",
+            "Voucher",
+            "Gifts",
+            "IncrMultipleDraws",
+            "SecondChanceTickets",
+            "SecondChanceDrawTickets"
+          ]
+        },
+        "outcomeMetaData": {
+          "$ref": "#/definitions/OutcomeMetaData"
+        },
+        "messages": {
+          "description": "",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Message"
+          }
+        }
+      },
+      "required": [
+        "promotionId",
+        "outcomeId",
+        "outcomeType",
+        "outcomeMetaData",
+        "messages"
+      ]
+    },
+    "OutcomeMetaData": {
+      "title": "OutcomeMetaData",
+      "type": "object",
+      "properties": {
+        "RebateDiscount": {
+          "type": "object",
+          "properties": {
+            "Type": {
+              "type": "string",
+              "enum": [
+                "Percentage",
+                "Amount"
+              ]
+            },
+            "Value": {
+              "description": "",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "required": [
+            "Type",
+            "Value"
+          ]
+        },
+        "IncrMultiDraws": {
+          "$ref": "#/definitions/OutcomeIncrMultiDraws"
+        },
+        "BonusMoney": {
+          "$ref": "#/definitions/OutcomeBonusMoney"
+        },
+        "RealMoney": {
+          "type": "object",
+          "properties": {
+            "Amount": {
+              "description": "",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "required": [
+            "Amount"
+          ]
+        },
+        "CashOutTurnover": {
+          "$ref": "#/definitions/OutcomeCashOutTurnover"
+        },
+        "SecondChanceDrawTickets": {
+          "type": "object",
+          "properties": {
+            "secondChanceDrawTicket": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "Gifts": {
+          "type": "object",
+          "properties": {
+            "SerialNumber": {
+              "description": "",
+              "type": "string"
+            },
+            "Value": {
+              "description": "",
+              "type": "integer",
+              "format": "int32"
+            },
+            "Description": {
+              "description": "",
+              "type": "string"
+            }
+          },
+          "required": [
+            "SerialNumber",
+            "Value"
+          ]
+        },
+        "NormalBets": {
+          "$ref": "#/definitions/OutcomeNormalBets"
+        },
+        "FreeBets": {
+          "$ref": "#/definitions/OutcomeFreeBets"
+        },
+        "Vouchers": {
+          "type": "object",
+          "properties": {
+            "voucherId": {
+              "description": "",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "required": [
+            "voucherId"
+          ]
+        }
+      }
+    },
+    "PercentageOrAmountType": {
+      "title": "PercentageOrAmountType",
+      "example": "Percentage",
+      "x-enum-elements": [
+        {
+          "name": "Percentage",
+          "description": ""
+        },
+        {
+          "name": "Amount",
+          "description": ""
+        }
+      ],
+      "type": "string",
+      "enum": [
+        "Percentage",
+        "Amount"
+      ]
+    },
+    "OutcomeIncrMultiDraws": {
+      "title": "OutcomeIncrMultiDraws",
+      "type": "object",
+      "properties": {
+        "Value": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "Type": {
+          "$ref": "#/definitions/IncrMultiDrawsType"
+        }
+      },
+      "required": [
+        "Value",
+        "Type"
+      ]
+    },
+    "IncrMultiDrawsType": {
+      "title": "IncrMultiDrawsType",
+      "example": "PcgDraws",
+      "x-enum-elements": [
+        {
+          "name": "PcgDraws",
+          "description": ""
+        },
+        {
+          "name": "NumDraws",
+          "description": ""
+        }
+      ],
+      "type": "string",
+      "enum": [
+        "PcgDraws",
+        "NumDraws"
+      ]
+    },
+    "OutcomeBonusMoney": {
+      "title": "OutcomeBonusMoney",
+      "type": "object",
+      "properties": {
+        "Value": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "Type": {
+          "$ref": "#/definitions/PercentageOrAmountType"
+        }
+      },
+      "required": [
+        "Value",
+        "Type"
+      ]
+    },
+    "OutcomeCashOutTurnover": {
+      "title": "OutcomeCashOutTurnover",
+      "type": "object",
+      "properties": {
+        "Type": {
+          "$ref": "#/definitions/PercentageOrAmountType"
+        },
+        "Value": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "Type",
+        "Value"
+      ]
+    },
+    "OutcomeNormalBets": {
+      "title": "OutcomeNormalBets",
+      "type": "object",
+      "properties": {
+        "GameId": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "NumFreeBets": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "NumGroups": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "NumMultipleDraws": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "Optional": {
+          "description": "",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OutcomeOptionalFields"
+          }
+        }
+      },
+      "required": [
+        "GameId",
+        "NumFreeBets",
+        "NumGroups",
+        "NumMultipleDraws"
+      ]
+    },
+    "OutcomeOptionalFields": {
+      "title": "OutcomeOptionalFields",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "",
+          "type": "string"
+        },
+        "type": {
+          "description": "",
+          "type": "string"
+        },
+        "value": {
+          "description": "",
+          "type": "string"
+        }
+      }
+    },
+    "OutcomeFreeBets": {
+      "title": "FreeBets",
+      "type": "object",
+      "properties": {
+        "GameId": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "NumFreeBets": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "NumGroups": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "NumMultipleDraws": {
+          "description": "",
+          "type": "integer",
+          "format": "int32"
+        },
+        "Optional": {
+          "description": "",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OutcomeOptionalFields"
+          }
+        }
+      },
+      "required": [
+        "GameId",
+        "NumFreeBets",
+        "NumGroups",
+        "NumMultipleDraws"
+      ]
+    }
+  }
+}

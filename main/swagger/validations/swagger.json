@@ -1,0 +1,1068 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Lottery Validations Service provides wager payment (validation) and winnings details services",
+    "version" : "0.0.49",
+    "title" : "Lottery Validations Service",
+    "contact" : {
+      "name" : "users@cxf.apache.org"
+    }
+  },
+  "basePath" : "/lottery-validations/api/v1.0",
+  "tags" : [ {
+    "name" : "Lottery Validations"
+  } ],
+  "paths" : {
+    "/wagers/{wagerId}/winnings" : {
+      "get" : {
+        "tags" : [ "Lottery Validations" ],
+        "summary" : "Retrieve the winnings for the wager",
+        "description" : "Retrieve the detailed or summary description of winnings for the given wager",
+        "operationId" : "processLotteryWinnings",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "wagerId",
+          "in" : "path",
+          "description" : "Internal transaction ID",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "channel",
+          "in" : "header",
+          "description" : "Channel identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "operator",
+          "in" : "header",
+          "description" : "Operator identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "payment-level",
+          "in" : "header",
+          "description" : "Retailer payment level",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "team",
+          "in" : "header",
+          "description" : "Team index",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "summaryOnly",
+          "in" : "query",
+          "description" : "Flag to return only summary results",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "OAuth2 token",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Wager winnings successfully processed",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ValidationResponseDTO"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request\r\n| Error code | Description |\r\n| :-: | - |\r\n| 26 | Validation Error: [...] |\r\n"
+          },
+          "401" : {
+            "description" : "Unauthorized\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Full authentication is required to access this resource |\r\n| - | Access token expired: {token} |\r\n"
+          },
+          "404" : {
+            "description" : "Not found\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Not found |\r\n| 30 | Entity of class: {class}, id: {id} not found |\r\n",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error\r\n| Error code | Description |\r\n| :-: | - |\r\n| 25 | System Error |\r\n| 9000 | No processed draws found for wager {id} |\r\n| 9001 | Authorization required to pay wager {id} |\r\n| 9002 | Validation failed for wager {id} with message: {text} |\r\n| 9004 | Wager {id} found in status {status} |\r\n| 9005 | Game parameters not implemented for game code {code} |\r\n| 9006 | Wager {id} winning amount is below minimum payable limit |\r\n| 9007 | Nothing to pay for wager {id} |\r\n| 9008 | Client request to service {service} failed with message: {text} |\r\n| 9009 | Wager {id} has been paid already |\r\n| 9010 | All draws have expired for wager {id} |\r\n| 9011 | Wager {id} has been exchanged |\r\n| 9012 | Exchange wager ID same as wager ID {id} |\r\n| 9013 | No draws found for wager {id} |\r\n| 9014 | Draw {id} not found |\r\n| 9016 | Not allowed to pay wager {id} |\r\n| 9017 | Auditing registration failed for action {text} and result {text} with error: {text}\r\n| 9018 | Wager {id} operator {id} does not match the current request {id}\r\n| 9019 | Wager {id} requires team index\r\n| 9020 | Wager {id} does not require team index\r\n| 9021 | Wager {id} team index {index} exceeds team shares {shares}",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          }
+        }
+      }
+    },
+    "/wagers/autopay" : {
+      "post" : {
+        "tags" : [ "Lottery Validations" ],
+        "summary" : "Automatically validate and pay all winning wagers of a game draw",
+        "description" : "The current implementation handles communicating the lost wagers to the PAM provider as well as the winning ones",
+        "operationId" : "processLotteryAutoPay",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "channel",
+          "in" : "header",
+          "description" : "Channel identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "operator",
+          "in" : "header",
+          "description" : "Operator identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "gameId",
+          "in" : "query",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "draw",
+          "in" : "query",
+          "description" : "Game draw",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "OAuth2 token",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Autopay successfully processed",
+            "schema" : {
+              "$ref" : "#/definitions/AutoPayResponseDTO"
+            }
+          },
+          "204" : {
+            "description" : "Requested draw not ready to pay"
+          },
+          "400" : {
+            "description" : "Bad request\r\n| Error code | Description |\r\n| :-: | - |\r\n| 26 | Validation Error: [...] |\r\n"
+          },
+          "401" : {
+            "description" : "Unauthorized\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Full authentication is required to access this resource |\r\n| - | Access token expired: {token} |\r\n"
+          },
+          "404" : {
+            "description" : "Not found\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Not found |\r\n| 30 | Entity of class: {class}, id: {id} not found |\r\n",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error\r\n| Error code | Description |\r\n| :-: | - |\r\n| 25 | System Error |\r\n| 9001 | Authorization required to pay wager {id} |\r\n| 9002 | Validation failed for wager {id} with message: {text} |\r\n| 9003 | Validation roll-back failed for wager {id} with message: {text} |\r\n| 9004 | Wager {id} found in status {status} |\r\n| 9005 | Game parameters not implemented for game code {code} |\r\n| 9007 | Nothing to pay for wager {id} |\r\n| 9008 | Client request to service {service} failed with message: {text} |\r\n| 9014 | Draw {id} not found |\r\n| 9015 | Draw {id} not ready to pay |\r\n| 9023 | Claim already issued for wager {id}",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          }
+        }
+      }
+    },
+    "/errors" : {
+      "get" : {
+        "tags" : [ "Lottery Validations" ],
+        "summary" : "Return a list of all application errors",
+        "description" : "",
+        "operationId" : "processLotteryErrors",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "OAuth2 token",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Application errors successfully retrieved",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorsResponseDTO"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Full authentication is required to access this resource |\r\n| - | Access token expired: {token} |\r\n"
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          }
+        }
+      }
+    },
+    "/wagers/claim/{claimId}" : {
+      "get" : {
+        "tags" : [ "Lottery Validations" ],
+        "summary" : "Find a claim",
+        "description" : "Retrieves the wager claimed by claim ID",
+        "operationId" : "findLotteryClaim",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "claimId",
+          "in" : "path",
+          "description" : "Claim code",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "OAuth2 token",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Claim successfully found"
+          },
+          "400" : {
+            "description" : "Bad request\r\n| Error code | Description |\r\n| :-: | - |\r\n| 26 | Validation Error: [...] |\r\n"
+          },
+          "401" : {
+            "description" : "Unauthorized\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Full authentication is required to access this resource |\r\n| - | Access token expired: {token} |\r\n"
+          },
+          "404" : {
+            "description" : "Not found\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Not found |\r\n| 30 | Entity of class: {class}, id: {id} not found |\r\n",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error\r\n| Error code | Description |\r\n| :-: | - |\r\n| 25 | System Error |\r\n| 9000 | No processed draws found for wager {id} |\r\n| 9001 | Authorization required to pay wager {id} |\r\n| 9002 | Validation failed for wager {id} with message: {text} |\r\n| 9004 | Wager {id} found in status {status} |\r\n| 9005 | Game parameters not implemented for game code {code} |\r\n| 9006 | Wager {id} winning amount is below minimum payable limit |\r\n| 9007 | Nothing to pay for wager {id} |\r\n| 9008 | Client request to service {service} failed with message: {text} |\r\n| 9009 | Wager {id} has been paid already |\r\n| 9010 | All draws have expired for wager {id} |\r\n| 9011 | Wager {id} has been exchanged |\r\n| 9012 | Exchange wager ID same as wager ID {id} |\r\n| 9013 | No draws found for wager {id} |\r\n| 9014 | Draw {id} not found |\r\n| 9016 | Not allowed to pay wager {id} |\r\n| 9017 | Auditing registration failed for action {text} and result {text} with error: {text}\r\n| 9018 | Wager {id} operator {id} does not match the current request {id}\r\n| 9019 | Wager {id} requires team index\r\n| 9020 | Wager {id} does not require team index\r\n| 9021 | Wager {id} team index {index} exceeds team shares {shares}\r\n| 9023 | Claim already issued for wager {id}",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Lottery Validations" ],
+        "summary" : "Validate a claim",
+        "description" : "Validates the claim by claim ID",
+        "operationId" : "validateLotteryClaim",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "claimId",
+          "in" : "path",
+          "description" : "Claim code",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "OAuth2 token",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Claim successfully validated"
+          },
+          "400" : {
+            "description" : "Bad request\r\n| Error code | Description |\r\n| :-: | - |\r\n| 26 | Validation Error: [...] |\r\n"
+          },
+          "401" : {
+            "description" : "Unauthorized\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Full authentication is required to access this resource |\r\n| - | Access token expired: {token} |\r\n"
+          },
+          "404" : {
+            "description" : "Not found\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Not found |\r\n| 30 | Entity of class: {class}, id: {id} not found |\r\n",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error\r\n| Error code | Description |\r\n| :-: | - |\r\n| 25 | System Error |\r\n| 9000 | No processed draws found for wager {id} |\r\n| 9001 | Authorization required to pay wager {id} |\r\n| 9002 | Validation failed for wager {id} with message: {text} |\r\n| 9004 | Wager {id} found in status {status} |\r\n| 9005 | Game parameters not implemented for game code {code} |\r\n| 9006 | Wager {id} winning amount is below minimum payable limit |\r\n| 9007 | Nothing to pay for wager {id} |\r\n| 9008 | Client request to service {service} failed with message: {text} |\r\n| 9009 | Wager {id} has been paid already |\r\n| 9010 | All draws have expired for wager {id} |\r\n| 9011 | Wager {id} has been exchanged |\r\n| 9012 | Exchange wager ID same as wager ID {id} |\r\n| 9013 | No draws found for wager {id} |\r\n| 9014 | Draw {id} not found |\r\n| 9016 | Not allowed to pay wager {id} |\r\n| 9017 | Auditing registration failed for action {text} and result {text} with error: {text}\r\n| 9018 | Wager {id} operator {id} does not match the current request {id}\r\n| 9019 | Wager {id} requires team index\r\n| 9020 | Wager {id} does not require team index\r\n| 9021 | Wager {id} team index {index} exceeds team shares {shares}\r\n| 9023 | Claim already issued for wager {id}",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          }
+        }
+      }
+    },
+    "/wagers/{wagerId}/claim" : {
+      "post" : {
+        "tags" : [ "Lottery Validations" ],
+        "summary" : "Claim a wager",
+        "description" : "Claims the wager passed as parameter",
+        "operationId" : "createLotteryClaim",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/LotteryClaimRequest"
+          }
+        }, {
+          "name" : "wagerId",
+          "in" : "path",
+          "description" : "Internal transaction identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "channel",
+          "in" : "header",
+          "description" : "Channel identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "operator",
+          "in" : "header",
+          "description" : "Operator identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "team",
+          "in" : "header",
+          "description" : "Team index",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "OAuth2 token",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Claim successfully created",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ValidationResponseDTO"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request\r\n| Error code | Description |\r\n| :-: | - |\r\n| 26 | Validation Error: [...] |\r\n"
+          },
+          "401" : {
+            "description" : "Unauthorized\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Full authentication is required to access this resource |\r\n| - | Access token expired: {token} |\r\n"
+          },
+          "404" : {
+            "description" : "Not found\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Not found |\r\n| 30 | Entity of class: {class}, id: {id} not found |\r\n",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error\r\n| Error code | Description |\r\n| :-: | - |\r\n| 25 | System Error |\r\n| 9000 | No processed draws found for wager {id} |\r\n| 9004 | Wager {id} found in status {status} |\r\n| 9005 | Game parameters not implemented for game code {code} |\r\n| 9006 | Wager {id} winning amount is below minimum payable limit |\r\n| 9007 | Nothing to pay for wager {id} |\r\n| 9008 | Client request to service {service} failed with message: {text} |\r\n| 9009 | Wager {id} has been paid already |\r\n| 9010 | All draws have expired for wager {id} |\r\n| 9011 | Wager {id} has been exchanged |\r\n| 9012 | Exchange wager ID same as wager ID {id} |\r\n| 9013 | No draws found for wager {id} |\r\n| 9014 | Draw {id} not found |\r\n| 9016 | Not allowed to pay wager {id} |\r\n| 9017 | Auditing registration failed for action {text} and result {text} with error: {text}\r\n| 9018 | Wager {id} operator {id} does not match the current request {id}\r\n| 9019 | Wager {id} requires team index\r\n| 9020 | Wager {id} does not require team index\r\n| 9021 | Wager {id} team index {index} exceeds team shares {shares}\r\n| 9022 | Claim creation failed for wager {id} with message: {text}\r\n| 9023 | Claim already issued for wager {id}\r\n| 9024 | Claim validation failed for claim {id} with message: {text}\r\n| 9025 | Claim creation not allowed for wager {id}, validation status: {status}",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          }
+        }
+      }
+    },
+    "/wagers/{wagerId}/validation" : {
+      "post" : {
+        "tags" : [ "Lottery Validations" ],
+        "summary" : "Validate and pay a wager",
+        "description" : "Validates and pays the wager passed as parameter",
+        "operationId" : "processLotteryValidate",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/LotteryValidationRequest"
+          }
+        }, {
+          "name" : "wagerId",
+          "in" : "path",
+          "description" : "Internal transaction identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "channel",
+          "in" : "header",
+          "description" : "Channel identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "operator",
+          "in" : "header",
+          "description" : "Operator identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "payment-level",
+          "in" : "header",
+          "description" : "Retailer payment level",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "team",
+          "in" : "header",
+          "description" : "Team index",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "serial",
+          "in" : "query",
+          "description" : "Coupon identifier",
+          "required" : true,
+          "type" : "string",
+          "maxLength" : 2147483647,
+          "minLength" : 1
+        }, {
+          "name" : "exchangeWagerId",
+          "in" : "query",
+          "description" : "New transaction identifier for exchanged wager",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "pin",
+          "in" : "query",
+          "description" : "Authorization PIN",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "OAuth2 token",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Validation successfully processed",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ValidationResponseDTO"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request\r\n| Error code | Description |\r\n| :-: | - |\r\n| 26 | Validation Error: [...] |\r\n"
+          },
+          "401" : {
+            "description" : "Unauthorized\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Full authentication is required to access this resource |\r\n| - | Access token expired: {token} |\r\n"
+          },
+          "404" : {
+            "description" : "Not found\r\n| Error code | Description |\r\n| :-: | - |\r\n| - | Not found |\r\n| 30 | Entity of class: {class}, id: {id} not found |\r\n",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error\r\n| Error code | Description |\r\n| :-: | - |\r\n| 25 | System Error |\r\n| 9000 | No processed draws found for wager {id} |\r\n| 9001 | Authorization required to pay wager {id} |\r\n| 9002 | Validation failed for wager {id} with message: {text} |\r\n| 9004 | Wager {id} found in status {status} |\r\n| 9005 | Game parameters not implemented for game code {code} |\r\n| 9006 | Wager {id} winning amount is below minimum payable limit |\r\n| 9007 | Nothing to pay for wager {id} |\r\n| 9008 | Client request to service {service} failed with message: {text} |\r\n| 9009 | Wager {id} has been paid already |\r\n| 9010 | All draws have expired for wager {id} |\r\n| 9011 | Wager {id} has been exchanged |\r\n| 9012 | Exchange wager ID same as wager ID {id} |\r\n| 9013 | No draws found for wager {id} |\r\n| 9014 | Draw {id} not found |\r\n| 9016 | Not allowed to pay wager {id} |\r\n| 9017 | Auditing registration failed for action {text} and result {text} with error: {text}\r\n| 9018 | Wager {id} operator {id} does not match the current request {id}\r\n| 9019 | Wager {id} requires team index\r\n| 9020 | Wager {id} does not require team index\r\n| 9021 | Wager {id} team index {index} exceeds team shares {shares}\r\n| 9023 | Claim already issued for wager {id}",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "AmountsDTO" : {
+      "type" : "object",
+      "required" : [ "gross", "net", "other", "refund", "tax" ],
+      "properties" : {
+        "gross" : {
+          "type" : "number",
+          "description" : "Gross amount = Net + Other + Refund + Tax"
+        },
+        "net" : {
+          "type" : "number",
+          "description" : "Net amount from "
+        },
+        "other" : {
+          "type" : "number",
+          "description" : "Other amount (reserved for future use)"
+        },
+        "refund" : {
+          "type" : "number",
+          "description" : "Refund amount"
+        },
+        "tax" : {
+          "type" : "number",
+          "description" : "Tax amount calculated using Pay Taxation options"
+        }
+      },
+      "description" : "Monetary amounts broken down by type"
+    },
+    "DetailsDTO" : {
+      "type" : "object",
+      "required" : [ "draw", "status" ],
+      "properties" : {
+        "detailAmounts" : {
+          "description" : "Sum of amounts of winnings for the draw",
+          "$ref" : "#/definitions/AmountsDTO"
+        },
+        "draw" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Draw identifier"
+        },
+        "purgeTime" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Unix epoch timestamp of winnings expiration"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Draw status",
+          "enum" : [ "None", "Win", "Expired", "Paid", "NoWin", "Pending", "PendingWinningNumbers", "PendingResults", "Claimed" ]
+        },
+        "winningsPerCategory" : {
+          "type" : "array",
+          "description" : "Array of winnings details per winning category",
+          "items" : {
+            "$ref" : "#/definitions/WinningsPerCategoryDTO"
+          }
+        }
+      },
+      "description" : "Detailed description of winnings for a draw"
+    },
+    "DrawBasedGameDTO" : {
+      "type" : "object",
+      "required" : [ "boards", "gameId", "multipliers" ],
+      "properties" : {
+        "blockStatus" : {
+          "type" : "string",
+          "description" : "Wager block status",
+          "enum" : [ "NA", "Unblocked", "Blocked", "PartiallyBlocked" ]
+        },
+        "boards" : {
+          "type" : "array",
+          "description" : "Lottery board data",
+          "items" : {
+            "$ref" : "#/definitions/LotteryBoardDataDTO"
+          }
+        },
+        "columns" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Columns played in wager"
+        },
+        "cost" : {
+          "type" : "number",
+          "description" : "Cost of wager"
+        },
+        "creationTime" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Unix epoch of wager creation timestamp"
+        },
+        "gameId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Game identifier"
+        },
+        "multipliers" : {
+          "type" : "array",
+          "description" : "Array of multipliers",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "options" : {
+          "type" : "array",
+          "description" : "Array of options",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "participatingDraws" : {
+          "description" : "Participating draws data",
+          "$ref" : "#/definitions/ParticipatingDrawsDTO"
+        },
+        "quickPick" : {
+          "type" : "boolean",
+          "description" : "Flag for quick-pick"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Internal wager status",
+          "enum" : [ "NA", "Played", "Canceled", "InternalPlayedRollback" ]
+        },
+        "teamShares" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Count of team shares"
+        }
+      },
+      "description" : "Draw-based game data"
+    },
+    "LotteryBoardDataDTO" : {
+      "type" : "object",
+      "required" : [ "boardId", "panels" ],
+      "properties" : {
+        "boardId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Board identifier"
+        },
+        "betType" : {
+          "type" : "string",
+          "description" : "Bet type"
+        },
+        "multipliers" : {
+          "type" : "array",
+          "description" : "Array of multipliers",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "panels" : {
+          "type" : "array",
+          "description" : "Array of Lottery panel data",
+          "items" : {
+            "$ref" : "#/definitions/LotteryPanelDataDTO"
+          }
+        },
+        "options" : {
+          "type" : "array",
+          "description" : "Array of options",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "quickPick" : {
+          "type" : "boolean",
+          "description" : "Flag for quick-pick"
+        }
+      },
+      "description" : "Lottery board data"
+    },
+    "LotteryPanelDataDTO" : {
+      "type" : "object",
+      "required" : [ "requested", "selection" ],
+      "properties" : {
+        "quickPick" : {
+          "type" : "boolean",
+          "description" : "Flag for quick-pick"
+        },
+        "qpSelections" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Count of quick-pick selections"
+        },
+        "requested" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Count of requested quick-pick selections"
+        },
+        "selection" : {
+          "type" : "array",
+          "description" : "Array of actual quick-pick selections",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "options" : {
+          "type" : "array",
+          "description" : "Array of options",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      },
+      "description" : "Lottery panel data"
+    },
+    "ParticipatingDrawsDTO" : {
+      "type" : "object",
+      "required" : [ "multipleDraws" ],
+      "properties" : {
+        "draws" : {
+          "type" : "array",
+          "description" : "Array of participating draws",
+          "items" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "firstDraw" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "First participating draw"
+        },
+        "lastDraw" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Last participating draw"
+        },
+        "multipleDraws" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Count of participating draws"
+        }
+      },
+      "description" : "Participating draws data"
+    },
+    "SummaryDataDTO" : {
+      "type" : "object",
+      "properties" : {
+        "winning" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Winning draws count"
+        },
+        "expired" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Expired draws count"
+        },
+        "paid" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Paid draws count"
+        },
+        "nonWinning" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Non-winning draws count"
+        },
+        "pending" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Pending draws count"
+        }
+      },
+      "description" : "Summary counters for each draw status"
+    },
+    "ValidationResponseDTO" : {
+      "type" : "object",
+      "required" : [ "cost", "endDraw", "gameId", "startDraw", "totalAmounts" ],
+      "properties" : {
+        "gameId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Game identifier"
+        },
+        "totalAmounts" : {
+          "description" : "Sum of amounts of all winnings",
+          "$ref" : "#/definitions/AmountsDTO"
+        },
+        "startDraw" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "First participating draw of the wager"
+        },
+        "endDraw" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Last participating draw of the wager"
+        },
+        "paidDraws" : {
+          "type" : "array",
+          "description" : "Array of draw numbers already paid",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "details" : {
+          "type" : "array",
+          "description" : "Array of detailed winnings",
+          "items" : {
+            "$ref" : "#/definitions/DetailsDTO"
+          }
+        },
+        "summary" : {
+          "description" : "Summarized draws status counters",
+          "$ref" : "#/definitions/SummaryDataDTO"
+        },
+        "dbg" : {
+          "description" : "Draw-based game data",
+          "$ref" : "#/definitions/DrawBasedGameDTO"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Final status of the wager",
+          "enum" : [ "None", "Winning", "WinningButNeedsAuthorization", "WinningButCannotPay", "WinningButNeedsClaim", "Pending", "PendingWinningNumbers", "PendingResults", "Paid", "Claimed", "Expired", "Lost", "OperatorNotIssuer" ]
+        },
+        "paymentStatus" : {
+          "type" : "string",
+          "description" : "Payment status of the wager winnings",
+          "enum" : [ "Cash", "CashOrClaim", "ClaimOnly", "OverLimit" ]
+        },
+        "claimCode" : {
+          "type" : "string",
+          "description" : "Claim code"
+        },
+        "cost" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      },
+      "description" : "Response for the validation or winnings endpoints"
+    },
+    "WinningsPerCategoryDTO" : {
+      "type" : "object",
+      "required" : [ "categoryAmounts" ],
+      "properties" : {
+        "categoryAmounts" : {
+          "description" : "Amounts won in category",
+          "$ref" : "#/definitions/AmountsDTO"
+        },
+        "categoryId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Category identifier"
+        },
+        "subCategoryId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Sub-category identifier"
+        },
+        "successes" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Count of category successes"
+        }
+      },
+      "description" : "Detailed description of winnings for a winning category"
+    },
+    "FaultInfo" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The error code"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "The error message"
+        },
+        "data" : {
+          "type" : "array",
+          "description" : "The error data which is an abstract object that may be used to provide any error metadata",
+          "items" : {
+            "type" : "object"
+          }
+        },
+        "source" : {
+          "type" : "string",
+          "description" : "The application at which the API error occured"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "The error family, e.g. RUNTIME, VALIDATION, etc"
+        },
+        "guid" : {
+          "type" : "string",
+          "description" : "The unique identifier of the error process"
+        }
+      },
+      "description" : "The FaultInfo object contains all the details assosiated with an API error"
+    },
+    "AutoPayResponseDTO" : {
+      "type" : "object",
+      "properties" : {
+        "paid" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Count of paid wagers"
+        },
+        "failed" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Count of failed wagers"
+        },
+        "lost" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Count of lost wagers"
+        }
+      },
+      "description" : "Autopay response"
+    },
+    "ErrorItemDTO" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Error code identifier"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Error message"
+        }
+      },
+      "description" : "Error item data"
+    },
+    "ErrorsResponseDTO" : {
+      "type" : "object",
+      "properties" : {
+        "source" : {
+          "type" : "string",
+          "description" : "Name of source application"
+        },
+        "revision" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Errors revision number"
+        },
+        "items" : {
+          "type" : "array",
+          "description" : "Array of error items",
+          "items" : {
+            "$ref" : "#/definitions/ErrorItemDTO"
+          }
+        }
+      },
+      "description" : "Errors endpoint response"
+    },
+    "LotteryClaimRequest" : {
+      "type" : "object",
+      "required" : [ "firstName", "idNumber", "idType", "lastName", "phoneNumberOne" ],
+      "properties" : {
+        "lastName" : {
+          "type" : "string",
+          "description" : "Claimant last name"
+        },
+        "firstName" : {
+          "type" : "string",
+          "description" : "Claimant first name"
+        },
+        "address" : {
+          "type" : "string",
+          "description" : "Claimant postal address"
+        },
+        "city" : {
+          "type" : "string",
+          "description" : "Claimant city"
+        },
+        "postalCode" : {
+          "type" : "string",
+          "description" : "Claimant postal code"
+        },
+        "phoneNumberOne" : {
+          "type" : "string",
+          "description" : "Claimant phone number"
+        },
+        "phoneNumberTwo" : {
+          "type" : "string",
+          "description" : "Claimant second phone number"
+        },
+        "idType" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Claimant type of identification"
+        },
+        "idNumber" : {
+          "type" : "string",
+          "description" : "Claimant identification code"
+        },
+        "claimAgentCode" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Retailer code where claim was made"
+        },
+        "claimTerminalId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Terminal identifier where claim was made"
+        },
+        "claimDateTime" : {
+          "type" : "string",
+          "description" : "Date/time of claim in local settings"
+        }
+      }
+    },
+    "LotteryValidationRequest" : {
+      "type" : "object",
+      "properties" : {
+        "playerInfo" : {
+          "description" : "Player information",
+          "$ref" : "#/definitions/PlayerInfo"
+        },
+        "posInfo" : {
+          "description" : "Point-Of-Sale information",
+          "$ref" : "#/definitions/POSInfo"
+        }
+      },
+      "description" : "Lottery Validation request"
+    },
+    "POSInfo" : {
+      "type" : "object",
+      "required" : [ "terminalId" ],
+      "properties" : {
+        "retailerId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Retailer identifier"
+        },
+        "terminalId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Terminal identifier"
+        },
+        "userId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "User identifier"
+        }
+      },
+      "description" : "Point-Of-Sales information"
+    },
+    "PlayerInfo" : {
+      "type" : "object",
+      "properties" : {
+        "groupId" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Group identifier"
+        },
+        "payMethod" : {
+          "type" : "string",
+          "description" : "Payment method"
+        },
+        "playerId" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Player identifier"
+        },
+        "sessionId" : {
+          "type" : "string",
+          "description" : "Session identifier"
+        },
+        "subscriptionId" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Subscription identifier"
+        }
+      },
+      "description" : "Player information"
+    }
+  }
+}

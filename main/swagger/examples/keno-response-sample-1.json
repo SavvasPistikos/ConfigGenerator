@@ -1,0 +1,43 @@
+{
+  "serialNumber": "32883451412048806462810",
+  "wager": {
+    "dbg": [
+      {
+        "boards": [
+          {
+            "betType": 1,
+            "boardId": 1,
+            "multipliers": [
+              1
+            ],
+            "panels": [
+              {
+                "requested": 6,
+                "selection": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ]
+              }
+            ],
+            "quickPick": false
+          }
+        ],
+        "columns": 1,
+        "cost": 50,
+        "gameId": 1100,
+        "multipliers": [],
+        "participatingDraws": {
+          "firstDraw": 691569,
+          "firstDrawTime": "1532361900",
+          "lastDraw": 691569,
+          "lastDrawTime": "1532361900",
+          "multipleDraws": 1
+        }
+      }
+    ]
+  }
+}

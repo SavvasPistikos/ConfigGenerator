@@ -1,0 +1,150 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "The API documentation of L10 BI service",
+    "version" : "1.0.0",
+    "title" : "BI Feed",
+    "contact" : {
+      "name" : "users@cxf.apache.org"
+    }
+  },
+  "basePath" : "/api/v1.0",
+  "tags" : [ {
+    "name" : "Lotos"
+  } ],
+  "paths" : {
+    "/feeds" : {
+      "post" : {
+        "tags" : [ "Lotos" ],
+        "summary" : "Register feed",
+        "description" : "",
+        "operationId" : "registerFeed",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/FeedRegistrationRequest"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "SUCCESS"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          }
+        }
+      }
+    },
+    "/feeds/bulk" : {
+      "post" : {
+        "tags" : [ "Lotos" ],
+        "summary" : "Register multiple feeds",
+        "description" : "",
+        "operationId" : "registerFeedBulk",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/FeedRegistrationRequest"
+            }
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "SUCCESS"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "FaultInfo" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The error code"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "The error message"
+        },
+        "data" : {
+          "type" : "array",
+          "description" : "The error data which is an abstract object that may be used to provide any error metadata",
+          "items" : {
+            "type" : "object"
+          }
+        },
+        "source" : {
+          "type" : "string",
+          "description" : "The application at which the API error occured"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "The error family, e.g. RUNTIME, VALIDATION, etc"
+        },
+        "guid" : {
+          "type" : "string",
+          "description" : "The unique identifier of the error process"
+        }
+      },
+      "description" : "The FaultInfo object contains all the details assosiated with an API error"
+    },
+    "FeedHeader" : {
+      "type" : "object",
+      "properties" : {
+        "date" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The feed date"
+        },
+        "sequenceId" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "The feed id"
+        }
+      }
+    },
+    "FeedRegistrationRequest" : {
+      "type" : "object",
+      "properties" : {
+        "header" : {
+          "description" : "The header",
+          "$ref" : "#/definitions/FeedHeader"
+        }
+      }
+    }
+  }
+}

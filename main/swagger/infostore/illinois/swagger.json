@@ -1,0 +1,2668 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Below you can find the API documentation for operations of Information Store.",
+    "version" : "1.0",
+    "title" : "Information Store",
+    "contact" : {
+      "name" : "Intralot S.A. "
+    }
+  },
+  "basePath" : "/api",
+  "tags" : [ {
+    "name" : "Draw operations V3.0"
+  }, {
+    "name" : "Draw update operations V1.0"
+  }, {
+    "name" : "Sample subscriber operations V1.0"
+  }, {
+    "name" : "Entity state operations"
+  }, {
+    "name" : "Subscriber operations"
+  }, {
+    "name" : "Transactions control operations"
+  }, {
+    "name" : "Validations state operations"
+  } ],
+  "paths" : {
+    "/v3.0/draws/{gameId}/{drawId}" : {
+      "get" : {
+        "tags" : [ "Draw operations V3.0" ],
+        "summary" : "Get draw",
+        "description" : "Get draw for a game by draw id",
+        "operationId" : "getDrawForGame",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "drawId",
+          "in" : "path",
+          "description" : "Draw identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Status filter. If the draw found is not in one of the specified statuses, the response will be empty. Multiple statuses filters allowed. By default no status filter is applied.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "future", "active", "pendingResults", "results", "drawBreak" ]
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "property",
+          "in" : "query",
+          "description" : "Specifies which properties to include, by default all properties are included in the response",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "includeAnimation",
+          "in" : "query",
+          "description" : "Parameter to force inclusion of animation object",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "Etag",
+          "in" : "header",
+          "description" : "Etag header, check https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/DrawV3Variation2"
+            }
+          },
+          "304" : {
+            "description" : "NOT MODIFIED"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "404" : {
+            "description" : "NOT FOUND",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v3.0/draws/{gameId}/visual-draw/{visualDraw}" : {
+      "get" : {
+        "tags" : [ "Draw operations V3.0" ],
+        "summary" : "Get draw for a game by visual draw number",
+        "description" : "Get draw for a game by visual draw number. The visual draw number depending on the game is either the same as the draw id, or is a number where the first four digits denote the year and the rest digits a yearly recurring draw number.",
+        "operationId" : "getDrawForGameByVisualDraw",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "visualDraw",
+          "in" : "path",
+          "description" : "Visual draw number",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Status filter. If the draw found is not in one of the specified statuses, the response will be empty. Multiple statuses filters allowed. By default no status filter is applied.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "future", "active", "pendingResults", "results", "drawBreak" ]
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "property",
+          "in" : "query",
+          "description" : "Specifies which properties to include, by default all properties are included in the response",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "Etag",
+          "in" : "header",
+          "description" : "Etag header, check https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/DrawV3Variation2"
+            }
+          },
+          "304" : {
+            "description" : "NOT MODIFIED"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "404" : {
+            "description" : "NOT FOUND",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v3.0/draws/{gameId}/last-result-and-active" : {
+      "get" : {
+        "tags" : [ "Draw operations V3.0" ],
+        "summary" : "Get the last draw with results or pending results and the active draw for a game.",
+        "description" : "Get the last draw with results or pending results and the active draw for a game. includeAnimation parameter can be used to force the retrieval of animation for the last resulted draw.",
+        "operationId" : "getLastAndActiveDraws",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "includeAnimation",
+          "in" : "query",
+          "description" : "Parameter to force inclusion of animation object",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "The status in which the last draws should be. By default results and pendingResults are returned.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "pendingResults", "results" ]
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "property",
+          "in" : "query",
+          "description" : "Specifies which properties to include, by default all properties are included in the response",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "Etag",
+          "in" : "header",
+          "description" : "Etag header, check https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/LastResultDrawAndActiveV3Variation2"
+            }
+          },
+          "304" : {
+            "description" : "NOT MODIFIED"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "404" : {
+            "description" : "NOT FOUND",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v3.0/draws/{gameId}/last/{limit}" : {
+      "get" : {
+        "tags" : [ "Draw operations V3.0" ],
+        "summary" : "Get last draws for a game",
+        "description" : "Get last draws for a game. By default the active draw is included in the response if it exists.",
+        "operationId" : "getLastDraws",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "limit",
+          "in" : "path",
+          "description" : "Limit, the number of total draws",
+          "required" : true,
+          "type" : "integer",
+          "maximum" : 100,
+          "minimum" : 1,
+          "format" : "int32"
+        }, {
+          "name" : "includeActive",
+          "in" : "query",
+          "description" : "Whether to include the active draw if it exists",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "The status in which the last draws should be. By default results and pendingResults are returned.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "pendingResults", "results" ]
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "property",
+          "in" : "query",
+          "description" : "Specifies which properties to include, by default all properties are included in the response",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "Etag",
+          "in" : "header",
+          "description" : "Etag header, check https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/DrawV3Variation2"
+              }
+            }
+          },
+          "304" : {
+            "description" : "NOT MODIFIED"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v3.0/draws/active" : {
+      "get" : {
+        "tags" : [ "Draw operations V3.0" ],
+        "summary" : "Get active draws",
+        "description" : "Get all active draws for all games",
+        "operationId" : "getActiveDraws",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "property",
+          "in" : "query",
+          "description" : "Specifies which properties to include, by default all properties are included in the response",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "Etag",
+          "in" : "header",
+          "description" : "Etag header, check https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number",
+          "required" : false,
+          "type" : "integer",
+          "default" : 0
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Results per page",
+          "required" : false,
+          "type" : "integer",
+          "default" : 10,
+          "maximum" : 100,
+          "minimum" : 1
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "Sorting order. Options: asc, desc. Default is desc.",
+          "required" : false,
+          "type" : "string",
+          "default" : "desc"
+        }, {
+          "name" : "column",
+          "in" : "query",
+          "description" : "Sorting column. Options: gameId, drawId, drawTime, status, visualDraw.",
+          "required" : false,
+          "type" : "string",
+          "default" : "gameId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/PageDrawV3Variation2"
+            }
+          },
+          "304" : {
+            "description" : "NOT MODIFIED"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v3.0/draws/{gameId}/upcoming/{limit}" : {
+      "get" : {
+        "tags" : [ "Draw operations V3.0" ],
+        "summary" : "Get upcoming draws for a game",
+        "description" : "Get upcoming(future) draws for a game and optionally the active one. By default the active draw is included in the response if it exists.",
+        "operationId" : "getUpcomingDraws",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "limit",
+          "in" : "path",
+          "description" : "Limit, the number of total draws",
+          "required" : true,
+          "type" : "integer",
+          "maximum" : 100,
+          "minimum" : 1,
+          "format" : "int32"
+        }, {
+          "name" : "includeActive",
+          "in" : "query",
+          "description" : "Whether to include the active draw if it exists",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "property",
+          "in" : "query",
+          "description" : "Specifies which properties to include, by default all properties are included in the response",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "Etag",
+          "in" : "header",
+          "description" : "Etag header, check https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/DrawV3Variation2"
+              }
+            }
+          },
+          "304" : {
+            "description" : "NOT MODIFIED"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v3.0/draws/{gameId}/active" : {
+      "get" : {
+        "tags" : [ "Draw operations V3.0" ],
+        "summary" : "Get the active draw for a game",
+        "description" : "Get the active draw for a game",
+        "operationId" : "getActiveDrawForGame",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "property",
+          "in" : "query",
+          "description" : "Specifies which properties to include, by default all properties are included in the response",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "Etag",
+          "in" : "header",
+          "description" : "Etag header, check https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/DrawV3Variation2"
+            }
+          },
+          "304" : {
+            "description" : "NOT MODIFIED"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v3.0/draws/{gameId}/draw-date/{fromDate}/{toDate}" : {
+      "get" : {
+        "tags" : [ "Draw operations V3.0" ],
+        "summary" : "Get draws for a game by date range",
+        "description" : "Get draws for a game by date range.",
+        "operationId" : "getDrawsForGameByDate",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "fromDate",
+          "in" : "path",
+          "description" : "The from date filter. Must be in 'yyyy-MM-dd' format.",
+          "required" : true,
+          "type" : "string",
+          "pattern" : "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+        }, {
+          "name" : "toDate",
+          "in" : "path",
+          "description" : "The to date filter. Must be in 'yyyy-MM-dd' format.",
+          "required" : true,
+          "type" : "string",
+          "pattern" : "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+        }, {
+          "name" : "timezone",
+          "in" : "header",
+          "description" : "The timezone in which the date filters were provided. Default is UTC.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Filter draws by status, multiple statuses filters allowed. By default results status is used.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "future", "active", "pendingResults", "results", "drawBreak" ]
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "property",
+          "in" : "query",
+          "description" : "Specifies which properties to include, by default all properties are included in the response",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "Etag",
+          "in" : "header",
+          "description" : "Etag header, check https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number",
+          "required" : false,
+          "type" : "integer",
+          "default" : 0
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Results per page",
+          "required" : false,
+          "type" : "integer",
+          "default" : 10,
+          "maximum" : 100,
+          "minimum" : 1
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "Sorting order. Options: asc, desc. Default is desc.",
+          "required" : false,
+          "type" : "string",
+          "default" : "desc"
+        }, {
+          "name" : "column",
+          "in" : "query",
+          "description" : "Sorting column. Options: gameId, drawId, drawTime, status, visualDraw.",
+          "required" : false,
+          "type" : "string",
+          "default" : "drawId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/PageDrawV3Variation2"
+            }
+          },
+          "304" : {
+            "description" : "NOT MODIFIED"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v3.0/draws/{gameId}/draw-date/{fromDate}/{toDate}/draw-id" : {
+      "get" : {
+        "tags" : [ "Draw operations V3.0" ],
+        "summary" : "Get draw ids for a game by date range",
+        "description" : "Get draw ids for a game by date range.",
+        "operationId" : "getDrawIdsForGameByDate",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "fromDate",
+          "in" : "path",
+          "description" : "The from date filter. Must be in 'yyyy-MM-dd' format.",
+          "required" : true,
+          "type" : "string",
+          "pattern" : "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+        }, {
+          "name" : "toDate",
+          "in" : "path",
+          "description" : "The to date filter. Must be in 'yyyy-MM-dd' format.",
+          "required" : true,
+          "type" : "string",
+          "pattern" : "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+        }, {
+          "name" : "timezone",
+          "in" : "header",
+          "description" : "The timezone in which the date filters were provided. Default is UTC.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Filter draws by status, multiple statuses filters allowed. By default results status is used.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "future", "active", "pendingResults", "results", "drawBreak" ]
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "Etag",
+          "in" : "header",
+          "description" : "Etag header, check https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer",
+                "format" : "int32"
+              }
+            }
+          },
+          "304" : {
+            "description" : "NOT MODIFIED"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v3.0/draws/{gameId}/draw-id/{fromDrawId}/{toDrawId}" : {
+      "get" : {
+        "tags" : [ "Draw operations V3.0" ],
+        "summary" : "Get draws for a game by draw id range",
+        "description" : "Get draws for a game using a draw number range.",
+        "operationId" : "getDrawsForGame",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "fromDrawId",
+          "in" : "path",
+          "description" : "The start draw id",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "toDrawId",
+          "in" : "path",
+          "description" : "The end draw id",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Filter draws by status, multiple statuses filters allowed. By default results status is used.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "future", "active", "pendingResults", "results", "drawBreak" ]
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "property",
+          "in" : "query",
+          "description" : "Specifies which properties to include, by default all properties are included in the response",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "Etag",
+          "in" : "header",
+          "description" : "Etag header, check https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number",
+          "required" : false,
+          "type" : "integer",
+          "default" : 0
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Results per page",
+          "required" : false,
+          "type" : "integer",
+          "default" : 10,
+          "maximum" : 100,
+          "minimum" : 1
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "Sorting order. Options: asc, desc. Default is desc.",
+          "required" : false,
+          "type" : "string",
+          "default" : "desc"
+        }, {
+          "name" : "column",
+          "in" : "query",
+          "description" : "Sorting column. Options: gameId, drawId, drawTime, status, visualDraw.",
+          "required" : false,
+          "type" : "string",
+          "default" : "drawId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/PageDrawV3Variation2"
+            }
+          },
+          "304" : {
+            "description" : "NOT MODIFIED"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v1.0/draws/{gameId}/{drawId}" : {
+      "put" : {
+        "tags" : [ "Draw update operations V1.0" ],
+        "summary" : "Register or update a draw",
+        "description" : "",
+        "operationId" : "registerOrUpdate",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "description" : "Game identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "drawId",
+          "in" : "path",
+          "description" : "Draw identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "providerId",
+          "in" : "header",
+          "description" : "Provider identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "stateId",
+          "in" : "header",
+          "description" : "State identifier used for idempotency",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/InfoStoreDrawUpdateRequestV1"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/InfoStoreDrawV1DTO"
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v1.0/sample/simple/update" : {
+      "post" : {
+        "tags" : [ "Sample subscriber operations V1.0" ],
+        "summary" : "Sample subscriber notification endpoint with notification in body",
+        "description" : "",
+        "operationId" : "simpleUpdate",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/An simple object that contains information about a state change of an entity"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/EntityNotificationDTOResponse"
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR"
+          },
+          "500" : {
+            "description" : "ERROR"
+          }
+        }
+      }
+    },
+    "/v1.0/sample/simple/update/{gameId}/{drawId}/{status}" : {
+      "post" : {
+        "tags" : [ "Sample subscriber operations V1.0" ],
+        "summary" : "Sample subscriber notification endpoint with no body",
+        "description" : "Sample subscriber notification endpoint with no body. The path and the path parameters can be changed as long as the properties have the specific names and format: {property} . The header parameters (stateId, previousStateId, namespace) are optional.",
+        "operationId" : "simpleUpdateNoDody",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "drawId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "status",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "stateId",
+          "in" : "header",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "previousStateId",
+          "in" : "header",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "namespace",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/EntityNotificationDTOResponse"
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR"
+          },
+          "500" : {
+            "description" : "ERROR"
+          }
+        }
+      }
+    },
+    "/v1.0/sample/update" : {
+      "post" : {
+        "tags" : [ "Sample subscriber operations V1.0" ],
+        "summary" : "Sample subscriber notification endpoint with entity map in body",
+        "description" : "",
+        "operationId" : "update",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/An object that contains information about a state change of an entity"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/EntityNotificationDTOResponse"
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR"
+          },
+          "500" : {
+            "description" : "ERROR"
+          }
+        }
+      }
+    },
+    "/v1.0/states" : {
+      "get" : {
+        "tags" : [ "Entity state operations" ],
+        "summary" : "Get entity states",
+        "description" : "Get paginated entity states. From and to parameters are optional and allow to retrieve a subset of entity states.",
+        "operationId" : "getEntityStates",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "from",
+          "in" : "query",
+          "description" : "The start state id",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "to",
+          "in" : "query",
+          "description" : "The end state id",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "subscriberId",
+          "in" : "query",
+          "description" : "Subscriber id",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number",
+          "required" : false,
+          "type" : "integer",
+          "default" : 0
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Results per page",
+          "required" : false,
+          "type" : "integer",
+          "default" : 10,
+          "maximum" : 100,
+          "minimum" : 1
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "Sorting order. Options: asc, desc. Default is asc.",
+          "required" : false,
+          "type" : "string",
+          "default" : "asc"
+        }, {
+          "name" : "column",
+          "in" : "query",
+          "description" : "Sorting column. Options: stateId",
+          "required" : false,
+          "type" : "string",
+          "default" : "stateId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/PageEntityStateDTO"
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v1.0/states/{stateId}/entity" : {
+      "get" : {
+        "tags" : [ "Entity state operations" ],
+        "summary" : "Get entity by state id",
+        "description" : "Get entity by state id. It contains only the entity body.",
+        "operationId" : "getEntityState",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "stateId",
+          "in" : "path",
+          "description" : "State identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "subscriberId",
+          "in" : "query",
+          "description" : "Subscriber id",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "404" : {
+            "description" : "NOT FOUND"
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v1.0/states/{stateId}" : {
+      "get" : {
+        "tags" : [ "Entity state operations" ],
+        "summary" : "Get entity state by state id",
+        "description" : "Get entity by state id. It contains the entity body as well as a container object that stores the state id and the namespace.",
+        "operationId" : "getState",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "stateId",
+          "in" : "path",
+          "description" : "State identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "subscriberId",
+          "in" : "query",
+          "description" : "Subscriber id",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/EntityStateDTO"
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "404" : {
+            "description" : "NOT FOUND"
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v1.0/subscribers/{subscriberId}" : {
+      "put" : {
+        "tags" : [ "Subscriber operations" ],
+        "summary" : "Update a subscriber",
+        "description" : "",
+        "operationId" : "updateGame",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "subscriberId",
+          "in" : "path",
+          "description" : "The subscriber id",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "The subscriber data",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/SubscriberUpdateRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/SubscriberDTO"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Subscriber operations" ],
+        "summary" : "Delete a subscriber",
+        "description" : "",
+        "operationId" : "deleteGame",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "subscriberId",
+          "in" : "path",
+          "description" : "The subscriber id",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/v1.0/subscribers" : {
+      "get" : {
+        "tags" : [ "Subscriber operations" ],
+        "summary" : "Get subscribers",
+        "description" : "",
+        "operationId" : "findAll",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "subscriberId",
+          "in" : "query",
+          "description" : "Filter by subscriberId",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "Filter by name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "gameIds",
+          "in" : "query",
+          "description" : "Filter by gameIds",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "entities",
+          "in" : "query",
+          "description" : "Filter by entities",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "draw", "transactions", "validations" ]
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "column",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "default" : "subscriberId"
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "default" : "asc"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/SubscriberDTO"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Subscriber operations" ],
+        "summary" : "Register a subscriber",
+        "description" : "",
+        "operationId" : "register",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "The subscriber data",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/SubscriberRegistrationRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/SubscriberDTO"
+            }
+          }
+        }
+      }
+    },
+    "/v1.0/transactions-control" : {
+      "get" : {
+        "tags" : [ "Transactions control operations" ],
+        "summary" : "Get transactions control configuration",
+        "description" : "",
+        "operationId" : "findOne",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/TransactionsControlDTO"
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Transactions control operations" ],
+        "summary" : "Update transactions control configuration",
+        "description" : "",
+        "operationId" : "registerOrUpdate",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "providerId",
+          "in" : "header",
+          "description" : "Provider identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "stateId",
+          "in" : "header",
+          "description" : "State identifier used for idempotency",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/TransactionsControlDTO"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/TransactionsControlDTO"
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    },
+    "/v1.0/validations-states/{gameId}/{drawId}/{version}" : {
+      "get" : {
+        "tags" : [ "Validations state operations" ],
+        "summary" : "Get validations state",
+        "description" : "",
+        "operationId" : "findOne",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "drawId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/ValidationsStateDTO"
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Validations state operations" ],
+        "summary" : "Update validations state",
+        "description" : "",
+        "operationId" : "registerOrUpdate",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gameId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "drawId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "providerId",
+          "in" : "header",
+          "description" : "Provider identifier",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "stateId",
+          "in" : "header",
+          "description" : "State identifier used for idempotency",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/ValidationsStateDTO"
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "500" : {
+            "description" : "APPLICATION ERROR",
+            "schema" : {
+              "$ref" : "#/definitions/FaultInfo"
+            }
+          },
+          "502" : {
+            "description" : "BAD GATEWAY"
+          },
+          "503" : {
+            "description" : "SERVICE UNAVAILABLE"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "AddOnPricePointsV3Variation2DTO" : {
+      "type" : "object",
+      "properties" : {
+        "amount" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "gameType" : {
+          "type" : "string"
+        }
+      }
+    },
+    "DrawResultV3Variation2" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The unique id of the result"
+        },
+        "divident" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Divident amount per winner of category"
+        },
+        "winners" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Number of category winners"
+        },
+        "distributed" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Distributed amount to all winners of category (net amount)"
+        },
+        "jackpot" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Jackpot amount of category"
+        },
+        "fixed" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Fixed winning amount of category"
+        },
+        "categoryType" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The type of category. 0:NormalDividend, 1:FixedAmount, 2:FixedOdds, 3:DividendSharedWithOther, 4:PromotionWinner, 5:ProgressiveJackpot"
+        },
+        "promotionId" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Promotion id of category. It will be null if not applicable."
+        },
+        "gameType" : {
+          "type" : "string",
+          "description" : "The game type related to the category."
+        }
+      }
+    },
+    "DrawV3Variation2" : {
+      "type" : "object",
+      "required" : [ "drawBreak", "drawId", "drawTime", "gameId", "gameRuleVersion", "pricePoints", "prizeCategories", "status", "statusNr", "visualDraw" ],
+      "properties" : {
+        "gameId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Game code"
+        },
+        "drawId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Draw number"
+        },
+        "drawTime" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Draw time in UTC in milliseconds"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Draw status (enumeration)",
+          "enum" : [ "future", "active", "pendingResults", "results", "drawBreak" ]
+        },
+        "statusNr" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Draw status (number)"
+        },
+        "drawBreak" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Draw break in milliseconds"
+        },
+        "visualDraw" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Visual draw number, a recurring draw number"
+        },
+        "gameRuleVersion" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Game rule version"
+        },
+        "pricePoints" : {
+          "description" : "Price points",
+          "$ref" : "#/definitions/PricePointsV3Variation2DTO"
+        },
+        "winningNumbers" : {
+          "type" : "array",
+          "description" : "Array of winning numbers for each winning column.",
+          "items" : {
+            "$ref" : "#/definitions/WinningNumbersV3Variation2DTO"
+          }
+        },
+        "prizeCategories" : {
+          "type" : "array",
+          "description" : "Prize categories",
+          "items" : {
+            "$ref" : "#/definitions/DrawResultV3Variation2"
+          }
+        },
+        "wagerStatistics" : {
+          "description" : "Wager statistics",
+          "$ref" : "#/definitions/WagerStatisticsDTO"
+        },
+        "drawType" : {
+          "type" : "string",
+          "description" : "DAY or EVE indicator. Applicable only for games that have day and eve draws"
+        }
+      }
+    },
+    "PricePointsV3Variation2DTO" : {
+      "type" : "object",
+      "properties" : {
+        "addOn" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AddOnPricePointsV3Variation2DTO"
+          }
+        },
+        "amount" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "WagerStatisticsDTO" : {
+      "type" : "object",
+      "required" : [ "columns" ],
+      "properties" : {
+        "columns" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Total columns"
+        },
+        "wagers" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Total wagers"
+        }
+      }
+    },
+    "WinningNumbersV3Variation2DTO" : {
+      "type" : "object",
+      "properties" : {
+        "list" : {
+          "type" : "array",
+          "description" : "Winning numbers list",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      }
+    },
+    "FaultInfo" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The error code"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "The error message"
+        },
+        "data" : {
+          "type" : "array",
+          "description" : "The error data which is an abstract object that may be used to provide any error metadata",
+          "items" : {
+            "type" : "object"
+          }
+        },
+        "source" : {
+          "type" : "string",
+          "description" : "The application at which the API error occured"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "The error family, e.g. RUNTIME, VALIDATION, etc"
+        },
+        "guid" : {
+          "type" : "string",
+          "description" : "The unique identifier of the error process"
+        }
+      },
+      "description" : "The FaultInfo object contains all the details assosiated with an API error"
+    },
+    "LastResultDrawAndActiveV3Variation2" : {
+      "type" : "object",
+      "properties" : {
+        "last" : {
+          "$ref" : "#/definitions/DrawV3Variation2"
+        },
+        "active" : {
+          "$ref" : "#/definitions/DrawV3Variation2"
+        }
+      }
+    },
+    "Page" : {
+      "type" : "object",
+      "properties" : {
+        "totalElements" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "last" : {
+          "type" : "boolean"
+        },
+        "first" : {
+          "type" : "boolean"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        },
+        "numberOfElements" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "size" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "content" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object"
+          }
+        },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "PageDrawV3Variation2" : {
+      "type" : "object",
+      "properties" : {
+        "totalPages" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "size" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "numberOfElements" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "content" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/DrawV3Variation2"
+          }
+        },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "first" : {
+          "type" : "boolean"
+        },
+        "last" : {
+          "type" : "boolean"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        }
+      }
+    },
+    "Sort" : {
+      "type" : "object"
+    },
+    "AddOnPricePointsV1DTO" : {
+      "type" : "object",
+      "properties" : {
+        "amount" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "gameType" : {
+          "type" : "string"
+        }
+      }
+    },
+    "InfoStoreDrawResultsV1DTO" : {
+      "type" : "object",
+      "required" : [ "bonusAmount", "distributedAmount", "dividentAmount", "id", "jackpotAmount", "netDividentAmount", "roundingAmount", "taxationAmount", "tierLevel", "tierType", "winners" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The unique id of the result",
+          "minimum" : 1
+        },
+        "tierType" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Number of total picks for tier ie. 1/10, 2/10, 3/10 where 10 is the tier type",
+          "minimum" : 1
+        },
+        "tierLevel" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Number of winning bets for tier ie. 1/10, 2/10, 3/10 where 1,2,3 is the tier level",
+          "minimum" : 0
+        },
+        "distributedAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Distributed amount to all winners of category",
+          "minimum" : 0
+        },
+        "dividentAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Gross divident amount per winner of category",
+          "minimum" : 0
+        },
+        "taxationAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Taxation amount per winner of category",
+          "minimum" : 0
+        },
+        "roundingAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Rounding amount per winner of category",
+          "minimum" : 0
+        },
+        "bonusAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Bonus amount per winner of category",
+          "minimum" : 0
+        },
+        "jackpotAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Jackpot amount per winner of category",
+          "minimum" : 0
+        },
+        "netDividentAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Net divident amount per winner of category",
+          "minimum" : 0
+        },
+        "winners" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Number of category winners",
+          "minimum" : 0
+        },
+        "fixedAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Fixed winning amount per winner of category"
+        },
+        "categoryType" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The type of category. 0:NormalDividend, 1:FixedAmount, 2:FixedOdds, 3:DividendSharedWithOther, 4:PromotionWinner, 5:ProgressiveJackpot"
+        },
+        "promotionId" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "The promotion id of category"
+        },
+        "gameType" : {
+          "type" : "string",
+          "description" : "The game type related to the category."
+        }
+      }
+    },
+    "InfoStoreDrawV1DTO" : {
+      "type" : "object",
+      "required" : [ "drawBreak", "drawId", "drawTime", "gameId", "gameRuleVersion", "pricePoints", "status", "visualDraw", "winningRevision" ],
+      "properties" : {
+        "gameId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Game code"
+        },
+        "drawId" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Draw number"
+        },
+        "drawTime" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Draw time in UTC in milliseconds"
+        },
+        "status" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Draw status"
+        },
+        "drawBreak" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Draw break in milliseconds"
+        },
+        "visualDraw" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Visual draw"
+        },
+        "gameRuleVersion" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Game rule version"
+        },
+        "pricePoints" : {
+          "description" : "Price points of the draw main game and addons",
+          "$ref" : "#/definitions/PricePointsV1DTO"
+        },
+        "winningNumbers" : {
+          "type" : "array",
+          "description" : "Array of winning numbers corresponding to winning column. List of String where each String corresponds to the winning numbers ofeach winning column. Winning numbers of each winning column should be comma separated.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "prizeCategories" : {
+          "type" : "array",
+          "description" : "Prize categories",
+          "items" : {
+            "$ref" : "#/definitions/InfoStoreDrawResultsV1DTO"
+          }
+        },
+        "winningRevision" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Winning revision"
+        },
+        "activationTime" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Time that the draw was activated"
+        },
+        "wagerStatistics" : {
+          "type" : "array",
+          "description" : "Wager statistics",
+          "items" : {
+            "$ref" : "#/definitions/InfoStoreDrawWagerStatisticsV1DTO"
+          }
+        },
+        "drawType" : {
+          "type" : "string",
+          "description" : "DAY or EVE indicator. Applicable only for games that have day and eve draws"
+        }
+      }
+    },
+    "InfoStoreDrawWagerStatisticsV1DTO" : {
+      "type" : "object",
+      "required" : [ "columns", "wagerType" ],
+      "properties" : {
+        "wagerType" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Wager type. 1:Play 2:Cancel?"
+        },
+        "columns" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Total columns"
+        },
+        "wagers" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Total wagers"
+        }
+      }
+    },
+    "PricePointsV1DTO" : {
+      "type" : "object",
+      "properties" : {
+        "addOn" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AddOnPricePointsV1DTO"
+          }
+        },
+        "amount" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "InfoStoreDrawUpdateRequestV1" : {
+      "type" : "object",
+      "required" : [ "drawBreak", "drawTime", "gameRuleVersion", "pricePoints", "status", "visualDraw", "winningRevision" ],
+      "properties" : {
+        "drawTime" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Draw time in UTC in milliseconds"
+        },
+        "status" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Draw status"
+        },
+        "drawBreak" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Draw break in milliseconds"
+        },
+        "visualDraw" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Visual draw"
+        },
+        "gameRuleVersion" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Game rule version"
+        },
+        "pricePoints" : {
+          "description" : "Price points of the draw main game and addons",
+          "$ref" : "#/definitions/PricePointsV1DTO"
+        },
+        "winningNumbers" : {
+          "type" : "array",
+          "description" : "Array of winning numbers corresponding to winning column. List of String where each String corresponds to the winning numbers ofeach winning column. Winning numbers of each winning column should be comma separated.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "prizeCategories" : {
+          "type" : "array",
+          "description" : "Prize categories",
+          "items" : {
+            "$ref" : "#/definitions/InfoStoreDrawResultsV1DTO"
+          }
+        },
+        "winningRevision" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Winning revision"
+        },
+        "activationTime" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Time that the draw was activated"
+        },
+        "wagerStatistics" : {
+          "type" : "array",
+          "description" : "Wager statistics",
+          "items" : {
+            "$ref" : "#/definitions/InfoStoreDrawWagerStatisticsV1DTO"
+          }
+        },
+        "drawType" : {
+          "type" : "string",
+          "description" : "DAY or EVE indicator. Applicable only for games that have day and eve draws"
+        }
+      }
+    },
+    "EntityNotificationDTOResponse" : {
+      "type" : "object",
+      "properties" : {
+        "stateId" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "An simple object that contains information about a state change of an entity" : {
+      "type" : "object",
+      "required" : [ "namespace", "stateId" ],
+      "properties" : {
+        "stateId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "previousStateId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "namespace" : {
+          "type" : "string"
+        }
+      }
+    },
+    "An object that contains information about a state change of an entity" : {
+      "type" : "object",
+      "required" : [ "namespace", "stateId" ],
+      "properties" : {
+        "stateId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "previousStateId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "namespace" : {
+          "type" : "string"
+        },
+        "draw" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            }
+          }
+        },
+        "transactionsControl" : {
+          "type" : "object"
+        },
+        "validationsState" : {
+          "type" : "object"
+        }
+      }
+    },
+    "EntityStateDTO" : {
+      "type" : "object",
+      "properties" : {
+        "stateId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "namespace" : {
+          "type" : "string"
+        },
+        "draw" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            }
+          }
+        },
+        "transactionsControl" : {
+          "type" : "object"
+        },
+        "validationsState" : {
+          "type" : "object"
+        }
+      }
+    },
+    "PageEntityStateDTO" : {
+      "type" : "object",
+      "properties" : {
+        "totalPages" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "size" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "numberOfElements" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "content" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/EntityStateDTO"
+          }
+        },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "first" : {
+          "type" : "boolean"
+        },
+        "last" : {
+          "type" : "boolean"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        }
+      }
+    },
+    "Serializable" : {
+      "type" : "object"
+    },
+    "SubscribableEntityOptions" : {
+      "type" : "object",
+      "properties" : {
+        "variation" : {
+          "type" : "string"
+        },
+        "properties" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "SubscriberDTO" : {
+      "type" : "object",
+      "properties" : {
+        "subscriberId" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "entities" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "draw", "transactions", "validations" ]
+          }
+        },
+        "gameIds" : {
+          "type" : "array",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "messageBody" : {
+          "type" : "string",
+          "enum" : [ "none", "notification", "entity" ]
+        },
+        "method" : {
+          "type" : "string",
+          "enum" : [ "rest" ]
+        },
+        "path" : {
+          "type" : "string"
+        },
+        "httpMethod" : {
+          "type" : "string"
+        },
+        "maxRetries" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "retryInterval" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "options" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/SubscribableEntityOptions"
+          }
+        }
+      }
+    },
+    "SubscriberUpdateRequest" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "entities" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "draw", "transactions", "validations" ]
+          }
+        },
+        "gameIds" : {
+          "type" : "array",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "messageBody" : {
+          "type" : "string",
+          "enum" : [ "none", "notification", "entity" ]
+        },
+        "path" : {
+          "type" : "string"
+        },
+        "httpMethod" : {
+          "type" : "string",
+          "pattern" : "^(GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS|TRACE)$"
+        },
+        "maxRetries" : {
+          "type" : "integer",
+          "format" : "int32",
+          "minimum" : 0,
+          "maximum" : 100
+        },
+        "retryInterval" : {
+          "type" : "integer",
+          "format" : "int32",
+          "minimum" : 500
+        },
+        "options" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/SubscribableEntityOptions"
+          }
+        }
+      }
+    },
+    "SubscriberRegistrationRequest" : {
+      "type" : "object",
+      "required" : [ "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "entities" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "draw", "transactions", "validations" ]
+          }
+        },
+        "gameIds" : {
+          "type" : "array",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "messageBody" : {
+          "type" : "string",
+          "enum" : [ "none", "notification", "entity" ]
+        },
+        "method" : {
+          "type" : "string",
+          "enum" : [ "rest" ]
+        },
+        "path" : {
+          "type" : "string"
+        },
+        "httpMethod" : {
+          "type" : "string",
+          "pattern" : "^(GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS|TRACE)$"
+        },
+        "maxRetries" : {
+          "type" : "integer",
+          "format" : "int32",
+          "minimum" : 0,
+          "maximum" : 100
+        },
+        "retryInterval" : {
+          "type" : "integer",
+          "format" : "int32",
+          "minimum" : 500
+        },
+        "options" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/SubscribableEntityOptions"
+          }
+        }
+      }
+    },
+    "TransactionControlGameStatus" : {
+      "type" : "object",
+      "properties" : {
+        "all" : {
+          "type" : "boolean",
+          "description" : "All transactions"
+        },
+        "cancel" : {
+          "type" : "boolean",
+          "description" : "Transactions for voiding tickets"
+        },
+        "exchang" : {
+          "type" : "boolean",
+          "description" : "Transactions for partial payments"
+        },
+        "fcd" : {
+          "type" : "boolean",
+          "description" : "Transactions for getting wager information"
+        },
+        "fs" : {
+          "type" : "boolean",
+          "description" : "Transactions for ticket checking"
+        },
+        "pay" : {
+          "type" : "boolean",
+          "description" : "Transactions for pay"
+        },
+        "play" : {
+          "type" : "boolean",
+          "description" : "Transactions for play"
+        }
+      }
+    },
+    "TransactionControlSystem" : {
+      "type" : "object",
+      "properties" : {
+        "all" : {
+          "type" : "boolean"
+        },
+        "games" : {
+          "type" : "boolean"
+        },
+        "genericReports" : {
+          "type" : "boolean"
+        },
+        "reports" : {
+          "type" : "boolean"
+        },
+        "validate" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "TransactionsControlDTO" : {
+      "type" : "object",
+      "properties" : {
+        "games" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/TransactionsControlGame"
+          }
+        },
+        "system" : {
+          "$ref" : "#/definitions/TransactionControlSystem"
+        }
+      }
+    },
+    "TransactionsControlGame" : {
+      "type" : "object",
+      "properties" : {
+        "gameId" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "status" : {
+          "$ref" : "#/definitions/TransactionControlGameStatus"
+        }
+      }
+    },
+    "ValidationsStateDTO" : {
+      "type" : "object",
+      "properties" : {
+        "gameId" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "drawId" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "version" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    }
+  }
+}

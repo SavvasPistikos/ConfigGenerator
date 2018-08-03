@@ -1,0 +1,6121 @@
+{
+  "basePath": "/",
+  "consumes": ["application/json", "application/json"],
+  "definitions": {
+    "BetModel": {
+      "properties": {
+        "isecure": {
+          "description": "I-Secure data of LOTOS coupon integrity mechanism",
+          "items": {
+            "format": "uint32",
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "metadata": {
+          "$ref": "#/definitions/MetaDataModel"
+        },
+        "wager": {
+          "$ref": "#/definitions/WagerDataModel"
+        }
+      },
+      "required": ["metadata", "wager"],
+      "type": "object"
+    },
+    "BoardModel": {
+      "properties": {
+        "boardId": {
+          "description": "Board id",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "multipliers": {
+          "description": "Multipliers",
+          "items": {
+            "format": "uint32",
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "options": {
+          "description": "Game specific board options",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "panels": {
+          "description": "Game specific array of board panels",
+          "items": {
+            "$ref": "#/definitions/PanelModel"
+          },
+          "type": "array"
+        },
+        "quickPick": {
+          "description": "Quick Pick attribute for board",
+          "type": "boolean"
+        }
+      },
+      "required": ["boardId", "panels"],
+      "type": "object"
+    },
+    "CallbackModel": {
+      "properties": {
+        "httpMethod": {
+          "description": "httpMethod",
+          "enum": ["Put", "Post"],
+          "type": "string"
+        },
+        "resourceUrl": {
+          "description": "resourceUrl",
+          "type": "string"
+        }
+      },
+      "required": ["resourceUrl", "httpMethod"],
+      "type": "object"
+    },
+    "CheckPaymentModel": {
+      "properties": {
+        "annuitypercent": {
+          "description": "annuitypercent",
+          "format": "double",
+          "type": "number"
+        },
+        "beneficiary": {
+          "$ref": "#/definitions/ClaimantModel"
+        },
+        "centerid": {
+          "description": "centerid",
+          "type": "string"
+        },
+        "checkamount": {
+          "description": "checkamount",
+          "format": "double",
+          "type": "number"
+        },
+        "checkid": {
+          "description": "check id printed on check",
+          "format": "int64",
+          "type": "integer"
+        },
+        "checkstatus": {
+          "description": "checkstatus",
+          "enum": ["Open", "Void", "Reissued", "Reconciled", "Cancelled"],
+          "type": "string"
+        },
+        "claimantid": {
+          "description": "claimantid",
+          "format": "int64",
+          "type": "integer"
+        },
+        "claimid": {
+          "description": "claimid",
+          "format": "int64",
+          "type": "integer"
+        },
+        "deviceid": {
+          "description": "deviceid",
+          "type": "string"
+        },
+        "grossamount": {
+          "description": "gross amount for the claimant for the installment",
+          "format": "double",
+          "type": "number"
+        },
+        "installmentno": {
+          "description": "installmentno",
+          "format": "int16",
+          "type": "integer"
+        },
+        "lastmodifieddate": {
+          "description": "lastmodifieddate",
+          "format": "date",
+          "type": "string"
+        },
+        "memo": {
+          "description": "memo",
+          "type": "string"
+        },
+        "note": {
+          "description": "note",
+          "type": "string"
+        },
+        "paymentdate": {
+          "description": "paymentdate",
+          "format": "date",
+          "type": "string"
+        },
+        "paymentmethod": {
+          "description": "paymentmethod",
+          "enum": ["Check", "Cash", "EFT"],
+          "type": "string"
+        },
+        "paymentpercent": {
+          "description": "paymentpercent",
+          "format": "double",
+          "type": "number"
+        },
+        "previouscheckid": {
+          "description": "previouscheckid",
+          "format": "int64",
+          "type": "integer"
+        },
+        "registerid": {
+          "description": "payment register unique id",
+          "format": "int64",
+          "type": "integer"
+        }
+      },
+      "required": ["claimid", "claimantid", "installmentno", "annuitypercent", "paymentpercent", "grossamount", "registerid", "checkid", "paymentmethod", "paymentdate", "checkamount", "checkstatus", "centerid", "deviceid", "previouscheckid", "lastmodifieddate", "memo", "note", "beneficiary"],
+      "type": "object"
+    },
+    "ClaimDetailsModel": {
+      "properties": {
+        "amount": {
+          "description": "amount",
+          "format": "double",
+          "type": "number"
+        },
+        "cashingLocation": {
+          "description": "cashingLocation",
+          "type": "string"
+        },
+        "description": {
+          "description": "description",
+          "type": "string"
+        },
+        "gameType": {
+          "description": "gameType",
+          "enum": ["Instant", "Online", "SecondChance", "Others"],
+          "type": "string"
+        },
+        "guid": {
+          "description": "Unique Reference key for the ticket or claim detail to avoid ticket duplicate entry",
+          "type": "string"
+        },
+        "playdraw": {
+          "description": "playdraw",
+          "format": "int32",
+          "type": "integer"
+        },
+        "sellingTerminal": {
+          "description": "sellingTerminal",
+          "type": "string"
+        },
+        "seqid": {
+          "description": "seqid",
+          "format": "int32",
+          "type": "integer"
+        },
+        "ticketnumber": {
+          "description": "ticketnumber",
+          "type": "string"
+        },
+        "tier": {
+          "description": "tier",
+          "format": "int32",
+          "type": "integer"
+        },
+        "wager": {
+          "description": "wager",
+          "format": "double",
+          "type": "number"
+        },
+        "winningDraw": {
+          "description": "winningDraw",
+          "format": "int32",
+          "type": "integer"
+        },
+        "winningtype": {
+          "description": "winningtype",
+          "enum": ["ticket", "others"],
+          "type": "string"
+        }
+      },
+      "required": ["seqid", "ticketnumber", "winningtype", "amount", "wager", "gameType", "playdraw", "winningDraw", "tier", "cashingLocation", "sellingTerminal", "description", "guid"],
+      "type": "object"
+    },
+    "ClaimHeaderModel": {
+      "properties": {
+        "claimid": {
+          "description": "system generated id",
+          "format": "int64",
+          "type": "integer"
+        },
+        "claimtype": {
+          "description": "claimtype",
+          "enum": ["Annuity", "Regular", "Retailerincentive", "Merchandise", "Secondchance", "Subscription", "Misc"],
+          "type": "string"
+        },
+        "createdate": {
+          "description": "createdate",
+          "format": "date",
+          "type": "string"
+        },
+        "grossamount": {
+          "description": "grossamount",
+          "format": "double",
+          "type": "number"
+        },
+        "nosofinstallment": {
+          "description": "nosofinstallment",
+          "format": "int32",
+          "type": "integer"
+        },
+        "publicity": {
+          "description": "publicity",
+          "type": "boolean"
+        },
+        "status": {
+          "description": "status of claim",
+          "enum": ["Open", "Hold", "Incomplete", "Cancelled", "Closed"],
+          "type": "string"
+        },
+        "transid": {
+          "description": "unique identifier for the activity",
+          "type": "string"
+        }
+      },
+      "required": ["transid", "status", "nosofinstallment", "publicity", "grossamount", "createdate", "claimtype"],
+      "type": "object"
+    },
+    "ClaimModel": {
+      "properties": {
+        "claimants": {
+          "description": "claimants",
+          "items": {
+            "$ref": "#/definitions/ClaimantModel"
+          },
+          "type": "array"
+        },
+        "deductions": {
+          "description": "deductions",
+          "items": {
+            "$ref": "#/definitions/ClaimantDeductionModel"
+          },
+          "type": "array"
+        },
+        "details": {
+          "description": "details",
+          "items": {
+            "$ref": "#/definitions/ClaimDetailsModel"
+          },
+          "type": "array"
+        },
+        "header": {
+          "$ref": "#/definitions/ClaimHeaderModel"
+        },
+        "payments": {
+          "description": "payments",
+          "items": {
+            "$ref": "#/definitions/CheckPaymentModel"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["header", "details", "claimants", "payments", "deductions"],
+      "type": "object"
+    },
+    "ClaimantDeductionModel": {
+      "properties": {
+        "claimantid": {
+          "description": "claimantid",
+          "format": "int64",
+          "type": "integer"
+        },
+        "claimid": {
+          "description": "claimid",
+          "format": "int64",
+          "type": "integer"
+        },
+        "deductionamount": {
+          "description": "deductionamount",
+          "format": "double",
+          "type": "number"
+        },
+        "deductiontype": {
+          "description": "deductiontype",
+          "enum": ["StateTax", "FederalTax", "ChildSupport", "TaxLien", "Merchandise", "Others"],
+          "type": "string"
+        },
+        "installmentno": {
+          "description": "installmentno",
+          "format": "int16",
+          "type": "integer"
+        },
+        "paidon": {
+          "description": "paidon",
+          "format": "date",
+          "type": "string"
+        }
+      },
+      "required": ["claimid", "claimantid", "installmentno", "deductiontype", "deductionamount", "paidon"],
+      "type": "object"
+    },
+    "ClaimantModel": {
+      "properties": {
+        "address1": {
+          "description": "address1",
+          "type": "string"
+        },
+        "address2": {
+          "description": "address2",
+          "type": "string"
+        },
+        "citizenship": {
+          "description": "citizenship",
+          "type": "boolean"
+        },
+        "city": {
+          "description": "city",
+          "type": "string"
+        },
+        "claimantid": {
+          "description": "claimantid",
+          "format": "int64",
+          "type": "integer"
+        },
+        "claimantpercent": {
+          "description": "claimantpercent",
+          "format": "double",
+          "type": "number"
+        },
+        "claimanttype": {
+          "description": "claimanttype",
+          "enum": ["player", "retailer", "SecondChance", "Others"],
+          "type": "string"
+        },
+        "country": {
+          "description": "country",
+          "type": "string"
+        },
+        "dateofbirth": {
+          "description": "dateofbirth",
+          "format": "date",
+          "type": "string"
+        },
+        "fax": {
+          "description": "fax",
+          "type": "string"
+        },
+        "firstname": {
+          "description": "firstname",
+          "type": "string"
+        },
+        "gender": {
+          "description": "gender",
+          "type": "string"
+        },
+        "ineligible": {
+          "description": "ineligible",
+          "type": "boolean"
+        },
+        "lastname": {
+          "description": "lastname",
+          "type": "string"
+        },
+        "middlename": {
+          "description": "middlename",
+          "type": "string"
+        },
+        "nationalid": {
+          "description": "nationalid",
+          "type": "string"
+        },
+        "notes": {
+          "description": "notes",
+          "type": "string"
+        },
+        "phone": {
+          "description": "phone",
+          "type": "string"
+        },
+        "postalcode": {
+          "description": "postalcode",
+          "type": "string"
+        },
+        "prefix": {
+          "description": "prefix title",
+          "enum": ["Mr", "Mrs", "Master", "Miss", "Sr", "Jr"],
+          "type": "string"
+        },
+        "state": {
+          "description": "state",
+          "type": "string"
+        },
+        "suffix": {
+          "description": "suffix title",
+          "enum": ["Mr", "Mrs", "Master", "Miss", "Sr", "Jr"],
+          "type": "string"
+        }
+      },
+      "required": ["claimantid", "ineligible", "claimanttype", "prefix", "firstname", "middlename", "lastname", "suffix", "address1", "address2", "city", "state", "country", "postalcode", "dateofbirth", "citizenship", "nationalid", "gender", "phone", "fax", "notes", "claimantpercent"],
+      "type": "object"
+    },
+    "ClaimsListModel": {
+      "items": {
+        "$ref": "#/definitions/ClaimModel"
+      },
+      "type": "array"
+    },
+    "ClientModel": {
+      "properties": {
+        "channel": {
+          "description": "channel",
+          "type": "string"
+        },
+        "client": {
+          "description": "client",
+          "type": "string"
+        },
+        "operator": {
+          "description": "operator",
+          "type": "string"
+        }
+      },
+      "required": ["client", "channel", "operator"],
+      "type": "object"
+    },
+    "CoreServiceModel": {
+      "properties": {
+        "description": {
+          "description": "description",
+          "type": "string"
+        },
+        "serviceId": {
+          "description": "serviceId",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "status": {
+          "description": "Active: Service is up, Suspended: Service is down on purpose, Down: Service is unexpectedly down",
+          "enum": ["Active", "Suspended", "Down"],
+          "type": "string"
+        }
+      },
+      "required": ["serviceId", "description", "status"],
+      "type": "object"
+    },
+    "DBGDetailsModel": {
+      "properties": {
+        "categories": {
+          "description": "categories",
+          "items": {
+            "$ref": "#/definitions/WinCategoryModel"
+          },
+          "type": "array"
+        },
+        "categoriesCount": {
+          "description": "Number of winning categories",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "columnPrice": {
+          "description": "Column price",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "maxAdvancedDraws": {
+          "description": "Maximum advanced draw offset from the active draw that a wager can be played",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "maxAllowedBoards": {
+          "description": "Maximum number of allowed boards in a single bet request",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "maxAllowedColumns": {
+          "description": "Maximum columns allowed",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "maxMultipleDraws": {
+          "description": "Maximum consecutive draws that a wager can participate",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "minAllowedBoards": {
+          "description": "Minimum number of allowed boards in a single bet request",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "minAllowedColumns": {
+          "description": "Minimum columns allowed",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "panels": {
+          "description": "panels",
+          "items": {
+            "$ref": "#/definitions/DBGPanelInfoModel"
+          },
+          "type": "array"
+        },
+        "salesEnd": {
+          "description": "Sales end offset in seconds relative to the drawTime",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "salesStart": {
+          "description": "Sales start offset in seconds relative to the drawTime",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "required": ["maxAllowedBoards", "minAllowedBoards", "panels", "categories", "categoriesCount", "maxAdvancedDraws", "maxMultipleDraws", "maxAllowedColumns", "minAllowedColumns", "columnPrice", "salesEnd", "salesStart"],
+      "type": "object"
+    },
+    "DBGPanelInfoModel": {
+      "properties": {
+        "max": {
+          "description": "Maximum number in panel",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "maxSelections": {
+          "description": "Maximum selected numbers allowed",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "min": {
+          "description": "Minimum number in panel",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "minSelections": {
+          "description": "Minimum selected numbers allowed",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "panelId": {
+          "description": "Panel identifier",
+          "format": "uint16",
+          "type": "integer"
+        }
+      },
+      "required": ["panelId", "minSelections", "maxSelections", "min", "max"],
+      "type": "object"
+    },
+    "DBGWagerModel": {
+      "properties": {
+        "boards": {
+          "description": "boards",
+          "items": {
+            "$ref": "#/definitions/BoardModel"
+          },
+          "type": "array"
+        },
+        "columns": {
+          "description": "LOTOS generated wager amount of columns",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "cost": {
+          "description": "LOTOS generated wager cost amount in cents",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "creationTime": {
+          "description": "LOTOS generated creation time",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "gameId": {
+          "description": "gameId",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "multipliers": {
+          "description": "multipliers",
+          "items": {
+            "format": "uint32",
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "options": {
+          "description": "Wager specific options",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "participatingDraws": {
+          "$ref": "#/definitions/ParticipatingDrawModel"
+        },
+        "quickPick": {
+          "description": "quickPick",
+          "type": "boolean"
+        },
+        "status": {
+          "description": "status",
+          "enum": ["Played", "Canceled", "UndoCanceled", "Blocked", "Unblocked", "Validated"],
+          "type": "string"
+        },
+        "teamShares": {
+          "description": "teamShares",
+          "format": "uint16",
+          "type": "integer"
+        }
+      },
+      "required": ["gameId", "multipliers", "boards"],
+      "type": "object"
+    },
+    "DatePatternModel": {
+      "properties": {
+        "dates": {
+          "description": "dates",
+          "format": "date",
+          "type": "string"
+        },
+        "index": {
+          "description": "index",
+          "format": "uint16",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "DayPatternModel": {
+      "properties": {
+        "day": {
+          "description": "day",
+          "enum": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+          "type": "string"
+        },
+        "index": {
+          "description": "index",
+          "format": "uint16",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "DrawModel": {
+      "properties": {
+        "drawId": {
+          "description": "Draw number",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "drawTime": {
+          "description": "Closing time of draw in ISO 8601 format",
+          "format": "datetime",
+          "type": "string"
+        },
+        "gameId": {
+          "description": "Game code",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "gameRecord": {
+          "description": "Game rules version",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "previousStateId": {
+          "description": "Unique Id that identifies the previous state change Id",
+          "type": "string"
+        },
+        "prizeCategories": {
+          "description": "Prize categories",
+          "items": {
+            "$ref": "#/definitions/PrizeCategoryModel"
+          },
+          "type": "array"
+        },
+        "salesEnd": {
+          "description": "Sales end offset in seconds relative to the drawTime",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "stateId": {
+          "description": "Unique Id that identifies this draw state change",
+          "type": "string"
+        },
+        "status": {
+          "description": "status",
+          "enum": ["Defined", "Active", "Completed", "DistributedCalculated", "WinningNumbersEntered", "PaymentsEnabled", "PaymentsSuspended"],
+          "type": "string"
+        },
+        "visualDraw": {
+          "description": "Visual draw, that is the draw Id of a game as it known to players. It is possible for the game engine to use a different draw id for each game which is called actual draw id (the drawId field) Unless otherwise noticed visual draw and actual draw are equal with each other",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "winningNumbers": {
+          "description": "Array of winning numbers",
+          "items": {
+            "$ref": "#/definitions/WinningNumbersModel"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["gameId", "stateId", "previousStateId", "drawId", "drawTime", "status", "salesEnd", "visualDraw", "gameRecord", "winningNumbers", "prizeCategories"],
+      "type": "object"
+    },
+    "ErrorResponseModel": {
+      "properties": {
+        "code": {
+          "description": "code",
+          "format": "int32",
+          "type": "integer"
+        },
+        "data": {
+          "description": "data",
+          "items": {
+            "properties": {
+              "data": {
+                "description": "data",
+                "format": "uint32",
+                "type": "integer"
+              },
+              "eData": {
+                "description": "eData",
+                "items": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "guid": {
+          "description": "guid",
+          "type": "string"
+        },
+        "message": {
+          "description": "message",
+          "type": "string"
+        },
+        "source": {
+          "description": "source",
+          "type": "string"
+        },
+        "type": {
+          "description": "type",
+          "type": "string"
+        }
+      },
+      "required": ["code", "message", "guid", "source"],
+      "type": "object"
+    },
+    "FSDetailedModel": {
+      "properties": {
+        "amounts": {
+          "$ref": "#/definitions/WinningsAmountsModel"
+        },
+        "cost": {
+          "description": "coupon cost in money units",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "drawId": {
+          "description": "drawId",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "gameId": {
+          "description": "gameId",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "prizeTier": {
+          "description": "prizeTier",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "status": {
+          "description": "status",
+          "enum": ["Win", "Pending", "Paid", "Claimed", "Expired"],
+          "type": "string"
+        },
+        "successes": {
+          "description": "total successes for this prizeTier",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "required": ["gameId", "drawId", "amounts", "successes", "prizeTier", "status"],
+      "type": "object"
+    },
+    "FSDetailedResponseModel": {
+      "items": {
+        "$ref": "#/definitions/FSDetailedModel"
+      },
+      "type": "array"
+    },
+    "FSModel": {
+      "properties": {
+        "amounts": {
+          "$ref": "#/definitions/WinningsAmountsModel"
+        },
+        "cost": {
+          "description": "cost",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "endDraw": {
+          "description": "endDraw",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "gameId": {
+          "description": "gameId",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "remainingDraws": {
+          "description": "remainingDraws",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "startDraw": {
+          "description": "startDraw",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "status": {
+          "description": "status",
+          "enum": ["Win", "NoWin", "Pending", "Paid", "Claimed", "Expired"],
+          "type": "string"
+        }
+      },
+      "required": ["status", "remainingDraws", "startDraw", "endDraw", "gameId", "amounts"],
+      "type": "object"
+    },
+    "GameEngineModel": {
+      "properties": {
+        "description": {
+          "description": "description",
+          "type": "string"
+        },
+        "gameId": {
+          "description": "gameId",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "status": {
+          "description": "Active:Game engine is up, Suspended: Game Engine is down on purpose, Down: Game engine unexpectedly down",
+          "enum": ["Active", "Suspended", "Down"],
+          "type": "string"
+        }
+      },
+      "required": ["gameId", "description", "status"],
+      "type": "object"
+    },
+    "GameInfoModel": {
+      "properties": {
+        "description": {
+          "description": "description",
+          "type": "string"
+        },
+        "gameId": {
+          "description": "gameId",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "status": {
+          "description": "status",
+          "enum": ["Active", "Inactive", "Suspended"],
+          "type": "string"
+        },
+        "subgame": {
+          "description": "subgame",
+          "format": "uint16",
+          "type": "integer"
+        }
+      },
+      "required": ["gameId", "description", "status"],
+      "type": "object"
+    },
+    "GameRulesModel": {
+      "properties": {
+        "dbg": {
+          "$ref": "#/definitions/DBGDetailsModel"
+        },
+        "gameId": {
+          "description": "Game id",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "recordId": {
+          "description": "The game rules version requested",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "status": {
+          "description": "Status of the game",
+          "enum": ["Active", "Inactive", "Suspended"],
+          "type": "string"
+        }
+      },
+      "required": ["dbg", "recordId", "gameId", "status"],
+      "type": "object"
+    },
+    "InstantWagerGroupModel": {
+      "properties": {
+        "poolId": {
+          "description": "poolId",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "prizeType": {
+          "description": "prizeType",
+          "type": "string"
+        },
+        "recorcdId": {
+          "description": "recorcdId",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "selection": {
+          "description": "selection",
+          "items": {
+            "$ref": "#/definitions/SelectionPartModel"
+          },
+          "type": "array"
+        },
+        "subgameId": {
+          "description": "subgameId",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "tier": {
+          "description": "tier",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "winningAmount": {
+          "description": "winningAmount",
+          "format": "uint64",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "InstantWagerModel": {
+      "properties": {
+        "creationTime": {
+          "description": "creationTime",
+          "type": "string"
+        },
+        "gameId": {
+          "description": "gameId",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "type": {
+          "description": "type",
+          "enum": ["Normal", "Free", "Demo"],
+          "type": "string"
+        },
+        "wagerInfo": {
+          "description": "wagerInfo",
+          "items": {
+            "$ref": "#/definitions/InstantWagerGroupModel"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["type", "gameId"],
+      "type": "object"
+    },
+    "L5ErrorDataModel": {
+      "properties": {
+        "data": {
+          "description": "data",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "eData": {
+          "description": "eData",
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Md5FileChecksumModel": {
+      "properties": {
+        "checksum": {
+          "description": "checksum",
+          "type": "string"
+        },
+        "filename": {
+          "description": "filename",
+          "type": "string"
+        }
+      },
+      "required": ["filename", "checksum"],
+      "type": "object"
+    },
+    "MetaDataModel": {
+      "properties": {
+        "playerInfo": {
+          "$ref": "#/definitions/PlayerInfoModel"
+        },
+        "posInfo": {
+          "$ref": "#/definitions/PosInfoModel"
+        },
+        "trnsTime": {
+          "description": "Timestamp of client request in ISO-8601 format",
+          "format": "datetime",
+          "type": "string"
+        }
+      },
+      "required": ["trnsTime"],
+      "type": "object"
+    },
+    "NotificationsRequestModel": {
+      "properties": {
+        "callback": {
+          "$ref": "#/definitions/CallbackModel"
+        },
+        "channel": {
+          "description": "channel",
+          "enum": ["Rest", "Queue"],
+          "type": "string"
+        },
+        "eventType": {
+          "description": "eventType",
+          "items": {
+            "description": "enum",
+            "enum": ["Draws", "Winnings", "SystemStatus", "TransactionControl"],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "gameIds": {
+          "description": "For draw notifications, clients can subscribe for a subset of game ids. If not given, notification for all games will be delivered",
+          "items": {
+            "format": "uint16",
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "maxRetries": {
+          "description": "Specific to Http channel. Maximum retries when a notification fails to be delivered",
+          "format": "uint8",
+          "type": "integer"
+        },
+        "rampUpTime": {
+          "description": "Specific to Http channel. Waiting period in milliseconds between retries",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "required": ["eventType", "channel"],
+      "type": "object"
+    },
+    "PageDrawModel": {
+      "properties": {
+        "content": {
+          "description": "content",
+          "items": {
+            "$ref": "#/definitions/DrawModel"
+          },
+          "type": "array"
+        },
+        "first": {
+          "description": "first",
+          "type": "boolean"
+        },
+        "last": {
+          "description": "last",
+          "type": "boolean"
+        },
+        "number": {
+          "description": "number",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "size": {
+          "description": "size",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "totalElements": {
+          "description": "totalElements",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "totalPages": {
+          "description": "totalPages",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "PanelModel": {
+      "properties": {
+        "QPSelections": {
+          "description": "QPSelections",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "options": {
+          "description": "Game specific panel options",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "quickPick": {
+          "description": "Quick Pick attribute for panel",
+          "type": "boolean"
+        },
+        "requested": {
+          "description": "Player selection for predefined system",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "selection": {
+          "description": "Numbers selection entered",
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["selection"],
+      "type": "object"
+    },
+    "ParticipatingDrawModel": {
+      "properties": {
+        "datePattern": {
+          "description": "datePattern",
+          "items": {
+            "$ref": "#/definitions/DatePatternModel"
+          },
+          "type": "array"
+        },
+        "dayPattern": {
+          "description": "dayPattern",
+          "items": {
+            "$ref": "#/definitions/DayPatternModel"
+          },
+          "type": "array"
+        },
+        "drawOffsets": {
+          "description": "Player selection for advance draws option",
+          "items": {
+            "format": "uint32",
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "firstDraw": {
+          "description": "LOTOS generated first participating draw",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "firstDrawTime": {
+          "description": "LOTOS generated first participating draw date",
+          "format": "datetime",
+          "type": "string"
+        },
+        "lastDraw": {
+          "description": "LOTOS generated last participating draw",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "lastDrawTime": {
+          "description": "LOTOS generated end participating draw",
+          "format": "datetime",
+          "type": "string"
+        },
+        "multipleDraws": {
+          "description": "Player selection for multiple participating draws",
+          "format": "uint16",
+          "type": "integer"
+        }
+      },
+      "required": ["multipleDraws"],
+      "type": "object"
+    },
+    "PlayRollbackResponseModel": {
+      "properties": {
+        "status": {
+          "description": "status",
+          "enum": ["Blocked", "Canceled"],
+          "type": "string"
+        }
+      },
+      "required": ["status"],
+      "type": "object"
+    },
+    "PlayerInfoModel": {
+      "properties": {
+        "groupId": {
+          "description": "Group id",
+          "format": "int32",
+          "type": "integer"
+        },
+        "payMethod": {
+          "description": "payMethod",
+          "type": "string"
+        },
+        "playerId": {
+          "description": "Eponumous Player id",
+          "type": "string"
+        },
+        "sessionId": {
+          "description": "Used to uniquely identify transactions for a specific player session",
+          "type": "string"
+        },
+        "subscriptionId": {
+          "description": "To be defined",
+          "format": "int64",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "PosInfoModel": {
+      "properties": {
+        "retailerId": {
+          "description": "Retailer id",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "terminalId": {
+          "description": "Serial id of a retailer POS",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "userId": {
+          "description": "Currently logged on user of a retailer POS",
+          "type": "string"
+        }
+      },
+      "required": ["terminalId"],
+      "type": "object"
+    },
+    "PrizeCategoryModel": {
+      "properties": {
+        "bonusAmount": {
+          "description": "Bonus amount per winner of category",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "distributedAmount": {
+          "description": "Distributed amount to all winners of category",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "dividendAmount": {
+          "description": "Gross dividend amount per winner of category",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "jackpotAmount": {
+          "description": "Jackpot from other category or previous draw",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "taxationAmount": {
+          "description": "Taxation amount per winner of category",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "winners": {
+          "description": "Number of category winners",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ProductModel": {
+      "properties": {
+        "activationDate": {
+          "description": "activationDate",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "binLow": {
+          "description": "binLow",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "name": {
+          "description": "name",
+          "type": "string"
+        },
+        "price": {
+          "description": "price",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "product": {
+          "description": "product",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "status": {
+          "description": "status",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "ticketLength": {
+          "description": "ticketLength",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "value": {
+          "description": "value",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "required": ["product", "name", "price", "value", "ticketLength", "binLow", "activationDate", "status"],
+      "type": "object"
+    },
+    "PromotionInfoModel": {
+      "properties": {
+        "optIn": {
+          "description": "optIn",
+          "type": "boolean"
+        },
+        "promotionId": {
+          "description": "promotionId",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "voucher": {
+          "description": "voucher",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PromotionResponseModel": {
+      "properties": {
+        "discount": {
+          "description": "discount",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "ticketMessage": {
+          "description": "ticketMessage",
+          "type": "string"
+        },
+        "win": {
+          "description": "win",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "PushNotificationModel": {
+      "properties": {
+        "clientId": {
+          "$ref": "#/definitions/ClientModel"
+        },
+        "draw": {
+          "$ref": "#/definitions/DrawModel"
+        },
+        "eventType": {
+          "description": "The resource type for which clients are intersted for getting notifications",
+          "items": {
+            "description": "enum",
+            "enum": ["Draws"],
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["clientId", "eventType"],
+      "type": "object"
+    },
+    "ResponseCodeModel": {
+      "properties": {
+        "code": {
+          "description": "code",
+          "format": "int32",
+          "type": "integer"
+        },
+        "description": {
+          "description": "description",
+          "type": "string"
+        }
+      },
+      "required": ["code", "description"],
+      "type": "object"
+    },
+    "ResponseCodesListResultModel": {
+      "items": {
+        "$ref": "#/definitions/ResponseCodeModel"
+      },
+      "type": "array"
+    },
+    "ScratchProductsResponseModel": {
+      "properties": {
+        "productList": {
+          "description": "productList",
+          "items": {
+            "$ref": "#/definitions/ProductModel"
+          },
+          "type": "array"
+        },
+        "version": {
+          "description": "version",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "required": ["version"],
+      "type": "object"
+    },
+    "ScratchTiersResponseModel": {
+      "properties": {
+        "productList": {
+          "description": "productList",
+          "items": {
+            "$ref": "#/definitions/TierModel"
+          },
+          "type": "array"
+        },
+        "version": {
+          "description": "version",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "required": ["version"],
+      "type": "object"
+    },
+    "SelectionPartModel": {
+      "properties": {
+        "data": {
+          "description": "data",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["data"],
+      "type": "object"
+    },
+    "SystemStatusModel": {
+      "properties": {
+        "GameEngines": {
+          "description": "Status of Game Engines in Lotos",
+          "items": {
+            "$ref": "#/definitions/GameEngineModel"
+          },
+          "type": "array"
+        },
+        "services": {
+          "description": "Status of core Services in Lotos",
+          "items": {
+            "$ref": "#/definitions/CoreServiceModel"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["GameEngines", "services"],
+      "type": "object"
+    },
+    "TierModel": {
+      "properties": {
+        "category": {
+          "description": "category",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "product": {
+          "description": "product",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "status": {
+          "description": "status",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "tier": {
+          "description": "tier",
+          "type": "string"
+        },
+        "value": {
+          "description": "value",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "required": ["product", "tier", "category", "value", "status"],
+      "type": "object"
+    },
+    "TransactionControlGameStatusModel": {
+      "properties": {
+        "all": {
+          "description": "all",
+          "type": "boolean"
+        },
+        "cancel": {
+          "description": "transactions for voiding tickets",
+          "type": "boolean"
+        },
+        "exchange": {
+          "description": "Transactions for partial payments",
+          "type": "boolean"
+        },
+        "fcd": {
+          "description": "Transactions for getting wager information",
+          "type": "boolean"
+        },
+        "fs": {
+          "description": "ticket checking",
+          "type": "boolean"
+        },
+        "pay": {
+          "description": "pay",
+          "type": "boolean"
+        },
+        "play": {
+          "description": "play",
+          "type": "boolean"
+        }
+      },
+      "required": ["all", "play", "fcd", "cancel", "fs", "pay", "exchange"],
+      "type": "object"
+    },
+    "TransactionsControlGameModel": {
+      "properties": {
+        "gameId": {
+          "description": "gameId",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/definitions/TransactionControlGameStatusModel"
+        }
+      },
+      "required": ["gameId", "status"],
+      "type": "object"
+    },
+    "TransactionsControlModel": {
+      "properties": {
+        "games": {
+          "$ref": "#/definitions/TransactionsControlGameModel"
+        },
+        "system": {
+          "$ref": "#/definitions/TransactionsControlSystemModel"
+        }
+      },
+      "required": ["system", "games"],
+      "type": "object"
+    },
+    "TransactionsControlSystemModel": {
+      "properties": {
+        "all": {
+          "description": "all",
+          "type": "boolean"
+        },
+        "games": {
+          "description": "games",
+          "type": "boolean"
+        },
+        "genericReports": {
+          "description": "genericReports",
+          "type": "boolean"
+        },
+        "reports": {
+          "description": "reports",
+          "type": "boolean"
+        },
+        "validate": {
+          "description": "validate",
+          "type": "boolean"
+        }
+      },
+      "required": ["all", "games", "reports", "genericReports", "validate"],
+      "type": "object"
+    },
+    "UnsubscribeResourceModel": {
+      "properties": {
+        "eventType": {
+          "description": "eventType",
+          "items": {
+            "description": "enum",
+            "enum": ["Draws", "Validations", "SystemStatus", "TransactionControl"],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "gameIds": {
+          "description": "For draw notifications, clients can unsubscribe from a set of game Ids. If not given, notification for all games will be stoped",
+          "items": {
+            "format": "uint16",
+            "type": "integer"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["eventType"],
+      "type": "object"
+    },
+    "VoucherModel": {
+      "properties": {
+        "amount": {
+          "description": "Amount in currency units",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "expirationTime": {
+          "description": "The expiration time of a voucher in ISO 8601 format",
+          "format": "datetime",
+          "type": "string"
+        },
+        "redeemed": {
+          "description": "If true the voucher has been already redeemed",
+          "type": "boolean"
+        },
+        "redemptionTime": {
+          "description": "The redemption time of the voucher in ISO 8601 format",
+          "format": "datetime",
+          "type": "string"
+        },
+        "serialNumber": {
+          "description": "Voucher",
+          "type": "string"
+        }
+      },
+      "required": ["redeemed", "expirationTime", "redemptionTime", "serialNumber"],
+      "type": "object"
+    },
+    "WagerDataModel": {
+      "properties": {
+        "dbg": {
+          "description": "Array of Draw Based Game wagers info",
+          "items": {
+            "$ref": "#/definitions/DBGWagerModel"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "WagerWinningsModel": {
+      "properties": {
+        "amounts": {
+          "$ref": "#/definitions/WinningsAmountsModel"
+        },
+        "drawId": {
+          "description": "drawId",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "gameId": {
+          "description": "gameId",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "playerId": {
+          "description": "playerId",
+          "format": "int64",
+          "type": "integer"
+        },
+        "serialNumber": {
+          "description": "serialNumber",
+          "type": "string"
+        },
+        "status": {
+          "description": "status",
+          "enum": ["Win", "NoWin"],
+          "type": "string"
+        },
+        "subTier": {
+          "description": "The winning sub category, needed for some games",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "tier": {
+          "description": "The winning category",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "required": ["drawId", "status", "gameId", "playerId", "tier", "serialNumber", "amounts"],
+      "type": "object"
+    },
+    "WinCategoryModel": {
+      "properties": {
+        "categoryId": {
+          "description": "categoryId",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "length": {
+          "description": "Drawn numbers size for this category",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "progressiveJackpot": {
+          "description": "progressiveJackpot",
+          "type": "boolean"
+        }
+      },
+      "required": ["categoryId", "progressiveJackpot", "length"],
+      "type": "object"
+    },
+    "WinningDrawModel": {
+      "properties": {
+        "drawDate": {
+          "description": "Winning Draw Date",
+          "type": "string"
+        },
+        "drawId": {
+          "description": "Winning Draw",
+          "format": "uint16",
+          "type": "integer"
+        }
+      },
+      "required": ["drawId", "drawDate"],
+      "type": "object"
+    },
+    "WinningHistoryModel": {
+      "properties": {
+        "boardId": {
+          "description": "Winning board id",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "gameId": {
+          "description": "Game id requested",
+          "format": "uint16",
+          "type": "integer"
+        },
+        "winningAmount": {
+          "description": "Winning amount in currency units",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "winningDrawInfo": {
+          "$ref": "#/definitions/WinningDrawModel"
+        },
+        "winningNumbers": {
+          "description": "Array of winning number columns",
+          "items": {
+            "$ref": "#/definitions/WinningNumbersModel"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["gameId", "boardId", "winningDrawInfo", "winningNumbers", "winningAmount"],
+      "type": "object"
+    },
+    "WinningHistoryResponseModel": {
+      "items": {
+        "$ref": "#/definitions/WinningHistoryModel"
+      },
+      "type": "array"
+    },
+    "WinningNumbersModel": {
+      "properties": {
+        "index": {
+          "description": "A zero based counter up to the size of the winning numbers of a game.It is introduced to support games with more than one set of winning numbers per draw",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "numbers": {
+          "description": "numbers",
+          "items": {
+            "format": "uint32",
+            "type": "integer"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["index", "numbers"],
+      "type": "object"
+    },
+    "WinningsAmountsModel": {
+      "properties": {
+        "gross": {
+          "description": "Gross amount in money units",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "net": {
+          "description": "Gross amount in money units",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "other": {
+          "description": "For future use",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "refund": {
+          "description": "Refund amount in money units. For future use",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "tax": {
+          "description": "Taxation amount in money units",
+          "format": "uint64",
+          "type": "integer"
+        }
+      },
+      "required": ["gross", "net", "tax"],
+      "type": "object"
+    },
+    "WinningsModel": {
+      "properties": {
+        "total": {
+          "description": "Total wagers",
+          "format": "uint64",
+          "type": "integer"
+        },
+        "totalPages": {
+          "description": "totalPages",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "wagers": {
+          "description": "wagers",
+          "items": {
+            "$ref": "#/definitions/WagerWinningsModel"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["wagers", "total", "totalPages"],
+      "type": "object"
+    }
+  },
+  "host": "",
+  "info": {
+    "description": "Api Gateway",
+    "title": "Api Gateway",
+    "version": "1.0"
+  },
+  "paths": {
+    "/alpha/games": {
+      "get": {
+        "description": "",
+        "operationId": "get_/alpha/games",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/GameInfoModel"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Retrieves all games defined in the system",
+        "tags": ["games"]
+      }
+    },
+    "/alpha/games/{gameId}/records/{recordId}": {
+      "get": {
+        "description": "",
+        "operationId": "get_/alpha/games/<>/records/<>",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint16",
+          "in": "path",
+          "name": "gameId",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "path",
+          "name": "recordId",
+          "required": true,
+          "type": "integer"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GameRulesModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Retrieves the requested record for a particular game",
+        "tags": ["games"]
+      }
+    },
+    "/alpha/system/transactions/status": {
+      "get": {
+        "description": "",
+        "operationId": "get_/alpha/system/transactions/status",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TransactionsControlModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Get status of allowed transactions",
+        "tags": ["system"]
+      }
+    },
+    "/alpha/vouchers/{voucherId}": {
+      "get": {
+        "description": "",
+        "operationId": "get_/alpha/vouchers/<>",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "Serial number of voucher",
+          "in": "path",
+          "name": "voucherId",
+          "required": true,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/VoucherModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "summary": "This method is used for retrieving information about a voucher",
+        "tags": ["vouchers"]
+      }
+    },
+    "/alpha/vouchers/{voucherId}/redemption": {
+      "put": {
+        "description": "",
+        "operationId": "put_/alpha/vouchers/<>/redemption",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Guid",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "The serial number of voucher",
+          "in": "path",
+          "name": "voucherId",
+          "required": true,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "schema": {
+              "$ref": "#/definitions/VoucherModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Voucher redemption",
+        "tags": ["vouchers"]
+      }
+    },
+    "/alpha/wagers": {
+      "delete": {
+        "description": "\nSometimes because of timeouts, network or node faillures e.t.c., the response of a play request is not delivered to clients.\nUnder those anomaly situations  clients can retry the request with exactly the same parameters as  they did the first time. Lotos guarantees\nthat the play request will not be commited again if it was successful the first time. In this case the response of the first request will be delivered to client.\nExcept from retrying, clients can also rollback the play request for which they didn't get the response by using this endpoint. The only parameter needed is the client generated guid\nthat was used for the play request.\n\nPossible error codes:\n\n| *Code* |                *Description*                             |\n|--------|----------------------------------------------------------|\n| 1001   |\tWager requested is cancelled                            |\n| 1002   |\tWager requested is blocked                              |\n| 3005   |\tInvalid GUID for cancellation/block of online wagers    |\n| 3006   |\tVoid ability is not allowed                             |\n| 18001  |\tInvalid provider                                        |\n| 18002  |\tNo terminal defined or available                        |\n| 109999 |  Connection with CS is down                              |\n| 500014 |  Transaction timeouts                                    |\n",
+        "operationId": "delete_/alpha/wagers",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "The Guid that was used upon play request",
+          "in": "query",
+          "name": "Guid",
+          "required": true,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PlayRollbackResponseModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "format": "json",
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Rollback a play request",
+        "tags": ["wagers"]
+      },
+      "post": {
+        "description": "\n it is used to play a wager\n\n The following optional fields are mandatory for Camelot requests\n\n metadata/playerInfo\n metadata/playerInfo/playerId\n\n\n The following logic applies for optional fields which are provided on request. Combinational logic applies for more than one optional fields applied\n\n| *Field*                                  |                                   *Handle Logic*                                  |\n|------------------------------------------|-----------------------------------------------------------------------------------|\n|wager/dbg[0]/cost                         | If wager cost calculated is not equal with the cost provided, wager is rejected   |\n|wager/dbg[0]/participatingDraws/firstDraw | If draw provided is not the active or a future draw, wager is rejected            |\n\n\n Possible error codes:\n\n| *Code* |                *Description*                             |\n|--------|----------------------------------------------------------|\n| 2000   |\t Unrecognized input method or play slip                 |\n| 2001   |\t Wager Columns less than allowed                        |\n| 2002   |\t Coupon Columns more than allowed                       |\n| 2004   |\t Coupon Multiple Draws more than allowed maximum        |\n| 2005   |\t Multiplicator more than allowed maximum                |\n| 2008   |\t Number of groups more than allowed maximum             |\n| 2009   |\t Number of groups invalid                               |\n| 2010   |\t Selected numbers/system is invalid                     |\n| 2012   |\t Coupon Advanced Draws more than allowed maximum        |\n| 2015   |\t Maximum winning amount exceeded                        |\n| 2019   |\t Wager amount limit exceeded                            |\n| 2020   |\t Preselected wager data file - sold out                 |\n| 2024   |\t Team Wagers less than allowed                          |\n| 2025   |\t Team Wagers more than allowed                          |\n| 2026   |\t Invalid Team Wager                                     |\n| 2030   |\t Wager Advance/Multiple Draws more than allowed maximum |\n| 2039   |\t Invalid participating draw                             |\n| 2041   |   Invalid Cost                                           |\n| 2042   |   Invalid DrawID                                         |\n| 5000   |\t Total wager is blocked                                 |\n| 5001   |\t First Group is blocked                                 |\n| 5002   |\t Second Group is blocked                                |\n| 5003   |\t Third Group is blocked                                 |\n| 5004   |\t Fourth Group is blocked                                |\n| 5005   |\t Fifth Group is blocked                                 |\n| 5006   |\t Sixth Group is blocked                                 |\n| 5007   |\t Seventh Group is blocked                               |\n| 5008   |\t Eighth Group is blocked                                |\n| 5009   |\t Nineth Group is blocked                                |\n| 5010   |\t Tenth Group is blocked                                 |\n| 10000  |\t There is no active draw                                |\n| 10002  |\t Draw requested is withhold                             |\n| 11000  |\t Game requested is invalid                              |\n| 18001  |\t Invalid provider                                       |\n| 18002  |\t No terminal defined or available                       |\n| 18003  |\t Duplicate Record                                       |\n| 109999 |   Connection with CS is down                             |\n| 500014 |   Transaction timeouts                                   |\n| 500024 |\t Unsupported game id                                    |\n",
+        "operationId": "post_/alpha/wagers",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Guid",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/BetModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "serialNumber": {
+                  "description": "serialNumber",
+                  "type": "string"
+                },
+                "wager": {
+                  "$ref": "#/definitions/WagerDataModel"
+                }
+              },
+              "required": ["wager", "serialNumber"],
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "format": "json",
+              "type": "string"
+            }
+          }
+        },
+        "summary": "place a bet",
+        "tags": ["wagers"]
+      }
+    },
+    "/alpha/wagers/verification": {
+      "post": {
+        "description": "\n Verifies a wager\n\n Possible error codes:\n\n| *Code* |                *Description*                             |\n|--------|----------------------------------------------------------|\n| 2000   |\t Unrecognized input method or play slip                 |\n| 2001   |\t Wager Columns less than allowed                        |\n| 2002   |\t Coupon Columns more than allowed                       |\n| 2004   |\t Coupon Multiple Draws more than allowed maximum        |\n| 2005   |\t Multiplicator more than allowed maximum                |\n| 2008   |\t Number of groups more than allowed maximum             |\n| 2009   |\t Number of groups invalid                               |\n| 2010   |\t Selected numbers/system is invalid                     |\n| 2012   |\t Coupon Advanced Draws more than allowed maximum        |\n| 2015   |\t Maximum winning amount exceeded                        |\n| 2019   |\t Wager amount limit exceeded                            |\n| 2020   |\t Preselected wager data file - sold out                 |\n| 2024   |\t Team Wagers less than allowed                          |\n| 2025   |\t Team Wagers more than allowed                          |\n| 2026   |\t Invalid Team Wager                                     |\n| 2030   |\t Wager Advance/Multiple Draws more than allowed maximum |\n| 2039   |\t Invalid participating draw                             |\n| 2041   |   Invalid Cost                                           |\n| 2042   |   Invalid DrawID                                         |\n| 5000   |\t Total wager is blocked                                 |\n| 5001   |\t First Group is blocked                                 |\n| 5002   |\t Second Group is blocked                                |\n| 5003   |\t Third Group is blocked                                 |\n| 5004   |\t Fourth Group is blocked                                |\n| 5005   |\t Fifth Group is blocked                                 |\n| 5006   |\t Sixth Group is blocked                                 |\n| 5007   |\t Seventh Group is blocked                               |\n| 5008   |\t Eighth Group is blocked                                |\n| 5009   |\t Nineth Group is blocked                                |\n| 5010   |\t Tenth Group is blocked                                 |\n| 10000  |\t There is no active draw                                |\n| 10002  |\t Draw requested is withhold                             |\n| 11000  |\t Game requested is invalid                              |\n| 18001  |\t Invalid provider                                       |\n| 18002  |\t No terminal defined or available                       |\n| 18003  |\t Duplicate Record                                       |\n| 109999 |   Connection with CS is down                             |\n| 500014 |   Transaction timeouts                                   |\n| 500024 |\t Unsupported game id                                    |\n",
+        "operationId": "post_/alpha/wagers/verification",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Guid",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/BetModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "serialNumber": {
+                  "description": "serialNumber",
+                  "type": "string"
+                },
+                "wager": {
+                  "$ref": "#/definitions/WagerDataModel"
+                }
+              },
+              "required": ["wager", "serialNumber"],
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "format": "json",
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Verifies a wager",
+        "tags": ["wagers"]
+      }
+    },
+    "/alpha/wagers/winning-history": {
+      "post": {
+        "description": "\n\nThe following optional field is mandatory for Camelot requests\n  wager/dbg[0]/participatingDraws/firstDraw\n  wager/dbg[0]/participatingDraws/lastDraw\n\nPossible error codes:\n\n| *Code* |          *Description*                 |\n|--------|----------------------------------------|\n| 4001   |\tCoupon requested is not winning       |\n| 10001  |\tDraw requested not found              |\n| 10004  |\tDraw not held yet                     |\n| 18001  |\tInvalid provider                      |\n| 18002  |\tNo terminal defined or available      |\n| 109999 |  Connection with CS is down            |\n| 500014 |  Transaction timeouts                  |\n",
+        "operationId": "post_/alpha/wagers/winning-history",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/BetModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/WinningHistoryResponseModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "format": "json",
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Retrieve winning history for a wager",
+        "tags": ["wagers"]
+      }
+    },
+    "/alpha/wagers/{serialNumber}": {
+      "get": {
+        "description": "\n\nPossible error codes:\n\n| *Code* |          *Description*                   |\n|--------|------------------------------------------|\n| 504    |  Draw requested not found                |\n| 1000   |  Wager requested not found               |\n| 1001   |  Wager requested is cancelled            |\n| 18001  |  Invalid provider                        |\n| 18002  |  No terminal defined or available        |\n| 109999 |  Connection with CS is down              |\n| 500014 |  Transaction timeouts                    |\n",
+        "operationId": "get_/alpha/wagers/<>",
+        "parameters": [{
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Guid",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "path",
+          "name": "serialNumber",
+          "required": true,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "serialNumber": {
+                  "description": "serialNumber",
+                  "type": "string"
+                },
+                "wager": {
+                  "$ref": "#/definitions/WagerDataModel"
+                }
+              },
+              "required": ["wager", "serialNumber"],
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Get wager details",
+        "tags": ["wagers"]
+      }
+    },
+    "/alpha/wagers/{serialNumber}/status": {
+      "put": {
+        "description": "it is used for updating the status of a wager. Each wager can be in one of the following states: Canceled,UndoCanceled, Played, Blocked, Unblocked or Validated",
+        "operationId": "put_/alpha/wagers/<>/status",
+        "parameters": [{
+          "description": "",
+          "in": "path",
+          "name": "serialNumber",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Guid",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "properties": {
+              "status": {
+                "description": "status",
+                "enum": ["Canceled", "UndoCanceled", "Blocked", "Unblocked"],
+                "type": "string"
+              }
+            },
+            "required": ["status"],
+            "type": "object"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "serialNumber": {
+                  "description": "serialNumber",
+                  "type": "string"
+                },
+                "wager": {
+                  "$ref": "#/definitions/WagerDataModel"
+                }
+              },
+              "required": ["wager", "serialNumber"],
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "format": "json",
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Updates the status of a wager",
+        "tags": ["wagers"]
+      }
+    },
+    "/alpha/wagers/{serialNumber}/winnings": {
+      "get": {
+        "description": "Retrieve possible winning of a wager",
+        "operationId": "get_/alpha/wagers/<>/winnings",
+        "parameters": [{
+          "description": "",
+          "in": "path",
+          "name": "serialNumber",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Authorization",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "int32",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "integer"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FSDetailedResponseModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "format": "json",
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Ticket checker",
+        "tags": ["wagers"]
+      }
+    },
+    "/api/v1.0/feeds": {
+      "get": {
+        "description": "\n\nPossible error codes:\n\n| *Code* |                *Description*                             |\n|--------|----------------------------------------------------------|\n| 18001  |\tInvalid provider                                        |\n| 18002  |\tNo terminal defined or available                        |\n| 109999 |  Connection with CS is down                              |\n| 500014 |  Transaction timeouts                                    |\n",
+        "operationId": "get_/api/v1.0/feeds",
+        "parameters": [{
+          "description": "The start feed date in epoch seconds",
+          "format": "uint32",
+          "in": "query",
+          "name": "fromDate",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "The start feed id",
+          "format": "uint32",
+          "in": "query",
+          "name": "fromId",
+          "required": true,
+          "type": "integer"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieve feeds from specified date and id to latest",
+        "tags": ["Camelot"]
+      }
+    },
+    "/api/v1.0/feeds/{date}/{id}": {
+      "get": {
+        "description": "\n\nPossible error codes:\n\n| *Code* |                *Description*                             |\n|--------|----------------------------------------------------------|\n| 18001  |\tInvalid provider                                        |\n| 18002  |\tNo terminal defined or available                        |\n| 109999 |  Connection with CS is down                              |\n| 500014 |  Transaction timeouts                                    |\n",
+        "operationId": "get_/api/v1.0/feeds/<>/<>",
+        "parameters": [{
+          "description": "The feed date in epoch seconds",
+          "format": "uint32",
+          "in": "path",
+          "name": "date",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "The feed id",
+          "format": "uint32",
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "type": "integer"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieve feed with specified date and id",
+        "tags": ["Camelot"]
+      }
+    },
+    "/api/v1.0/ilock/verification": {
+      "post": {
+        "description": "",
+        "operationId": "post_/api/v1.0/ilock/verification",
+        "parameters": [{
+          "description": "",
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "properties": {
+              "lockData": {
+                "description": "lockData",
+                "items": {
+                  "properties": {
+                    "draw": {
+                      "description": "draw",
+                      "format": "uint32",
+                      "type": "integer"
+                    },
+                    "fromCpn": {
+                      "description": "fromCpn",
+                      "format": "uint32",
+                      "type": "integer"
+                    },
+                    "game": {
+                      "description": "game",
+                      "format": "uint32",
+                      "type": "integer"
+                    },
+                    "hash": {
+                      "description": "hash",
+                      "type": "string"
+                    },
+                    "toCpn": {
+                      "description": "toCpn",
+                      "format": "uint32",
+                      "type": "integer"
+                    },
+                    "type": {
+                      "description": "type",
+                      "format": "uint32",
+                      "type": "integer"
+                    }
+                  },
+                  "required": ["fromCpn", "toCpn", "game", "draw", "type"],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": ["lockData"],
+            "type": "object"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "draw": {
+                  "description": "draw",
+                  "format": "uint32",
+                  "type": "integer"
+                },
+                "fromCpn": {
+                  "description": "fromCpn",
+                  "format": "uint32",
+                  "type": "integer"
+                },
+                "game": {
+                  "description": "game",
+                  "format": "uint32",
+                  "type": "integer"
+                },
+                "hash": {
+                  "description": "hash",
+                  "type": "string"
+                },
+                "toCpn": {
+                  "description": "toCpn",
+                  "format": "uint32",
+                  "type": "integer"
+                },
+                "type": {
+                  "description": "type",
+                  "format": "uint32",
+                  "type": "integer"
+                }
+              },
+              "required": ["type", "game", "draw", "fromCpn", "toCpn", "hash"],
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Verify iLock data",
+        "tags": ["iLock"]
+      }
+    },
+    "/api/v1.0/reports/aging": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/aging",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves scratch aging settlement report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/billing": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/billing",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves billing detail report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/book-activations": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/book-activations",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves book activations report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/book-confirmations": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/book-confirmations",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves book confirmations report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/book-history": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/book-history",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "book",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "edition",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves book history report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/book-returns": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/book-returns",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "enum": ["Retailer"],
+          "in": "query",
+          "name": "scope",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves returned books report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/book-settlements": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/book-settlements",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "enum": ["LSR", "Retailer"],
+          "in": "query",
+          "name": "scope",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves book settlements report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/cashbox-sales-summary": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/cashbox-sales-summary",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves cashbox sales summary report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/cashbox-weekly-invoice": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/cashbox-weekly-invoice",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves cashbox settlement report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/cashes": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/cashes",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "query",
+          "name": "TerminalRequested",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "category",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Retailer", "Terminal", "Employee"],
+          "in": "query",
+          "name": "scope",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves cashes reports",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/commissions": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/commissions",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "category",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Retailer"],
+          "in": "query",
+          "name": "scope",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves commissions report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/current-settlement": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/current-settlement",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "query",
+          "name": "TerminalRequested",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "category",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Retailer", "Terminal", "Employee"],
+          "in": "query",
+          "name": "scope",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves current settlement report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/draw-results": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/draw-results",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "game",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "Draw Date in epoch seconds",
+          "format": "uint32",
+          "in": "query",
+          "name": "drawDate",
+          "type": "integer"
+        }, {
+          "description": "Draw Number",
+          "format": "uint32",
+          "in": "query",
+          "name": "draw",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves draw results reports",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/financial-adjustments": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/financial-adjustments",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves financial adjustments report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/future-settlements": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/future-settlements",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves future settlements report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/games/current-jackpots": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/games/current-jackpots",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves current jackpots for all games",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/games/winning-numbers": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/games/winning-numbers",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves winning numbers for the past draw of all games",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/incentive-bonus": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/incentive-bonus",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves incentive bonus report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/instant-cashes": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/instant-cashes",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves instant cashes report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/instant-inventory-detail": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/instant-inventory-detail",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves scratch inventory detail report when LSR user is logged in",
+        "tags": ["LSR Reports"]
+      }
+    },
+    "/api/v1.0/reports/instant-ranking": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/instant-ranking",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves instant ranking report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/inventory-cleanup": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/inventory-cleanup",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves scratch inventory clean-up report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/inventory-detail": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/inventory-detail",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint16",
+          "in": "query",
+          "name": "part",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves scratch inventory detail report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/inventory-summary": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/inventory-summary",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves scratch inventory summary report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/last-draws": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/last-draws",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "game",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "Number of draws",
+          "format": "uint32",
+          "in": "query",
+          "name": "draws",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves draw results for number of draws requested",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/order-detail": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/order-detail",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves order detail report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/order-status": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/order-status",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves Order Status report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/payout": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/payout",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Retailer"],
+          "in": "query",
+          "name": "scope",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves payout reports",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/pending-orders": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/pending-orders",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves pending orders report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/prizes": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/prizes",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves prizes available report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/returned-book": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/returned-book",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves returned book report when LSR user is logged in",
+        "tags": ["LSR Reports"]
+      }
+    },
+    "/api/v1.0/reports/sales": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/sales",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "query",
+          "name": "TerminalRequested",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "category",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Retailer", "Terminal", "Employee"],
+          "in": "query",
+          "name": "scope",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves financial related reports",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/sales-summary": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/sales-summary",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "query",
+          "name": "TerminalRequested",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "category",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Retailer", "Terminal", "Employee"],
+          "in": "query",
+          "name": "scope",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves sales summary report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/scratch-products": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/scratch-products",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "type",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ScratchProductsResponseModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves scratch products report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/scratch-tiers": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/scratch-tiers",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "type",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ScratchTiersResponseModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves scratch tiers report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/selling_bonus": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/selling_bonus",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "query",
+          "name": "TerminalRequested",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "category",
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Day", "Week"],
+          "in": "query",
+          "name": "type",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "enum": ["Retailer", "Terminal", "Employee"],
+          "in": "query",
+          "name": "scope",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves selling bonus reports",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/shift": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/shift",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "category",
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "query",
+          "name": "from",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "query",
+          "name": "to",
+          "required": true,
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves shift report",
+        "tags": ["Reports"]
+      }
+    },
+    "/api/v1.0/reports/weekly-invoice": {
+      "get": {
+        "description": "",
+        "operationId": "get_/api/v1.0/reports/weekly-invoice",
+        "parameters": [{
+          "description": "",
+          "in": "header",
+          "name": "Client",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Channel",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Operator",
+          "required": true,
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint64",
+          "in": "header",
+          "name": "TerminalId",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "UserId",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "header",
+          "name": "Password",
+          "type": "string"
+        }, {
+          "description": "",
+          "format": "uint32",
+          "in": "query",
+          "name": "offset",
+          "type": "integer"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "widthpx",
+          "type": "string"
+        }, {
+          "description": "",
+          "in": "query",
+          "name": "tz",
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "Retrieves weekly invoice report",
+        "tags": ["Reports"]
+      }
+    },
+    "/checksum": {
+      "get": {
+        "description": "Retrieve MD5 checksums for L5Connector component",
+        "operationId": "get_/checksum",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Md5FileChecksumModel"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponseModel"
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["system"]
+      }
+    },
+    "/enviroment": {
+      "get": {
+        "description": "",
+        "operationId": "get_/enviroment",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "format": "json",
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Retrieve container's enviroment",
+        "tags": ["system"]
+      }
+    },
+    "/gtg": {
+      "get": {
+        "description": "",
+        "operationId": "get_/gtg",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Used for service liveness checks",
+        "tags": ["system"]
+      }
+    },
+    "/swagger": {
+      "get": {
+        "description": "",
+        "operationId": "get_/swagger",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "format": "json",
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "summary": ""
+      }
+    },
+    "system/status": {
+      "get": {
+        "description": "",
+        "operationId": "get_system/status",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SystemStatusModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Lotos liveness check",
+        "tags": ["system"]
+      }
+    }
+  },
+  "produces": ["application/json", "application/json"],
+  "schemes": ["http", "http"],
+  "swagger": "2.0",
+  "tags": []
+}
