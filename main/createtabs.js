@@ -5,6 +5,8 @@ var verbs = ["GET", "POST", "DELETE", "PUT"];
 var js;
 var importedJsonConfig;
 
+let allGroupedByTags = {};
+
 
 function importJson(liItem) {
     js = readJson(liItem.id + "swagger.json");
@@ -20,12 +22,12 @@ function importJson(liItem) {
         di.appendChild(s);
 
         let groupedPaths = groupByTags();
+        allGroupedByTags[buttonElement.id.split("/")[1]] = groupedPaths;
 
         let allCheckbox = document.createElement("input");
         allCheckbox.type = "checkbox";
         allCheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
         allCheckbox.setAttribute("onchange", "addAllToList(this)");
-        allCheckbox.value = "Select all";
 
 
         let url = document.createElement("input");
@@ -48,8 +50,15 @@ function importJson(liItem) {
 
 
         for (let tag in groupedPaths) {
+
             let tagli = document.createElement("li");
-            tagli.innerHTML = tag;
+            let tagCheckbox = document.createElement("input");
+            tagCheckbox.type = "checkbox";
+            tagCheckbox.setAttribute("onchange", "addAllTagsToList(this)");
+            tagCheckbox.setAttribute("class", tag);
+            tagCheckbox.setAttribute("id", tag + "," + buttonElement.id.split("/")[1]);
+            tagli.appendChild(tagCheckbox);
+            tagli.appendChild(document.createTextNode(tag));
 
             var pathsul = document.createElement("ul");
 

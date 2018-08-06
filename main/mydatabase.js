@@ -16,7 +16,9 @@ var paths = [
     "swagger/promotionengine",
     "swagger/pulse",
     "swagger/validations",
-    "swagger/voucher"
+    "swagger/voucher",
+    "swagger/internal",
+    "swagger/l5hws"
 ];
 
 function readJson(jsonPath) {
