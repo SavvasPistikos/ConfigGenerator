@@ -1,0 +1,585 @@
+{
+  "apis": {
+    "ats": {
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/ats/documents/documentHash/{id}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/ats/documents/documentHash/{id}",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/submit",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/ats/documents/documentHash",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/ats/documents/documentHash",
+          "method": "POST"
+        }
+      ],
+      "url": "http://ats-service.opap:8080"
+    },
+    "auth": {
+      "paths": [
+        {
+          "endpoint": "/authentication/token",
+          "method": "POST",
+          "path": "/oauth/token"
+        },
+        {
+          "endpoint": "/authentication/token",
+          "method": "DELETE",
+          "path": "/oauth/token"
+        },
+        {
+          "endpoint": "/authentication/refresh_token",
+          "method": "DELETE",
+          "path": "/oauth/refresh_token"
+        },
+        {
+          "endpoint": "/authentication/check_token",
+          "method": "GET",
+          "path": "/oauth/check_token"
+        },
+        {
+          "endpoint": "/authentication/token_key",
+          "method": "GET",
+          "path": "/oauth/token_key"
+        },
+        {
+          "endpoint": "/api/v1.0/user",
+          "method": "GET",
+          "path": "/auth/api/v1.0/user"
+        }
+      ],
+      "url": "http://auth:8080",
+      "version": "v1.0"
+    },
+    "consumables": {
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/consumables/{id}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/consumables/{id}",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/consumables/{id}",
+          "method": "DELETE"
+        },
+        {
+          "endpoint": "/api/v1.0/consumables/categories/{id}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/consumables/categories/{id}",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/consumables/categories/{id}",
+          "method": "DELETE"
+        },
+        {
+          "endpoint": "/api/v1.0/game-families",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories/{id}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories/{id}",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories/{id}",
+          "method": "DELETE"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories/{id}/sub-categories/{subCatId}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories/{id}/sub-categories/{subCatId}",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories/{id}/sub-categories/{subCatId}",
+          "method": "DELETE"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories/bulk",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/loyalty/profiles",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/loyalty/profiles",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/consumables",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/consumables",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories/{id}/sub-categories",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories/{id}/sub-categories",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/consumables/bulk",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/statuses/{id}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/statuses/{id}",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/statuses/{id}",
+          "method": "DELETE"
+        },
+        {
+          "endpoint": "/api/v1.0/consumables/categories",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/consumables/categories",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/{id}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/{id}",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/{id}",
+          "method": "DELETE"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/loyalty/profiles/{id}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/loyalty/profiles/{id}",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/loyalty/profiles/{id}",
+          "method": "DELETE"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/statuses",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/statuses",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/tickets/categories",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/products",
+          "method": "GET"
+        }
+      ],
+      "url": "http://consumables:8080"
+    },
+    "gamemanagement": {
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/games/{gameId}/channels/versions/{channelRecordId}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/program/{gameId}/{drawId}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/products/active",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/games/active",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/gamesInfo/{id}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/games/{gameId}/versions",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/games/{gameId}/channels/versions/active",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/games",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/products/subscriptions",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/games/{gameId}/versions/active",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/games/{gameId}/versions/{recordId}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/gamesinfo",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/products/{id}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/products/{productId}/update",
+          "method": "POST"
+        }
+      ],
+      "url": "http://gamemanagementservice:8080"
+    },
+    "infostore": {
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/sample/simple/update/{gameId}/{drawId}/{status}",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v2.0/draws/{gameId}/visual-draw/{visualDraw}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/sample/simple/update",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v2.0/draws/active",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/visual-draw/{visualDraw}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/draws/{gameStateId}/{drawNumber}/results",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v2.0/draws/{gameId}/upcoming/{limit}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/states",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v3.0/draws/active",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/subscribers",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/subscribers",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/last-result-and-active",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/sample/update",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v2.0/draws/{gameId}/last/{limit}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/states/{stateId}/entity",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v2.0/draws/{gameId}/draw-id/{fromDrawId}/{toDrawId}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/games/summary",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/last/{limit}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/subscribers/{subscriberId}",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/subscribers/{subscriberId}",
+          "method": "DELETE"
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/draw-id/{fromDrawId}/{toDrawId}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/states/{stateId}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/upcoming/{limit}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v2.0/draws/{gameId}/draw-date/{fromDate}/{toDate}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v2.0/draws/{gameId}/active",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/games/{gameId}/jackpot",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/{drawId}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/draws/{gameStateId}/{drawNumber}/draw",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/draws/{gameStateId}/{drawNumber}/prizes",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/draw-date/{fromDate}/{toDate}/draw-id",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/draw-date/{fromDate}/{toDate}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/active",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v2.0/draws/{gameId}/{drawId}",
+          "method": "GET"
+        }
+      ],
+      "url": "http://infostore:8888",
+      "version": "v1.0"
+    },
+    "internalApis": {
+      "internal": true,
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/wagers/{serialNumber}/validation",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/wagers/{serialNumber}/winnings",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/wagers",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/terminal-actions/signon",
+          "method": "POST"
+        }
+      ]
+    },
+    "promotionengine": {
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/promotions",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions/vouchers/prepared",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions/verification",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions/cancellation",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions/{promoId}/messages",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions/{promoId}/conductDraw",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions/creation",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions/{promoId}/message",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions/outcomes",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions/outcomes",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/promotions/outcomes",
+          "method": "DELETE"
+        },
+        {
+          "endpoint": "/api/v1.0/retailers/{retailerId}/happyhours",
+          "method": "GET",
+          "path": "/api/v1.0/promotions/retailer/happyhours/{retailerId}"
+        }
+      ],
+      "url": "http://l10-promotion-engine:10000"
+    },
+    "pulse": {
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/segments",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/accounting/retailers",
+          "method": "GET",
+          "path": "/api/v1.0/retailers"
+        },
+        {
+          "endpoint": "/api/v1.0/accounting/retailers/{id}/rewards/{prizeId}",
+          "method": "PUT",
+          "path": "/api/v1.0/retailers/{id}/rewards/{prizeId}"
+        },
+        {
+          "endpoint": "/api/v1.0/accounting/retailers/{id}/games/{gameId}/payment-level",
+          "method": "GET",
+          "path": "/api/v1.0/retailers/{id}/games/{gameId}/payment-level"
+        },
+        {
+          "endpoint": "/api/v1.0/accounting/retailers/{id}/incentives",
+          "method": "GET",
+          "path": "/api/v1.0/retailers/{id}/incentives"
+        },
+        {
+          "endpoint": "/api/v1.0/segments/snapshots",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/accounting/retailers/{id}/loyalty/status",
+          "method": "GET",
+          "path": "/api/v1.0/retailers/{id}/loyalty/status"
+        },
+        {
+          "endpoint": "/api/v1.0/accounting/reports/accounting-period-summary",
+          "method": "GET",
+          "path": "/api/v1.0/terminal-reports/accounting-period-summary"
+        },
+        {
+          "endpoint": "/api/v1.0/accounting/retailers/{id}/rewards",
+          "method": "GET",
+          "path": "/api/v1.0/retailers/{id}/rewards"
+        },
+        {
+          "endpoint": "/api/v1.0/accounting/reports/date-range-summary",
+          "method": "GET",
+          "path": "/api/v1.0/terminal-reports/date-range-summary"
+        },
+        {
+          "endpoint": "/api/v1.0/segments/snapshots/{id}/retailers",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/accounting/retailers/{id}/games",
+          "method": "GET",
+          "path": "/api/v1.0/retailers/{id}/games"
+        },
+        {
+          "endpoint": "/api/v1.0/accounting/retailers/{id}/operational-hours",
+          "method": "GET",
+          "path": "/api/v1.0/retailers/{id}/operational-hours"
+        },
+        {
+          "endpoint": "/api/v1.0/segments/{id}/retailers",
+          "method": "GET"
+        }
+      ],
+      "url": "http://pulseservices:8080"
+    },
+    "validations": {
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/wagers/{wagerId}/claim",
+          "method": "POST",
+          "path": "/lottery-validations/api/v1.0/wagers/{wagerId}/claim"
+        }
+      ],
+      "url": "http://lottery-validations:80"
+    }
+  }
+}
