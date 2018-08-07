@@ -1,4 +1,3 @@
-
 function generate(generateButton) {
     for (let p in listt) {
         if (listt[p].length > 0) {
@@ -32,8 +31,15 @@ function generate(generateButton) {
                     : basePath + document.getElementById("end=" + res[0]).value;
                 path.method = res[1];
 
-                eval("path.tags" + " = " + "jsonList[\"" + apiName + "\"].paths[\"" + res[0] + "\"]."
-                    + res[1].toLocaleLowerCase() + ".tags;");
+                eval("tempPath" + " = " + "jsonList[\"" + apiName + "\"].paths[\"" + res[0] + "\"]."
+                    + res[1].toLocaleLowerCase() + ";");
+
+                if (tempPath.tags != null) {
+                    path.tags = tempPath.tags;
+                }
+
+                /*eval("path.tags" + " = " + "jsonList[\"" + apiName + "\"].paths[\"" + res[0] + "\"]."
+                    + res[1].toLocaleLowerCase() + ".tags;");*/
                 apiss.apis[apiName].paths.push(path);
             }
 

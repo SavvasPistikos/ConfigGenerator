@@ -22,6 +22,7 @@ function importJson(liItem) {
         di.appendChild(s);
 
         let groupedPaths = groupByTags();
+
         allGroupedByTags[buttonElement.id.split("/")[1]] = groupedPaths;
 
         let allCheckbox = document.createElement("input");
@@ -48,69 +49,11 @@ function importJson(liItem) {
         ul.appendChild(document.createTextNode("\t\t version = "));
         ul.appendChild(version);
 
-
-        for (let tag in groupedPaths) {
-
-            let tagli = document.createElement("li");
-            let tagCheckbox = document.createElement("input");
-            tagCheckbox.type = "checkbox";
-            tagCheckbox.setAttribute("onchange", "addAllTagsToList(this)");
-            tagCheckbox.setAttribute("class", tag);
-            tagCheckbox.setAttribute("id", tag + "," + buttonElement.id.split("/")[1]);
-            tagli.appendChild(tagCheckbox);
-            tagli.appendChild(document.createTextNode(tag));
-
-            var pathsul = document.createElement("ul");
-
-            for (let path in groupedPaths[tag]) {
-                var pathli = document.createElement("li");
-                var internalpathul = document.createElement("ul");
-
-                for (let i in groupedPaths[tag][path].methods) {
-                    var ili = document.createElement("li");
-                    var icheckbox = document.createElement('input');
-                    icheckbox.type = "checkbox";
-                    icheckbox.setAttribute("onchange", "addToList(this);");
-                    icheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
-                    icheckbox.setAttribute("id", groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods[i]);
-                    let id = path + "," + groupedPaths[tag][path].methods[i];
-
-                    ili.appendChild(icheckbox);
-                    ili.appendChild(document.createTextNode(groupedPaths[tag][path].methods[i]));
-                    internalpathul.appendChild(ili);
-                }
-
-                var checkbox = document.createElement('input');
-                checkbox.type = "checkbox";
-                checkbox.setAttribute("onchange", "addToList(this);");
-                checkbox.setAttribute("class", buttonElement.id.split("/")[1]);
-                checkbox.setAttribute("id", "parent" + "=" + groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods);
-
-                text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + groupedPaths[tag][path].endpoint : groupedPaths[tag][path].endpoint;
-                pathli.appendChild(checkbox);
-                pathli.appendChild(document.createTextNode(text));
-                pathli.appendChild(document.createTextNode("\t\t Endpoint = "));
-
-                let endpointIn = document.createElement("input");
-                endpointIn.setAttribute("type", "text");
-                endpointIn.value = "";
-                //endpointIn.setAttribute("onfocus", "this.style.width = ((this.value.length + 4) * 7) + 'px';")
-                endpointIn.setAttribute("id", "end=" + groupedPaths[tag][path].endpoint);
-                pathli.appendChild(endpointIn);
-                pathli.appendChild(internalpathul);
-                pathsul.appendChild(pathli);
-                tagli.appendChild(pathsul);
-
-                ul.appendChild(tagli);
-                di.appendChild(ul);
-                di.setAttribute("class", "JsonContent");
-                di.setAttribute("id", "div=" + buttonElement.id.replace("bt=", ""));
-                di.style.display = "initial";
-                buttonElement.innerHTML = js.info.title;
-                document.body.appendChild(di);
-            }
+        if (js.tags != null) {
+            groupByTagsDraw(groupedPaths, buttonElement, ul, di);
+        } else {
+            noTagsDraw(groupedPaths, buttonElement, ul, di);
         }
-
         hideOtherTabs(buttonElement.id);
     }
 }
@@ -121,7 +64,7 @@ function addButton(buttonId) {
     newButton.setAttribute("class", "mybutton");
     newButton.setAttribute("onclick", "hideOtherTabs(this.id);");
     newButton.setAttribute("id", "bt=" + buttonId);
-    newButton.innerHTML = js.info.title;
+    newButton.innerHTML = (js.info == null) ? buttonId.split("/"[1]) : js.info.title;
 
     let removeButton = document.createElement("button");
     removeButton.setAttribute("class", "remove");
@@ -243,6 +186,11 @@ function groupByTags() {
         }
         pathObject.endpoint = p;
 
+        if (tag == null) {
+            groupedPaths = paths
+            return groupedPaths;
+        }
+
         if (groupedPaths[tag[0]] == null) {
             groupedPaths[tag[0]] = [];
         }
@@ -250,4 +198,129 @@ function groupByTags() {
     }
 
     return groupedPaths;
+}
+
+function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
+    for (let tag in groupedPaths) {
+        let tagli = document.createElement("li");
+        let tagCheckbox = document.createElement("input");
+        tagCheckbox.type = "checkbox";
+        tagCheckbox.setAttribute("onchange", "addAllTagsToList(this)");
+        tagCheckbox.setAttribute("class", tag);
+        tagCheckbox.setAttribute("id", tag + "," + buttonElement.id.split("/")[1]);
+        tagli.appendChild(tagCheckbox);
+        tagli.appendChild(document.createTextNode(tag));
+
+        var pathsul = document.createElement("ul");
+
+        for (let path in groupedPaths[tag]) {
+            var pathli = document.createElement("li");
+            var internalpathul = document.createElement("ul");
+
+            for (let i in groupedPaths[tag][path].methods) {
+                var ili = document.createElement("li");
+                var icheckbox = document.createElement('input');
+                icheckbox.type = "checkbox";
+                icheckbox.setAttribute("onchange", "addToList(this);");
+                icheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
+                icheckbox.setAttribute("id", groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods[i]);
+                let id = path + "," + groupedPaths[tag][path].methods[i];
+
+                ili.appendChild(icheckbox);
+                ili.appendChild(document.createTextNode(groupedPaths[tag][path].methods[i]));
+                internalpathul.appendChild(ili);
+            }
+
+            var checkbox = document.createElement('input');
+            checkbox.type = "checkbox";
+            checkbox.setAttribute("onchange", "addToList(this);");
+            checkbox.setAttribute("class", buttonElement.id.split("/")[1]);
+            checkbox.setAttribute("id", "parent" + "=" + groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods);
+
+            text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + groupedPaths[tag][path].endpoint : groupedPaths[tag][path].endpoint;
+            pathli.appendChild(checkbox);
+            pathli.appendChild(document.createTextNode(text));
+            pathli.appendChild(document.createTextNode("\t\t Endpoint = "));
+
+            let endpointIn = document.createElement("input");
+            endpointIn.setAttribute("type", "text");
+            endpointIn.value = "";
+            //endpointIn.setAttribute("onfocus", "this.style.width = ((this.value.length + 4) * 7) + 'px';")
+            endpointIn.setAttribute("id", "end=" + groupedPaths[tag][path].endpoint);
+            pathli.appendChild(endpointIn);
+            pathli.appendChild(internalpathul);
+            pathsul.appendChild(pathli);
+            tagli.appendChild(pathsul);
+
+            ul.appendChild(tagli);
+            di.appendChild(ul);
+            di.setAttribute("class", "JsonContent");
+            di.setAttribute("id", "div=" + buttonElement.id.replace("bt=", ""));
+            di.style.display = "initial";
+            buttonElement.innerHTML = js.info.title;
+            document.body.appendChild(di);
+        }
+    }
+
+}
+
+function noTagsDraw(groupedPaths, buttonElement, ul, di) {
+    for (var path in groupedPaths) {
+        var li = document.createElement("li");
+        var checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+        var method = [];
+        if (groupedPaths[path]["get"] != null) {
+            method.push("GET");
+        }
+        if (groupedPaths[path]["post"] != null) {
+            method.push("POST");
+        }
+        if (groupedPaths[path]["delete"] != null) {
+            method.push("DELETE");
+        }
+        if (groupedPaths[path]["put"] != null) {
+            method.push("PUT");
+        }
+        var iul = document.createElement("ul");
+
+        for (var i in method) {
+
+            var ili = document.createElement("li");
+            var icheckbox = document.createElement('input');
+            icheckbox.type = "checkbox";
+            icheckbox.setAttribute("onchange", "addToList(this);");
+            icheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
+            icheckbox.setAttribute("id", path + "," + method[i]);
+            let id = path + "," + method[i];
+
+            ili.appendChild(icheckbox);
+            ili.appendChild(document.createTextNode(method[i]));
+            iul.appendChild(ili);
+        }
+
+        checkbox.setAttribute("onchange", "addToList(this);");
+        checkbox.setAttribute("class", buttonElement.id.split("/")[1]);
+        checkbox.setAttribute("id", "parent" + "=" + path + "," + method);
+
+        text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + path : path;
+        li.appendChild(checkbox);
+        li.appendChild(document.createTextNode(text));
+        li.appendChild(document.createTextNode("\t\t Endpoint = "));
+        let endpointIn = document.createElement("input");
+        endpointIn.setAttribute("type", "text");
+        endpointIn.value = "";
+        //endpointIn.setAttribute("onfocus", "this.style.width = ((this.value.length + 4) * 7) + 'px';")
+        endpointIn.setAttribute("id", "end=" + path);
+        li.appendChild(endpointIn);
+        li.appendChild(iul);
+        ul.appendChild(li);
+
+        di.appendChild(ul);
+        di.setAttribute("class", "JsonContent");
+        di.setAttribute("id", "div=" + buttonElement.id.replace("bt=", ""));
+        di.style.display = "initial";
+        buttonElement.innerHTML = js.info.title;
+        document.body.appendChild(di);
+    }
 }
