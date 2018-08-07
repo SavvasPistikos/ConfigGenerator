@@ -188,3 +188,13 @@ function getOnlyChildCheckboxesToBeremoved(checkboxElem) {
     }
 }
 
+$(document).ready(function () {
+    $(document).on('change', '.JsonContent', function(){
+        localStorage.setItem("body",document.body.value);
+    });
+});
+
+window.onbeforeunload = function(e) {
+    document.body = localStorage.getItem("body");
+    return 'Dialog text here.';
+};

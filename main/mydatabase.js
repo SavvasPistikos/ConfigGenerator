@@ -43,6 +43,7 @@ $(document).ready(function () {
     });
 });
 
+
 $(document).ready(
     function generateDropDown() {
         document.getElementById('upload').addEventListener('change', handleFileSelect, false);
