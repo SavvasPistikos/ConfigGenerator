@@ -70,6 +70,7 @@ function addToList(checkboxElem) {
         }
     }
     checkIfAllTagsCheckboxShouldBeChecked(checkboxElem);
+    checkIfAllCheckboxShouldBeChecked(checkboxElem);
 }
 
 function checkIfparentshouldbeChecked(children) {
@@ -80,17 +81,17 @@ function checkIfparentshouldbeChecked(children) {
     return set;
 }
 
-function checkIfAllCheckboxShouldBeChecked(ch) {
-    let counter = 0;
-    let allcheck = document.getElementsByClassName(ch.className);
+function checkIfAllCheckboxShouldBeChecked(checkboxElem) {
+    let checked = true;
+    let allcheck = document.getElementsByClassName(checkboxElem.className);
     var arrallch = Array.from(allcheck);
 
     for (x in arrallch) {
-        if (arrallch[x].checked === false) {
-            counter++;
+        if (arrallch[x].id !== "") {
+            checked = checked & arrallch[x].checked;
         }
     }
-    arrallch[0].checked = (counter === 1);
+    arrallch[0].checked = checked;
 }
 
 function checkIfparentshouldbeUnChecked(children) {
@@ -113,26 +114,31 @@ function removeA(arr) {
 }
 
 function addAllToList(allCheckBoxElement) {
+    const checked  = allCheckBoxElement.checked;
     let checkboxes = document.getElementsByClassName(allCheckBoxElement.className);
     let arr = (allCheckBoxElement.checked === true) ? Array.from(checkboxes).filter(getOnlyChildCheckboxes)
         : Array.from(checkboxes).filter(getOnlyChildCheckboxesToBeremoved);
 
     for (ch in arr) {
-        arr[ch].checked = allCheckBoxElement.checked;
+        arr[ch].checked = checked;
         addToList(arr[ch]);
     }
+    allCheckBoxElement.checked = checked;
 }
 
 function addAllTagsToList(tagCheckBoxElement) {
+    const initialCheck = tagCheckBoxElement.checked;
+
     let id = tagCheckBoxElement.id.split(",")[1];
     let tag = tagCheckBoxElement.id.split(",")[0];
 
     for (let p in allGroupedByTags[id][tag]) {
         let checkboxId = "parent" + "=" + allGroupedByTags[id][tag][p].endpoint + "," + allGroupedByTags[id][tag][p].methods;
         let parentCheckbox = document.getElementById(checkboxId);
-        parentCheckbox.checked = tagCheckBoxElement.checked;
+        parentCheckbox.checked = initialCheck;
         addToList(parentCheckbox);
     }
+    tagCheckBoxElement.checked = initialCheck;
 }
 
 function checkIfAllTagsCheckboxShouldBeChecked(tagChb) {
@@ -152,7 +158,7 @@ function checkIfAllTagsCheckboxShouldBeChecked(tagChb) {
     for (let p in allGroupedByTags[tagChb.className][foundTag]) {
         let checkbox = document.getElementById("parent=" +
             allGroupedByTags[tagChb.className][foundTag][p].endpoint
-            + "," +allGroupedByTags[tagChb.className][foundTag][p].methods);
+            + "," + allGroupedByTags[tagChb.className][foundTag][p].methods);
         checked = checked & checkbox.checked;
     }
 

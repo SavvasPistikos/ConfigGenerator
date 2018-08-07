@@ -22,9 +22,9 @@ function importJson(liItem) {
         let groupedPaths = groupByTags();
         allGroupedByTags[buttonElement.id.split("/")[1]] = groupedPaths;
 
-        let allCheckbox = createCheckBox("addAllToList(this);", buttonElement.id.split("/")[1], "");
-        let url = createInputText("", "url=" + buttonElement.id.split("/")[1]);
-        let version = createInputText("", "vers=" + buttonElement.id.split("/")[1]);
+        let allCheckbox = createCheckBox("addAllToList(this);", buttonElement.id.split("/")[1], null);
+        let url = createInputText(null, "url=" + buttonElement.id.split("/")[1]);
+        let version = createInputText(null, "vers=" + buttonElement.id.split("/")[1]);
 
         ul.appendChild(allCheckbox);
         ul.appendChild(document.createTextNode("\t\t Url = "));
@@ -297,11 +297,11 @@ function createCheckBox(onChangeFunction, classString, idString) {
     let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
 
-    if (idString !== "")
+    if (idString != null)
         checkbox.id = idString;
     if (classString !== "")
         checkbox.className = classString;
-    if (onChangeFunction !== "")
+    if (onChangeFunction != null)
         checkbox.setAttribute("onchange",onChangeFunction);
     return checkbox;
 }
@@ -310,7 +310,7 @@ function createInputText(value, idString) {
     let inputext = document.createElement("input");
     inputext.type = "text";
 
-    if (idString !== "")
+    if (idString != null)
         inputext.id = idString;
     inputext.value = value;
     return inputext;
