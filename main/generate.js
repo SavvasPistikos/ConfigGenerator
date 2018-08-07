@@ -4,7 +4,6 @@ function generate(generateButton) {
             let basePath;
             let apiName = p.replace(",", "/").split("/")[0];
 
-            //eval("api" + " = " + "{" + apiName + ":{url: \"\", version: \"\", paths: []}}" + ";");
             if (apiss.apis[apiName] == null) {
                 if (document.getElementById("vers=" + p).value !== "") {
                     apiss.apis[apiName] = {url: "", version: "", paths: []};

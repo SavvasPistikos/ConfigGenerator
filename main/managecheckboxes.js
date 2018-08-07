@@ -64,12 +64,12 @@ function addToList(checkboxElem) {
                 ch.checked = false;
             }
         }
-        if (!checkIfparentshouldbeUnChecked(chs) && parent === false) {
+        if (checkIfparentshouldbeUnChecked(chs) && parent === false) {
             ch = document.getElementById(parentpath);
             ch.checked = false;
         }
     }
-    //checkIfAllCheckboxShouldBeChecked(ch);
+    checkIfAllTagsCheckboxShouldBeChecked(checkboxElem);
 }
 
 function checkIfparentshouldbeChecked(children) {
@@ -135,20 +135,28 @@ function addAllTagsToList(tagCheckBoxElement) {
     }
 }
 
-function checkIfAllTagsCheckboxShouldBeChecked(ch) {
+function checkIfAllTagsCheckboxShouldBeChecked(tagChb) {
     let foundTag;
-    let endpoint = (ch.id.split("parent=")[1] !== null) ? ch.id.split("parent=")[1]
-        : ch.id.split("parent=")[0];
+    let checked = true;
+    let endpoint = (tagChb.id.split("parent=")[1] != null) ? tagChb.id.split("parent=")[1].split(",")[0]
+        : tagChb.id.split("parent=")[0].split(",")[0];
 
-    for (let tag in allGroupedByTags[ch.className]) {
-        for (let p in allGroupedByTags[ch.className][tag]) {
-            foundTag = (allGroupedByTags[ch.className][tag][p].endpoint === endpoint) ? tag : "";
+    for (let tag in allGroupedByTags[tagChb.className]) {
+        for (let p in allGroupedByTags[tagChb.className][tag]) {
+            if (allGroupedByTags[tagChb.className][tag][p].endpoint === endpoint) {
+                foundTag = tag;
+            }
         }
     }
 
-    for (let p in allGroupedByTags[ch.className][foundTag]) {
-        let checkbox = document.getElementById()
+    for (let p in allGroupedByTags[tagChb.className][foundTag]) {
+        let checkbox = document.getElementById("parent=" +
+            allGroupedByTags[tagChb.className][foundTag][p].endpoint
+            + "," +allGroupedByTags[tagChb.className][foundTag][p].methods);
+        checked = checked & checkbox.checked;
     }
+
+    document.getElementById(foundTag + "," + tagChb.className).checked = checked;
 
 }
 

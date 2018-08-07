@@ -4,9 +4,7 @@ var apiss = {apis: {}};
 var verbs = ["GET", "POST", "DELETE", "PUT"];
 var js;
 var importedJsonConfig;
-
 let allGroupedByTags = {};
-
 
 function importJson(liItem) {
     js = readJson(liItem.id + "swagger.json");
@@ -22,28 +20,13 @@ function importJson(liItem) {
         di.appendChild(s);
 
         let groupedPaths = groupByTags();
-
         allGroupedByTags[buttonElement.id.split("/")[1]] = groupedPaths;
 
-        let allCheckbox = document.createElement("input");
-        allCheckbox.type = "checkbox";
-        allCheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
-        allCheckbox.setAttribute("onchange", "addAllToList(this)");
-
-
-        let url = document.createElement("input");
-        url.setAttribute("type", "text");
-        url.value = "";
-        url.setAttribute("id", "url=" + buttonElement.id.split("/")[1]);
-
-
-        let version = document.createElement("input");
-        version.setAttribute("type", "text");
-        version.value = "";
-        version.setAttribute("id", "vers=" + buttonElement.id.split("/")[1]);
+        let allCheckbox = createCheckBox("addAllToList(this);", buttonElement.id.split("/")[1], "");
+        let url = createInputText("", "url=" + buttonElement.id.split("/")[1]);
+        let version = createInputText("", "vers=" + buttonElement.id.split("/")[1]);
 
         ul.appendChild(allCheckbox);
-
         ul.appendChild(document.createTextNode("\t\t Url = "));
         ul.appendChild(url);
         ul.appendChild(document.createTextNode("\t\t version = "));
@@ -133,7 +116,6 @@ function handleFileSelect(evt) {
 
 function importConfig(impJson) {
     for (a in impJson.apis) {
-
         apiss.apis[a] = impJson.apis[a];
         if (a === "internalApis") {
             continue;
@@ -205,7 +187,7 @@ function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
         let tagli = document.createElement("li");
         let tagCheckbox = document.createElement("input");
         tagCheckbox.type = "checkbox";
-        tagCheckbox.setAttribute("onchange", "addAllTagsToList(this)");
+        tagCheckbox.setAttribute("onchange", "addAllTagsToList(this);");
         tagCheckbox.setAttribute("class", tag);
         tagCheckbox.setAttribute("id", tag + "," + buttonElement.id.split("/")[1]);
         tagli.appendChild(tagCheckbox);
@@ -219,23 +201,18 @@ function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
 
             for (let i in groupedPaths[tag][path].methods) {
                 var ili = document.createElement("li");
-                var icheckbox = document.createElement('input');
-                icheckbox.type = "checkbox";
-                icheckbox.setAttribute("onchange", "addToList(this);");
-                icheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
-                icheckbox.setAttribute("id", groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods[i]);
-                let id = path + "," + groupedPaths[tag][path].methods[i];
+
+                let icheckbox = createCheckBox("addToList(this);",
+                    buttonElement.id.split("/")[1]
+                    , groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods[i]);
 
                 ili.appendChild(icheckbox);
                 ili.appendChild(document.createTextNode(groupedPaths[tag][path].methods[i]));
                 internalpathul.appendChild(ili);
             }
 
-            var checkbox = document.createElement('input');
-            checkbox.type = "checkbox";
-            checkbox.setAttribute("onchange", "addToList(this);");
-            checkbox.setAttribute("class", buttonElement.id.split("/")[1]);
-            checkbox.setAttribute("id", "parent" + "=" + groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods);
+            let checkbox = createCheckBox("addToList(this);", buttonElement.id.split("/")[1]
+                , "parent" + "=" + groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods);
 
             text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + groupedPaths[tag][path].endpoint : groupedPaths[tag][path].endpoint;
             pathli.appendChild(checkbox);
@@ -267,8 +244,6 @@ function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
 function noTagsDraw(groupedPaths, buttonElement, ul, di) {
     for (var path in groupedPaths) {
         var li = document.createElement("li");
-        var checkbox = document.createElement('input');
-        checkbox.type = "checkbox";
         var method = [];
         if (groupedPaths[path]["get"] != null) {
             method.push("GET");
@@ -287,21 +262,15 @@ function noTagsDraw(groupedPaths, buttonElement, ul, di) {
         for (var i in method) {
 
             var ili = document.createElement("li");
-            var icheckbox = document.createElement('input');
-            icheckbox.type = "checkbox";
-            icheckbox.setAttribute("onchange", "addToList(this);");
-            icheckbox.setAttribute("class", buttonElement.id.split("/")[1]);
-            icheckbox.setAttribute("id", path + "," + method[i]);
-            let id = path + "," + method[i];
-
+            let icheckbox = createCheckBox("addToList(this);",
+                buttonElement.id.split("/")[1], path + "," + method[i]);
             ili.appendChild(icheckbox);
             ili.appendChild(document.createTextNode(method[i]));
             iul.appendChild(ili);
         }
 
-        checkbox.setAttribute("onchange", "addToList(this);");
-        checkbox.setAttribute("class", buttonElement.id.split("/")[1]);
-        checkbox.setAttribute("id", "parent" + "=" + path + "," + method);
+        let checkbox = createCheckBox("addToList(this);", buttonElement.id.split("/")[1]
+            , "parent" + "=" + path + "," + method);
 
         text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + path : path;
         li.appendChild(checkbox);
@@ -310,7 +279,6 @@ function noTagsDraw(groupedPaths, buttonElement, ul, di) {
         let endpointIn = document.createElement("input");
         endpointIn.setAttribute("type", "text");
         endpointIn.value = "";
-        //endpointIn.setAttribute("onfocus", "this.style.width = ((this.value.length + 4) * 7) + 'px';")
         endpointIn.setAttribute("id", "end=" + path);
         li.appendChild(endpointIn);
         li.appendChild(iul);
@@ -323,4 +291,27 @@ function noTagsDraw(groupedPaths, buttonElement, ul, di) {
         buttonElement.innerHTML = js.info.title;
         document.body.appendChild(di);
     }
+}
+
+function createCheckBox(onChangeFunction, classString, idString) {
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+
+    if (idString !== "")
+        checkbox.id = idString;
+    if (classString !== "")
+        checkbox.className = classString;
+    if (onChangeFunction !== "")
+        checkbox.setAttribute("onchange",onChangeFunction);
+    return checkbox;
+}
+
+function createInputText(value, idString) {
+    let inputext = document.createElement("input");
+    inputext.type = "text";
+
+    if (idString !== "")
+        inputext.id = idString;
+    inputext.value = value;
+    return inputext;
 }
