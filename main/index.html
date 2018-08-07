@@ -23,7 +23,10 @@
             background-size: cover;
             margin: 4px 2px;
         }
-
+        .gbutton {
+            background-size: cover;
+            margin: 4px 2px;
+        }
         .dropdown-submenu {
             position: relative;
         }
@@ -36,17 +39,19 @@
     </style>
 </head>
 <body>
-    <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files
-            <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-        </ul>
-    </div>
+<div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files
+        <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+    </ul>
+</div>
 
-    <div id="buttons">
-        <button id="generate" class="mybutton" onclick=generate(this)> Generate</button>
-        <input id="upload" type=file accept="text/html" name="files[]" size=30>
+<div id="buttons">
+    <button id="generate" class="gbutton" onclick=generate(this)> Generate</button>
+    <input id="upload" type=file accept="text/html" name="files[]" size=30>
+</div>
+<div id="JsonContentDiv">
+</div>
 
-    </div>
 </body>
 </html>
