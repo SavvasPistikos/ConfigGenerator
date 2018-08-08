@@ -1,15 +1,18 @@
 var listt = {};
-var jsonList = [];
+var jsonList = {};
 var apiss = {apis: {}};
 var verbs = ["GET", "POST", "DELETE", "PUT"];
 var js;
 var importedJsonConfig;
-let allGroupedByTags = {};
+var allGroupedByTags = {};
+var outerdiv;
 
 function importJson(liItem) {
+    outerdiv = document.getElementById("JsonContentDiv");
     js = readJson(liItem.id + "swagger.json");
     var buttonElement = addButton(liItem.id);
     jsonList[buttonElement.id.split("/")[1]] = js;
+
     if (document.getElementById("div=" + buttonElement.id) == null) {
         let ul = document.createElement("ul");
         let di = document.createElement("div");
@@ -235,7 +238,8 @@ function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
             di.setAttribute("id", "div=" + buttonElement.id.replace("bt=", ""));
             di.style.display = "initial";
             buttonElement.innerHTML = js.info.title;
-            document.body.appendChild(di);
+            outerdiv.appendChild(di);
+            //document.body.appendChild(di);
         }
     }
 
@@ -289,7 +293,8 @@ function noTagsDraw(groupedPaths, buttonElement, ul, di) {
         di.setAttribute("id", "div=" + buttonElement.id.replace("bt=", ""));
         di.style.display = "initial";
         buttonElement.innerHTML = js.info.title;
-        document.body.appendChild(di);
+        outerdiv.appendChild(di);
+        //document.body.appendChild(di);
     }
 }
 
@@ -302,7 +307,7 @@ function createCheckBox(onChangeFunction, classString, idString) {
     if (classString !== "")
         checkbox.className = classString;
     if (onChangeFunction != null)
-        checkbox.setAttribute("onchange",onChangeFunction);
+        checkbox.setAttribute("onchange", onChangeFunction);
     return checkbox;
 }
 

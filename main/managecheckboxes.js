@@ -1,4 +1,5 @@
 function addToList(checkboxElem) {
+    writetoLocalStorage(checkboxElem);
     if (listt[checkboxElem.className] == null) {
         listt[checkboxElem.className] = [];
     }
@@ -114,7 +115,7 @@ function removeA(arr) {
 }
 
 function addAllToList(allCheckBoxElement) {
-    const checked  = allCheckBoxElement.checked;
+    const checked = allCheckBoxElement.checked;
     let checkboxes = document.getElementsByClassName(allCheckBoxElement.className);
     let arr = (allCheckBoxElement.checked === true) ? Array.from(checkboxes).filter(getOnlyChildCheckboxes)
         : Array.from(checkboxes).filter(getOnlyChildCheckboxesToBeremoved);
@@ -187,13 +188,6 @@ function getOnlyChildCheckboxesToBeremoved(checkboxElem) {
         return checkboxElem;
     }
 }
-
-$(document).ready(function () {
-    $(document).on('change', '.JsonContent', function(){
-        localStorage.setItem("body",document.body.value);
-    });
-});
-
 window.onbeforeunload = function(e) {
     document.body = localStorage.getItem("body");
     return 'Dialog text here.';

@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="localstorage.js"></script>
     <script src="managecheckboxes.js"></script>
     <script src="generate.js"></script>
     <script src="json2yaml.js"></script>
@@ -20,6 +21,11 @@
         }
 
         .mybutton {
+            background-size: cover;
+            margin: 4px 2px;
+        }
+
+        .gbutton {
             background-size: cover;
             margin: 4px 2px;
         }
@@ -44,9 +50,10 @@
 </div>
 
 <div id="buttons">
-    <button id="generate" class="mybutton" onclick=generate(this)> Generate</button>
+    <button id="generate" class="gbutton" onclick=generate(this)> Generate</button>
     <input id="upload" type=file accept="text/html" name="files[]" size=30>
-
+</div>
+<div id="JsonContentDiv">
 </div>
 
 </body>
