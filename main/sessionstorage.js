@@ -33,8 +33,10 @@ $(document).ready(function () {
 
         for (ch in checkboxses) {
             let checkbox = document.getElementById(ch);
-            checkbox.checked = (checkboxses[ch] == true) ? true : false;
-            addToList(checkbox);
+            if (checkbox != null) {
+                checkbox.checked = (checkboxses[ch] == true) ? true : false;
+                addToList(checkbox);
+            }
         }
 
     }

@@ -35,11 +35,8 @@ function importJson(liItem) {
         ul.appendChild(document.createTextNode("\t\t version = "));
         ul.appendChild(version);
 
-        if (js.tags != null) {
-            groupByTagsDraw(groupedPaths, buttonElement, ul, di);
-        } else {
-            noTagsDraw(groupedPaths, buttonElement, ul, di);
-        }
+        groupByTagsDraw(groupedPaths, buttonElement, ul, di);
+
         hideOtherTabs(buttonElement.id);
     }
 }
