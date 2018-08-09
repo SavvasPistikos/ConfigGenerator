@@ -1,5 +1,5 @@
 function addToList(checkboxElem) {
-    writetoLocalStorage(checkboxElem);
+    writetosessionStorage(checkboxElem);
     if (listt[checkboxElem.className] == null) {
         listt[checkboxElem.className] = [];
     }

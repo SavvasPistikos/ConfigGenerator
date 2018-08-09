@@ -172,8 +172,8 @@ function groupByTags() {
         pathObject.endpoint = p;
 
         if (tag == null) {
-            groupedPaths = paths
-            return groupedPaths;
+            tag = [];
+            tag[0] = "default";
         }
 
         if (groupedPaths[tag[0]] == null) {
