@@ -1,5 +1,6 @@
 var listt = {};
 var jsonList = {};
+var tagList = {};
 var apiss = {apis: {}};
 var verbs = ["GET", "POST", "DELETE", "PUT"];
 var js;
@@ -22,7 +23,7 @@ function importJson(liItem) {
         s.value = buttonElement.id.split("/")[1];
         di.appendChild(s);
 
-        let groupedPaths = groupByTags();
+        let groupedPaths = groupByTags(buttonElement.id.split("/")[1]);
         allGroupedByTags[buttonElement.id.split("/")[1]] = groupedPaths;
 
         let allCheckbox = createCheckBox("addAllToList(this);", buttonElement.id.split("/")[1], null);
@@ -143,7 +144,7 @@ function importConfig(impJson) {
     }
 }
 
-function groupByTags() {
+function groupByTags(jsonFileName) {
     let paths = js.paths;
     let groupedPaths = {};
     for (var p in paths) {
@@ -179,6 +180,12 @@ function groupByTags() {
         groupedPaths[tag[0]].push(pathObject);
     }
 
+    for (let tag in groupedPaths) {
+        if (tagList[jsonFileName] == null) {
+            tagList[jsonFileName] = [];
+        }
+        tagList[jsonFileName].push(tag);
+    }
     return groupedPaths;
 }
 
@@ -191,13 +198,23 @@ function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
         tagCheckbox.setAttribute("class", tag);
         tagCheckbox.setAttribute("id", tag + "," + buttonElement.id.split("/")[1]);
         tagli.appendChild(tagCheckbox);
-        tagli.appendChild(document.createTextNode(tag));
+
+        let tagButton = document.createElement("button");
+        tagButton.setAttribute("id", "btr" + tag.replace(/\s/g, ''));
+        tagButton.setAttribute("data-toggle", "collapse");
+        tagButton.setAttribute("data-target", "#ul" + tag.replace(/\s/g, ''));
+        tagButton.innerHTML = tag;
+        tagli.appendChild(tagButton);
 
         var pathsul = document.createElement("ul");
+        pathsul.setAttribute("class", "panel-collapse collapse");
+        pathsul.setAttribute("id", "ul" + tag.replace(/\s/g, ''));
 
         for (let path in groupedPaths[tag]) {
             var pathli = document.createElement("li");
+            pathli.setAttribute("class", "list-group");
             var internalpathul = document.createElement("ul");
+
 
             for (let i in groupedPaths[tag][path].methods) {
                 var ili = document.createElement("li");

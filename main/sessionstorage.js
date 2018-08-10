@@ -5,6 +5,7 @@ function writetosessionStorage(checkboxElem) {
     sessionStorage.setItem("checkboxesStatus", JSON.stringify(checkboxesStatus));
     sessionStorage.setItem("allGroupedByTags", JSON.stringify(allGroupedByTags));
     sessionStorage.setItem("jsonList", JSON.stringify(jsonList));
+    sessionStorage.setItem("tagList",JSON.stringify(tagList));
 }
 
 
@@ -29,6 +30,7 @@ $(document).ready(function () {
         document.getElementById("buttons").innerHTML = sessionStorage.getItem("buttons");
         allGroupedByTags = JSON.parse(sessionStorage.getItem("allGroupedByTags"));
         jsonList = JSON.parse(sessionStorage.getItem("jsonList"));
+        tagList = JSON.parse(sessionStorage.getItem("tagList"));
         let checkboxses = JSON.parse(sessionStorage.getItem("checkboxesStatus"));
 
         for (ch in checkboxses) {

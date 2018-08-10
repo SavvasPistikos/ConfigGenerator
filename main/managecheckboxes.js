@@ -125,6 +125,11 @@ function addAllToList(allCheckBoxElement) {
         addToList(arr[ch]);
     }
     allCheckBoxElement.checked = checked;
+
+    for (let tag in tagList[allCheckBoxElement.className]) {
+        $("#btr" + tagList[allCheckBoxElement.className][tag].replace(/\s/g, '')).click();
+    }
+
 }
 
 function addAllTagsToList(tagCheckBoxElement) {
@@ -140,6 +145,7 @@ function addAllTagsToList(tagCheckBoxElement) {
         addToList(parentCheckbox);
     }
     tagCheckBoxElement.checked = initialCheck;
+    $("#btr" + tagCheckBoxElement.className.replace(/\s/g, '')).click();
 }
 
 function checkIfAllTagsCheckboxShouldBeChecked(tagChb) {
@@ -188,7 +194,8 @@ function getOnlyChildCheckboxesToBeremoved(checkboxElem) {
         return checkboxElem;
     }
 }
-window.onbeforeunload = function(e) {
+
+window.onbeforeunload = function (e) {
     document.body = localStorage.getItem("body");
     return 'Dialog text here.';
 };
