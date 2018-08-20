@@ -127,7 +127,10 @@ function addAllToList(allCheckBoxElement) {
     allCheckBoxElement.checked = checked;
 
     for (let tag in tagList[allCheckBoxElement.className]) {
-        $("#btr" + tagList[allCheckBoxElement.className][tag].replace(/\s/g, '')).click();
+        let checkboxid = tagList[allCheckBoxElement.className][tag].replace(/\s/g, '');
+        checkboxid = checkboxid.replace(".", "_");
+        checkboxid = checkboxid.replace(/["'()]/g, "");
+        $("#btr" + checkboxid).click();
     }
 
 }
