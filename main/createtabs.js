@@ -191,6 +191,8 @@ function groupByTags(jsonFileName) {
 
 function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
     for (let tag in groupedPaths) {
+        let elementsid = trimId(tag);
+
         let tagli = document.createElement("li");
         let tagCheckbox = document.createElement("input");
         tagCheckbox.type = "checkbox";
@@ -200,15 +202,15 @@ function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
         tagli.appendChild(tagCheckbox);
 
         let tagButton = document.createElement("button");
-        tagButton.setAttribute("id", "btr" + tag.replace(/\s/g, ''));
+        tagButton.setAttribute("id", "btr" + elementsid);
         tagButton.setAttribute("data-toggle", "collapse");
-        tagButton.setAttribute("data-target", "#ul" + tag.replace(/\s/g, ''));
+        tagButton.setAttribute("data-target", "#ul" + elementsid);
         tagButton.innerHTML = tag;
         tagli.appendChild(tagButton);
 
         var pathsul = document.createElement("ul");
         pathsul.setAttribute("class", "panel-collapse collapse");
-        pathsul.setAttribute("id", "ul" + tag.replace(/\s/g, ''));
+        pathsul.setAttribute("id", "ul" + elementsid);
 
         for (let path in groupedPaths[tag]) {
             var pathli = document.createElement("li");
@@ -225,6 +227,7 @@ function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
 
                 ili.appendChild(icheckbox);
                 ili.appendChild(document.createTextNode(groupedPaths[tag][path].methods[i]));
+                ili.appendChild(craeateOptionsUL(groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods[i]));
                 internalpathul.appendChild(ili);
             }
 
@@ -234,14 +237,7 @@ function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
             text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + groupedPaths[tag][path].endpoint : groupedPaths[tag][path].endpoint;
             pathli.appendChild(checkbox);
             pathli.appendChild(document.createTextNode(text));
-            pathli.appendChild(document.createTextNode("\t\t Endpoint = "));
 
-            let endpointIn = document.createElement("input");
-            endpointIn.setAttribute("type", "text");
-            endpointIn.value = "";
-            //endpointIn.setAttribute("onfocus", "this.style.width = ((this.value.length + 4) * 7) + 'px';")
-            endpointIn.setAttribute("id", "end=" + groupedPaths[tag][path].endpoint);
-            pathli.appendChild(endpointIn);
             pathli.appendChild(internalpathul);
             pathsul.appendChild(pathli);
             tagli.appendChild(pathsul);
@@ -257,59 +253,6 @@ function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
         }
     }
 
-}
-
-function noTagsDraw(groupedPaths, buttonElement, ul, di) {
-    for (var path in groupedPaths) {
-        var li = document.createElement("li");
-        var method = [];
-        if (groupedPaths[path]["get"] != null) {
-            method.push("GET");
-        }
-        if (groupedPaths[path]["post"] != null) {
-            method.push("POST");
-        }
-        if (groupedPaths[path]["delete"] != null) {
-            method.push("DELETE");
-        }
-        if (groupedPaths[path]["put"] != null) {
-            method.push("PUT");
-        }
-        var iul = document.createElement("ul");
-
-        for (var i in method) {
-
-            var ili = document.createElement("li");
-            let icheckbox = createCheckBox("addToList(this);",
-                buttonElement.id.split("/")[1], path + "," + method[i]);
-            ili.appendChild(icheckbox);
-            ili.appendChild(document.createTextNode(method[i]));
-            iul.appendChild(ili);
-        }
-
-        let checkbox = createCheckBox("addToList(this);", buttonElement.id.split("/")[1]
-            , "parent" + "=" + path + "," + method);
-
-        text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + path : path;
-        li.appendChild(checkbox);
-        li.appendChild(document.createTextNode(text));
-        li.appendChild(document.createTextNode("\t\t Endpoint = "));
-        let endpointIn = document.createElement("input");
-        endpointIn.setAttribute("type", "text");
-        endpointIn.value = "";
-        endpointIn.setAttribute("id", "end=" + path);
-        li.appendChild(endpointIn);
-        li.appendChild(iul);
-        ul.appendChild(li);
-
-        di.appendChild(ul);
-        di.setAttribute("class", "JsonContent");
-        di.setAttribute("id", "div=" + buttonElement.id.replace("bt=", ""));
-        di.style.display = "initial";
-        buttonElement.innerHTML = js.info.title;
-        outerdiv.appendChild(di);
-        //document.body.appendChild(di);
-    }
 }
 
 function createCheckBox(onChangeFunction, classString, idString) {
@@ -333,4 +276,84 @@ function createInputText(value, idString) {
         inputext.id = idString;
     inputext.value = value;
     return inputext;
+}
+
+function craeateOptionsUL(classString) {
+    let optionsUl = document.createElement("ul");
+    let authorizeLi = document.createElement("li");
+    let authorizeCheckbox = createCheckBox(null, classString, "");
+    authorizeCheckbox.className = classString;
+    authorizeCheckbox.id = "auth" + classString;
+    let authorizeTextNode = document.createTextNode("Authorize");
+    authorizeLi.appendChild(authorizeCheckbox);
+    authorizeLi.appendChild(authorizeTextNode);
+
+    let displayLi = document.createElement("li");
+    let displayCheckBox = createCheckBox(null, classString, "");
+    displayCheckBox.className = classString;
+    displayCheckBox.id = "disp" + classString;
+    let displayTextNode = document.createTextNode("Display");
+    displayLi.appendChild(displayCheckBox);
+    displayLi.appendChild(displayTextNode);
+
+    let endpointLi = document.createElement("li");
+    let endpointCheckBox = createCheckBox("displayInputText(this);", classString, "end" + classString);
+    endpointLi.appendChild(endpointCheckBox);
+    endpointLi.appendChild(document.createTextNode("\t\t Endpoint"));
+    let endpointIn = document.createElement("input");
+    endpointIn.className = classString;
+    endpointIn.id = "end=" + classString;
+    endpointIn.setAttribute("type", "text");
+    endpointIn.value = "";
+    endpointIn.style.display = "none";
+    endpointLi.appendChild(endpointIn);
+
+
+    let tagsLi = document.createElement("li");
+    let tagsCheckBox = createCheckBox("displayInputText(this);", classString, "tag" + classString);
+    tagsLi.appendChild(tagsCheckBox);
+    tagsLi.appendChild(document.createTextNode("\t\t Tags"));
+    let tagsIn = document.createElement("input");
+    tagsIn.className = classString;
+    tagsIn.id = "tags=" + classString;
+    tagsIn.setAttribute("type", "text");
+    tagsIn.value = "";
+    tagsIn.style.display = "none";
+    tagsLi.appendChild(tagsIn);
+
+
+    optionsUl.appendChild(authorizeLi);
+    optionsUl.appendChild(displayLi);
+    optionsUl.appendChild(endpointLi);
+    optionsUl.appendChild(tagsLi);
+
+    return optionsUl;
+}
+
+function displayInputText(endpointOptionsCheckbox) {
+    let inputElement;
+    let endpointInput = endpointOptionsCheckbox.id.includes("end");
+
+    if (endpointInput == true) {
+        inputElement = document.getElementById("end=" + endpointOptionsCheckbox.className);
+    } else {
+        inputElement = document.getElementById("tags=" + endpointOptionsCheckbox.className);
+    }
+
+    if (endpointOptionsCheckbox.checked == true) {
+        inputElement.style.display = "inline";
+    }
+    else {
+        inputElement.value = "";
+        inputElement.style.display = "none";
+    }
+
+}
+
+function trimId(tag) {
+    let elementId;
+    elementId = tag.replace(/\s/g, '');
+    elementId = elementId.replace(".", "_");
+    elementId = elementId.replace(/["'()]/g, "");
+    return elementId;
 }

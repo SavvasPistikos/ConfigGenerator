@@ -145,7 +145,10 @@ function addAllTagsToList(tagCheckBoxElement) {
         addToList(parentCheckbox);
     }
     tagCheckBoxElement.checked = initialCheck;
-    $("#btr" + tagCheckBoxElement.className.replace(/\s/g, '')).click();
+    let checkboxid = tagCheckBoxElement.className.replace(/\s/g, '');
+    checkboxid = checkboxid.replace(".", "_");
+    checkboxid = checkboxid.replace(/["'()]/g, "");
+    $("#btr" + checkboxid).click();
 }
 
 function checkIfAllTagsCheckboxShouldBeChecked(tagChb) {

@@ -1,4 +1,5 @@
 var paths = [
+    "swagger/internal",
     "swagger/ats",
     "swagger/auth/illinois",
     "swagger/auth/v1.0",
@@ -17,12 +18,14 @@ var paths = [
     "swagger/pulse",
     "swagger/validations",
     "swagger/voucher",
-    "swagger/internal",
     "swagger/l5hws"
 ];
 
 function readJson(jsonPath) {
     var jsontext = null;
+    if (jsonPath === "swagger/internal/swagger.json") {
+        jsonPath = "http://localhost:8080/api/v1.0/api-swagger/internal";
+    }
     $.ajax({
         'async': false,
         'global': false,
@@ -49,6 +52,7 @@ $(document).ready(
         document.getElementById('upload').addEventListener('change', handleFileSelect, false);
         var ulmenu = document.getElementsByClassName("dropdown-menu");
         var menu = ulmenu[0];
+
 
         for (let i = 0; i < paths.length; i++) {
             let path = paths[i].split("/");

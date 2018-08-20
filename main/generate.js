@@ -18,24 +18,40 @@ function generate(generateButton) {
             apiss.apis[apiName].paths = [];
 
             for (let i in listt[p]) {
-                let path = {path: "", endpoint: "", method: "", tags: [], internal: false, display: true};
+                let path = {
+                    path: "",
+                    endpoint: "",
+                    method: "",
+                    tags: [],
+                    display: true,
+                    authorize: false
+                };
                 let res = listt[p][i].split(",");
 
                 basePath = (jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
                     ? jsonList[apiName].basePath
                     : "";
 
+                path.display = document.getElementById("disp" + listt[p][i]).checked;
+                path.authorize = document.getElementById("auth" + listt[p][i]).checked;
                 path.path = basePath + res[0];
-                path.endpoint = (document.getElementById("end=" + res[0]).value === "") ? path.path
-                    : basePath + document.getElementById("end=" + res[0]).value;
-                path.method = res[1];
-
+                if (document.getElementById("end" + listt[p][i]).checked === true) {
+                    path.endpoint = document.getElementById("end=" + listt[p][i]).value;
+                } else {
+                    path.endpoint = path.path;
+                }
                 eval("tempPath" + " = " + "jsonList[\"" + apiName + "\"].paths[\"" + res[0] + "\"]."
                     + res[1].toLocaleLowerCase() + ";");
 
-                if (tempPath.tags != null) {
-                    path.tags = tempPath.tags;
+                if (document.getElementById("tag" + listt[p][i]).checked === true) {
+                    path.tags.push(document.getElementById("tags=" + listt[p][i]).value);
+                } else {
+                    if (tempPath.tags != null) {
+                        path.tags = tempPath.tags;
+                    }
                 }
+                path.method = res[1];
+
 
                 /*eval("path.tags" + " = " + "jsonList[\"" + apiName + "\"].paths[\"" + res[0] + "\"]."
                     + res[1].toLocaleLowerCase() + ".tags;");*/
