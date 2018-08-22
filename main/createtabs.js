@@ -10,10 +10,9 @@ var outerdiv;
 
 function importJson(liItem) {
     outerdiv = document.getElementById("JsonContentDiv");
-
     js = JSON.parse(readJson(liItem.id));
-    var buttonElement = addButton(liItem.id);
-    jsonList[buttonElement.id.split("/")[0]] = js;
+    var buttonElement = addButton("swagger/" + liItem.id);
+    jsonList[buttonElement.id.split("/")[1]] = js;
 
     if (document.getElementById("div=" + buttonElement.id) == null) {
         let ul = document.createElement("ul");

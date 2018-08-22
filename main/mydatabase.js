@@ -101,7 +101,6 @@ $(document).ready(
 
                 parentul.appendChild(childli);
                 parentli.appendChild(parentul);
-                menu.appendChild(parentli);
             }
         }
     });
