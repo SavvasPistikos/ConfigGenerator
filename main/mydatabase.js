@@ -1,41 +1,38 @@
-var paths = [
-    "swagger/internal",
-    "swagger/ats",
-    "swagger/auth/illinois",
-    "swagger/auth/v1.0",
-    "swagger/auth",
-    "swagger/bifeed",
-    "swagger/bos-adaptorj",
-    "swagger/camelotadaptor",
-    "swagger/claims",
-    "swagger/consumables",
-    "swagger/gamemanagement",
-    "swagger/hl",
-    "swagger/infostore/illinois",
-    "swagger/infostore/opap",
-    "swagger/infostore/v1.0",
-    "swagger/promotionengine",
-    "swagger/pulse",
-    "swagger/validations",
-    "swagger/voucher",
-    "swagger/l5hws"
-];
-
-function readJson(jsonPath) {
+function readJson(liService) {
+    let service = liService.split("/")[0];
+    let version = (liService.split("/")[1] != null) ? liService.split("/")[1] : "";
     var jsontext = null;
-    if (jsonPath === "swagger/internal/swagger.json") {
-        jsonPath = "http://localhost:8080/api/v1.0/api-swagger/internal";
+
+    if (service === "internal") {
+        service = "http://localhost:8080/api/v1.0/api-swagger/internal";
     }
+    let url = (version === "") ? "http://localhost:8080/api/v1.0/swagger/" + service
+        : "http://localhost:8080/api/v1.0/swagger/" + service + "/" + version;
     $.ajax({
         'async': false,
         'global': false,
-        'url': jsonPath,
+        'url': url,
         'dataType': "json",
         'success': function (data) {
             jsontext = data;
         }
     });
     return jsontext;
+}
+
+function getServices() {
+    var services = null;
+
+    $.ajax({
+        'async': false,
+        'global': false,
+        'url': "http://localhost:8080/api/v1.0/swagger/services",
+        'dataType': "json",
+        'success': function (data) {
+            services = data;
+        }
+    });
+    return services;
 }
 
 $(document).ready(function () {
@@ -52,45 +49,59 @@ $(document).ready(
         document.getElementById('upload').addEventListener('change', handleFileSelect, false);
         var ulmenu = document.getElementsByClassName("dropdown-menu");
         var menu = ulmenu[0];
+        let services = getServices();
 
+        let li = document.createElement("li");
+        li.setAttribute("id", "internal");
+        li.setAttribute("role", "presentation");
+        li.setAttribute("onclick", "importJson(this);");
+        li.innerHTML = "<a role=\"menuitem\" tabindex=\"-1\" href=\"#\">" + "internal";
+        menu.appendChild(li);
 
-        for (let i = 0; i < paths.length; i++) {
-            let path = paths[i].split("/");
-            var absolutePath = path[0] + "/";
-            for (let y = 1; y < path.length; y++) {
-                absolutePath += path[y] + "/";
-                if (document.getElementById(absolutePath) === null && y !== path.length - 1) {
-                    let parentul = document.getElementById(absolutePath.replace(path[y] + "/", ""));
-                    let li = document.createElement("li");
-                    li.setAttribute("class", "dropdown-submenu");
-                    li.innerHTML = "<a class=\"test\" tabindex=\"-1\" href=\"#\">" + path[y] + "<span class=\"caret\"></span></a>";
+        for (let i = 0; i < services.length; i++) {
+            let path = services[i].service;
+            let version = services[i].version;
 
-                    let ul = document.createElement("ul");
-                    ul.setAttribute("class", "dorpdown-menu");
-                    ul.setAttribute("id", absolutePath);
-                    li.appendChild(ul);
-                    if (y === 1) {
-                        menu.appendChild(li);
-                    }
-                    else {
-                        parentul.appendChild(li);
-                    }
-                }
-                else if (document.getElementById(absolutePath) === null && y === path.length - 1) {
-                    let parentul = document.getElementById(absolutePath.replace(path[y] + "/", ""));
-                    if (parentul == null) {
-                        parentul = menu;
-                    }
-                    let li = document.createElement("li");
-
-                    if (document.getElementById(absolutePath) === null) {
-                        li.setAttribute("id", absolutePath);
-                        li.setAttribute("onclick", "importJson(this);")
-                        li.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + path[y] + "</a>";
-                        parentul.appendChild(li);
-                    }
-                }
+            if (document.getElementById(path) === null && version === "") {
+                let li = document.createElement("li");
+                li.setAttribute("id", path);
+                li.setAttribute("role", "presentation");
+                li.setAttribute("onclick", "importJson(this);");
+                li.innerHTML = "<a role=\"menuitem\" tabindex=\"-1\" href=\"#\">" + path;
+                menu.appendChild(li);
             }
-            absolutePath = "";
+            else if (document.getElementById(path) === null && version !== "") {
+                let parentli = document.createElement("li");
+                parentli.setAttribute("class", "dropdown-submenu");
+                parentli.innerHTML = "<a class=\"test\" tabindex=\"-1\" href=\"#\">" + path + " <span class=\"caret\"></span></a>";
+
+                let parentul = document.createElement("ul");
+                parentul.setAttribute("id", path);
+                parentul.setAttribute("class", "dropdown-submenu");
+
+                let childli = document.createElement("li");
+                childli.setAttribute("id", path + "/" + version);
+                childli.setAttribute("onclick", "importJson(this);");
+                childli.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
+
+                parentli.appendChild(parentul);
+                parentul.appendChild(childli);
+                menu.appendChild(parentli);
+            } else if (document.getElementById(path) != null && version !== "") {
+                let parentli = document.getElementById(path);
+
+                let parentul = document.createElement("ul");
+                parentul.setAttribute("class", "dropdown-submenu");
+
+
+                let childli = document.createElement("li");
+                childli.setAttribute("id", path + "/" + version);
+                childli.setAttribute("onclick", "importJson(this);");
+                childli.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
+
+                parentul.appendChild(childli);
+                parentli.appendChild(parentul);
+                menu.appendChild(parentli);
+            }
         }
     });
