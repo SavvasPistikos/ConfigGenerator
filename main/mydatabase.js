@@ -1,6 +1,6 @@
 function readJson(liService) {
     let service = liService.split("/")[0];
-    let version = (liService.split("/")[1] != null) ? liService.split("/")[1] : "";
+    let version = (liService.split("/")[1] != null && liService.split("/")[1] !== "default") ? liService.split("/")[1] : "";
     var jsontext = null;
 
     if (service === "internal") {
@@ -53,7 +53,6 @@ $(document).ready(
 
         let li = document.createElement("li");
         li.setAttribute("id", "internal");
-        li.setAttribute("role", "presentation");
         li.setAttribute("onclick", "importJson(this);");
         li.innerHTML = "<a role=\"menuitem\" tabindex=\"-1\" href=\"#\">" + "internal";
         menu.appendChild(li);
@@ -63,44 +62,48 @@ $(document).ready(
             let version = services[i].version;
 
             if (document.getElementById(path) === null && version === "") {
-                let li = document.createElement("li");
-                li.setAttribute("id", path);
-                li.setAttribute("role", "presentation");
-                li.setAttribute("onclick", "importJson(this);");
-                li.innerHTML = "<a role=\"menuitem\" tabindex=\"-1\" href=\"#\">" + path;
-                menu.appendChild(li);
+                let simpleli = document.createElement("li");
+                simpleli.setAttribute("id", path);
+                simpleli.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + path + "</a>";
+                simpleli.setAttribute("onclick", "importJson(this);");
+                menu.appendChild(simpleli);
             }
             else if (document.getElementById(path) === null && version !== "") {
-                let parentli = document.createElement("li");
-                parentli.setAttribute("class", "dropdown-submenu");
-                parentli.innerHTML = "<a class=\"test\" tabindex=\"-1\" href=\"#\">" + path + " <span class=\"caret\"></span></a>";
-
-                let parentul = document.createElement("ul");
-                parentul.setAttribute("id", path);
-                parentul.setAttribute("class", "dropdown-submenu");
-
-                let childli = document.createElement("li");
-                childli.setAttribute("id", path + "/" + version);
-                childli.setAttribute("onclick", "importJson(this);");
-                childli.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
-
-                parentli.appendChild(parentul);
-                parentul.appendChild(childli);
-                menu.appendChild(parentli);
-            } else if (document.getElementById(path) != null && version !== "") {
-                let parentli = document.getElementById(path);
-
-                let parentul = document.createElement("ul");
-                parentul.setAttribute("class", "dropdown-submenu");
-
-
-                let childli = document.createElement("li");
-                childli.setAttribute("id", path + "/" + version);
-                childli.setAttribute("onclick", "importJson(this);");
-                childli.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
-
-                parentul.appendChild(childli);
-                parentli.appendChild(parentul);
+                addSubmenu(path, version, menu, null);
+            } else if (document.getElementById(path) != null) {
+                if (document.getElementById(path).tagName === "UL") {
+                    version = (version === "") ? "default" : version;
+                    let ulmenu = document.getElementById(path);
+                    let lichild = document.createElement("li");
+                    lichild.setAttribute("id", path + "/" + version);
+                    lichild.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
+                    lichild.setAttribute("onclick", "importJson(this);");
+                    ulmenu.appendChild(lichild);
+                } else {
+                    let previousitem = document.getElementById(path);
+                    addSubmenu(path, version, menu, previousitem);
+                }
             }
         }
     });
+
+function addSubmenu(path, version, menu, previousitem) {
+
+    let lisubmenu = document.createElement("li");
+    lisubmenu.setAttribute("class", "dropdown-submenu");
+    lisubmenu.innerHTML = "<a class=\"test\" tabindex=\"-1\" href=\"#\">" + path + "<span class=\"caret\"></span></a>";
+
+    let ulmenu = document.createElement("ul");
+    ulmenu.setAttribute("id", path);
+    ulmenu.setAttribute("class", "dropdown-submenu");
+
+    let lichild = document.createElement("li");
+    lichild.setAttribute("id", path + "/" + version);
+    lichild.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
+    lichild.setAttribute("onclick", "importJson(this);");
+
+    ulmenu.appendChild(lichild);
+    if (previousitem != null) ulmenu.appendChild(previousitem);
+    lisubmenu.appendChild(ulmenu);
+    menu.appendChild(lisubmenu);
+}

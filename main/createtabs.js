@@ -11,10 +11,12 @@ var outerdiv;
 function importJson(liItem) {
     outerdiv = document.getElementById("JsonContentDiv");
     js = JSON.parse(readJson(liItem.id));
-    var buttonElement = addButton("swagger/" + liItem.id);
-    jsonList[buttonElement.id.split("/")[1]] = js;
 
-    if (document.getElementById("div=" + buttonElement.id) == null) {
+
+    if (document.getElementById("div=" + "swagger/" + liItem.id) == null) {
+        var buttonElement = addButton("swagger/" + liItem.id);
+        jsonList[buttonElement.id.split("/")[1]] = js;
+
         let ul = document.createElement("ul");
         let di = document.createElement("div");
         let s = document.createElement("input");
