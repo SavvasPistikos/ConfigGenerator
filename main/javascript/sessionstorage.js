@@ -1,5 +1,3 @@
-var checkboxesStatus = {};
-
 function writetosessionStorage(checkboxElem) {
     checkboxesStatus[checkboxElem.id] = checkboxElem.checked;
     sessionStorage.setItem("checkboxesStatus", JSON.stringify(checkboxesStatus));

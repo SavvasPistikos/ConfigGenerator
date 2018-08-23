@@ -3,11 +3,13 @@ function readJson(liService) {
     let version = (liService.split("/")[1] != null && liService.split("/")[1] !== "default") ? liService.split("/")[1] : "";
     var jsontext = null;
 
-    if (service === "internal") {
-        service = "http://localhost:8080/api/v1.0/api-swagger/internal";
-    }
     let url = (version === "") ? "http://localhost:8080/api/v1.0/swagger/" + service
         : "http://localhost:8080/api/v1.0/swagger/" + service + "/" + version;
+
+    if (service === "internal") {
+        url = "http://localhost:8080/api/v1.0/api-swagger/internal";
+    }
+
     $.ajax({
         'async': false,
         'global': false,
