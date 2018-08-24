@@ -13,6 +13,18 @@
     <script src="javascript/createtabs.js"></script>
     <meta charset="UTF-8" content="width=device-width, initial-scale=1">
     <style>
+/*        #jsonOutput {
+            top: 40%;
+            left: 50%;
+            width:30em;
+            height:18em;
+            margin-top: -9em; !*set to a negative number 1/2 of your height*!
+            margin-left: -15em; !*set to a negative number 1/2 of your width*!
+            border: 1px solid #ccc;
+            background-color: #f3f3f3;
+            position:fixed;
+        }*/
+
         .remove {
             background: url("images/trash.png");
             background-size: cover;
@@ -58,12 +70,16 @@
 
     <div class="tabbable boxed parentTabs">
         <ul class="nav nav-tabs" id="outer">
+            <li><a data-toggle="tab" href="#manageswaggers">Manage Swaggers</a></li>
+            </li>
             <li class="active"><a data-toggle="tab" href="#dropdownlist">Load Swaggers</a></li>
             <li><a data-toggle="tab" href="#manage">Edit Configuration</a></li>
             <li><a data-toggle="tab" href="#output">Output</a></li>
         </ul>
 
         <div class="tab-content">
+            <div id="manageswaggers" class="tab-pane fade">
+            </div>
             <div id="dropdownlist" class="tab-pane fade in active">
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files

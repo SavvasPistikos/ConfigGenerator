@@ -46,8 +46,6 @@ $(document).ready(function () {
 });
 
 $(function () {
-
-    //when ever any tab is clicked this method will be call
     $("#services").on("click", "a", function (e) {
         e.preventDefault();
 
@@ -55,7 +53,6 @@ $(function () {
         registerCloseEvent();
         $currentTab = $(this);
     });
-
 });
 
 function registerCloseEvent() {
@@ -65,7 +62,7 @@ function registerCloseEvent() {
         //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
         var tabContentId = $(this).parent().attr("href");
         $(this).parent().parent().remove(); //remove li of tab
-        $('#myTab a:last').tab('show'); // Select first tab
+        $('#services a:last').tab('show'); // Select first tab
         $(tabContentId).remove(); //remove respective tab content
 
     });
