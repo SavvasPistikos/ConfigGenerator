@@ -61,28 +61,9 @@ function generate(generateButton) {
         }
     }
 
-    let alreadyGenerated = document.getElementById("div=" + generateButton.id);
-    if (alreadyGenerated == null) {
-        let generatediv = document.createElement("div");
-        generatediv.setAttribute("id", "div=" + generateButton.id);
-        generatediv.setAttribute("class", "JsonContent");
-        let jsonOutput = document.createElement("textarea");
-        jsonOutput.setAttribute("rows", "30");
-        jsonOutput.setAttribute("cols", "50");
-        jsonOutput.setAttribute("id", "jsonOutput");
-        var yaml = json2yaml(apiss);
-        //jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
-        jsonOutput.innerHTML = yaml;
-        generatediv.appendChild(jsonOutput);
-        document.body.appendChild(generatediv);
-    } else {
-        jsonOutput.hidden = false;
-        var yaml = json2yaml(apiss);
-        //jsonOutput.innerHTML = JSON.stringify(apiss, null, 2);
-        jsonOutput.innerHTML = yaml;
-    }
-
-    hideOtherTabs(generateButton.id);
+    let jsonOutput = document.getElementById("jsonOutput");
+    var yaml = json2yaml(apiss);
+    jsonOutput.innerHTML = yaml;
     console.log(JSON.stringify(apiss, null, 2));
     apiss = {apis: {}};
 }

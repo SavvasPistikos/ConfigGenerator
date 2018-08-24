@@ -1,6 +1,6 @@
 function readJson(liService) {
-    let service = liService.split("/")[0];
-    let version = (liService.split("/")[1] != null && liService.split("/")[1] !== "default") ? liService.split("/")[1] : "";
+    let service = liService.split("_")[0];
+    let version = (liService.split("_")[1] != null && liService.split("_")[1] !== "default") ? liService.split("_")[1] : "";
     var jsontext = null;
 
     let url = (version === "") ? "http://localhost:8080/api/v1.0/swagger/" + service
@@ -45,10 +45,34 @@ $(document).ready(function () {
     });
 });
 
+$(function () {
 
+    //when ever any tab is clicked this method will be call
+    $("#services").on("click", "a", function (e) {
+        e.preventDefault();
+
+        $(this).tab('show');
+        registerCloseEvent();
+        $currentTab = $(this);
+    });
+
+});
+
+function registerCloseEvent() {
+
+    $(".closeTab").click(function () {
+
+        //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
+        var tabContentId = $(this).parent().attr("href");
+        $(this).parent().parent().remove(); //remove li of tab
+        $('#myTab a:last').tab('show'); // Select first tab
+        $(tabContentId).remove(); //remove respective tab content
+
+    });
+}
 $(document).ready(
     function generateDropDown() {
-        document.getElementById('upload').addEventListener('change', handleFileSelect, false);
+        //document.getElementById('upload').addEventListener('change', handleFileSelect, false);
         var ulmenu = document.getElementsByClassName("dropdown-menu");
         var menu = ulmenu[0];
         let services = getServices();
@@ -77,7 +101,7 @@ $(document).ready(
                     version = (version === "") ? "default" : version;
                     let ulmenu = document.getElementById(path);
                     let lichild = document.createElement("li");
-                    lichild.setAttribute("id", path + "/" + version);
+                    lichild.setAttribute("id", path + "_" + version);
                     lichild.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
                     lichild.setAttribute("onclick", "importJson(this);");
                     ulmenu.appendChild(lichild);
@@ -100,7 +124,7 @@ function addSubmenu(path, version, menu, previousitem) {
     ulmenu.setAttribute("class", "dropdown-submenu");
 
     let lichild = document.createElement("li");
-    lichild.setAttribute("id", path + "/" + version);
+    lichild.setAttribute("id", path + "_" + version);
     lichild.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
     lichild.setAttribute("onclick", "importJson(this);");
 

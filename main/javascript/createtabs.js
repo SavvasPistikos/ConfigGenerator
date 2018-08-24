@@ -1,18 +1,26 @@
 function importJson(liItem) {
     buttonIdWithout = liItem.id.split("/")[0];
-    outerdiv = document.getElementById("JsonContentDiv");
+    //outerdiv = document.getElementById("swaggers");
     js = (buttonIdWithout === "internal") ? readJson(liItem.id) : JSON.parse(readJson(liItem.id));
 
-    if (document.getElementById("div=" + liItem.id) == null) {
-        var buttonElement = addButton(liItem.id);
+    if (document.getElementById("div" + liItem.id) == null) {
         jsonList[buttonIdWithout] = js;
+        let servicesul = document.getElementById("services");
 
+        let li = document.createElement("li");
+        li.innerHTML = "<a data-toggle=\"tab\" href=\"#div" + liItem.id + "\">"
+            + "<button class=\"close closeTab\" type=\"button\" >×</button>"
+
+            + liItem.id + "</a>";
+
+        servicesul.appendChild(li);
         let ul = document.createElement("ul");
         let di = document.createElement("div");
+        di.setAttribute("class", "tab-pane fade active in");
+        di.setAttribute("id", "div" + liItem.id);
         let s = document.createElement("input");
         s.setAttribute("id", "inp=" + js.info.title.toString());
         s.setAttribute("type", "hidden");
-        s.value = buttonElement.id.split("/")[0];
         di.appendChild(s);
 
         let groupedPaths = groupByTags(buttonIdWithout);
@@ -28,33 +36,13 @@ function importJson(liItem) {
         ul.appendChild(document.createTextNode("\t\t version = "));
         ul.appendChild(version);
 
-        groupByTagsDraw(groupedPaths, buttonElement, ul, di);
 
-        hideOtherTabs(buttonElement.id);
+        let dum = document.getElementById("swaggers");
+        groupByTagsDraw(groupedPaths, ul, dum, liItem.id);
+
     }
 }
 
-function addButton(buttonId) {
-    let div = document.getElementById("buttons");
-    let newButton = document.createElement("button");
-    newButton.setAttribute("class", "mybutton");
-    newButton.setAttribute("onclick", "hideOtherTabs(this.id);");
-    newButton.setAttribute("id", "bt=" + buttonId);
-    newButton.innerHTML = (js.info == null) ? buttonIdWithout : js.info.title;
-
-    let removeButton = document.createElement("button");
-    removeButton.setAttribute("class", "remove");
-    removeButton.setAttribute("onclick", "removeAssociatedItems(this.id);");
-    removeButton.setAttribute("id", "remove=" + buttonId);
-
-    let generate = document.getElementById("generate");
-    div.removeChild(generate);
-    div.appendChild(newButton);
-    div.appendChild(removeButton);
-    div.appendChild(generate);
-
-    return newButton;
-}
 
 function removeAssociatedItems(buttonId) {
     let bId = buttonId.replace("remove=", "bt=");
@@ -76,17 +64,6 @@ function removeAssociatedItems(buttonId) {
         document.getElementById("jsonOutput").innerHTML = "";
     }
 
-}
-
-function hideOtherTabs(jsonName) {
-    var i, tabcontent;
-    tabcontent = document.getElementsByClassName("JsonContent");
-    document.getElementById("div=" + jsonName.replace("bt=", "")).style.display = "initial";
-    for (i = 0; i < tabcontent.length; i++) {
-        if (tabcontent[i].id !== "div=" + jsonName.replace("bt=", "")) {
-            tabcontent[i].style.display = "none";
-        }
-    }
 }
 
 function handleFileSelect(evt) {
@@ -181,7 +158,7 @@ function groupByTags(jsonFileName) {
     return groupedPaths;
 }
 
-function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
+function groupByTagsDraw(groupedPaths, ul, di, tabid) {
     for (let tag in groupedPaths) {
         let elementsid = trimId(tag);
 
@@ -237,14 +214,15 @@ function groupByTagsDraw(groupedPaths, buttonElement, ul, di) {
             tagli.appendChild(pathsul);
 
             ul.appendChild(tagli);
-            di.appendChild(ul);
-            di.setAttribute("class", "JsonContent");
-            di.setAttribute("id", "div=" + buttonElement.id.replace("bt=", ""));
-            di.style.display = "initial";
-            buttonElement.innerHTML = js.info.title;
-            outerdiv.appendChild(di);
+
         }
     }
+    let tabpanediv = document.createElement("div");
+    tabpanediv.setAttribute("class", "tab-pane fade");
+    tabpanediv.setAttribute("id", "div" + tabid);
+    tabpanediv.appendChild(ul);
+    di.appendChild(tabpanediv);
+    //outerdiv.appendChild(di);
 
 }
 
@@ -366,11 +344,11 @@ function createAllOptionsCheckbox(tagliElement, tag) {
 
 }
 
-function AuthorizeAllSubTagEndpoints(authorizeAllElement){
+function AuthorizeAllSubTagEndpoints(authorizeAllElement) {
     let authCheckboxes = document.getElementsByClassName(authorizeAllElement.className);
     let arrayAuthCheckboxes = Array.from(authCheckboxes).filter(getOnlyAuthCheckboxes);
 
-    for(ach in arrayAuthCheckboxes){
+    for (ach in arrayAuthCheckboxes) {
         arrayAuthCheckboxes[ach].checked = authorizeAllElement.checked;
     }
 }
@@ -385,11 +363,11 @@ function getOnlyAuthCheckboxes(authCheckboxElem) {
     }
 }
 
-function DisplayAllSubTagEndpoints(displayAllElement){
+function DisplayAllSubTagEndpoints(displayAllElement) {
     let dispCheckboxes = document.getElementsByClassName(displayAllElement.className);
     let arrayDispCheckboxes = Array.from(dispCheckboxes).filter(getOnlyDispCheckboxes);
 
-    for(ach in arrayDispCheckboxes){
+    for (ach in arrayDispCheckboxes) {
         arrayDispCheckboxes[ach].checked = displayAllElement.checked;
     }
 }

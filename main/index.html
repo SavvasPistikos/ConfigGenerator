@@ -40,21 +40,60 @@
             left: 100%;
             margin-top: -1px;
         }
+
+        .row {
+            float: left;
+            margin-left: 5px;
+        }
+
+        .buttonss {
+            float: bottom;
+        }
     </style>
 </head>
 <body>
-<div class="dropdown">
-    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files
-        <span class="caret"></span></button>
-    <ul class="dropdown-menu">
-    </ul>
-</div>
 
-<div id="buttons">
-    <button id="generate" class="gbutton" onclick=generate(this)> Generate</button>
-    <input id="upload" type=file accept="text/html" name="files[]" size=30>
-</div>
-<div id="JsonContentDiv">
+<div class="container">
+    <h2>ApiGatewayJ Configuration Tool</h2>
+
+    <div class="tabbable boxed parentTabs">
+        <ul class="nav nav-tabs" id="outer">
+            <li class="active"><a data-toggle="tab" href="#dropdownlist">Load Swaggers</a></li>
+            <li><a data-toggle="tab" href="#manage">Edit Configuration</a></li>
+            <li><a data-toggle="tab" href="#output">Output</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="dropdownlist" class="tab-pane fade in active">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                    </ul>
+                </div>
+            </div>
+
+            <div id="manage" class="tab-pane fade">
+                <div class="tabbable">
+                    <ul id="services" class="nav nav-tabs">
+                        <li id="generate">
+                            <div id="buttons">
+                                <button class="gbutton" onclick=generate(this)> Generate</button>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="swaggers">
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="output" class="tab-pane fade">
+                <textarea id="jsonOutput" rows="30" cols="50"></textarea>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 </body>
