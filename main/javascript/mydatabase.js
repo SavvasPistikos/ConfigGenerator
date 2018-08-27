@@ -1,14 +1,10 @@
 function readJson(liService) {
-    let service = liService.split("_")[0];
-    let version = (liService.split("_")[1] != null && liService.split("_")[1] !== "default") ? liService.split("_")[1] : "";
     var jsontext = null;
+    let url = "http://localhost:8080/api/v1.0/swaggers/" + liService;
 
-    let url = (version === "") ? "http://localhost:8080/api/v1.0/swagger/" + service
-        : "http://localhost:8080/api/v1.0/swagger/" + service + "/" + version;
-
-    if (service === "internal") {
-        url = "http://localhost:8080/api/v1.0/api-swagger/internal";
-    }
+    /*    if (service === "internal") {
+            url = "http://localhost:8080/api/v1.0/api-swagger/internal";
+        }*/
 
     $.ajax({
         'async': false,
@@ -28,7 +24,7 @@ function getServices() {
     $.ajax({
         'async': false,
         'global': false,
-        'url': "http://localhost:8080/api/v1.0/swagger/services",
+        'url': "http://localhost:8080/api/v1.0/swaggers",
         'dataType': "json",
         'success': function (data) {
             services = data;
@@ -45,28 +41,6 @@ $(document).ready(function () {
     });
 });
 
-$(function () {
-    $("#services").on("click", "a", function (e) {
-        e.preventDefault();
-
-        $(this).tab('show');
-        registerCloseEvent();
-        $currentTab = $(this);
-    });
-});
-
-function registerCloseEvent() {
-
-    $(".closeTab").click(function () {
-
-        //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
-        var tabContentId = $(this).parent().attr("href");
-        $(this).parent().parent().remove(); //remove li of tab
-        $('#services a:last').tab('show'); // Select first tab
-        $(tabContentId).remove(); //remove respective tab content
-
-    });
-}
 $(document).ready(
     function generateDropDown() {
         //document.getElementById('upload').addEventListener('change', handleFileSelect, false);
@@ -89,10 +63,11 @@ $(document).ready(
                 simpleli.setAttribute("id", path);
                 simpleli.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + path + "</a>";
                 simpleli.setAttribute("onclick", "importJson(this);");
+                $(simpleli).data("id", services[i].id);
                 menu.appendChild(simpleli);
             }
             else if (document.getElementById(path) === null && version !== "") {
-                addSubmenu(path, version, menu, null);
+                addSubmenu(path, version, menu, null,services[i].id);
             } else if (document.getElementById(path) != null) {
                 if (document.getElementById(path).tagName === "UL") {
                     version = (version === "") ? "default" : version;
@@ -101,16 +76,17 @@ $(document).ready(
                     lichild.setAttribute("id", path + "_" + version);
                     lichild.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
                     lichild.setAttribute("onclick", "importJson(this);");
+                    $(lichild).data("id", services[i].id);
                     ulmenu.appendChild(lichild);
                 } else {
                     let previousitem = document.getElementById(path);
-                    addSubmenu(path, version, menu, previousitem);
+                    addSubmenu(path, version, menu, previousitem,services[i].id);
                 }
             }
         }
     });
 
-function addSubmenu(path, version, menu, previousitem) {
+function addSubmenu(path, version, menu, previousitem,serviceId) {
 
     let lisubmenu = document.createElement("li");
     lisubmenu.setAttribute("class", "dropdown-submenu");
@@ -124,6 +100,7 @@ function addSubmenu(path, version, menu, previousitem) {
     lichild.setAttribute("id", path + "_" + version);
     lichild.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
     lichild.setAttribute("onclick", "importJson(this);");
+    $(lichild).data("id", serviceId);
 
     ulmenu.appendChild(lichild);
     if (previousitem != null) ulmenu.appendChild(previousitem);

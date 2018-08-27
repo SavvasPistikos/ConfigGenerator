@@ -8,4 +8,5 @@ var importedJsonConfig;
 var allGroupedByTags = {};
 var outerdiv;
 var checkboxesStatus = {};
-var buttonIdWithout ;
+var buttonIdWithout;
+var servicesIds = {};

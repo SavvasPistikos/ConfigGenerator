@@ -1,14 +1,14 @@
 function importJson(liItem) {
     buttonIdWithout = liItem.id.split("/")[0];
     //outerdiv = document.getElementById("swaggers");
-    js = (buttonIdWithout === "internal") ? readJson(liItem.id) : JSON.parse(readJson(liItem.id));
+    js = (buttonIdWithout === "internal") ? readJson($(liItem).data("id")).content : JSON.parse(readJson($(liItem).data("id")).content);
 
     if (document.getElementById("div" + liItem.id) == null) {
         jsonList[buttonIdWithout] = js;
         let servicesul = document.getElementById("services");
 
         let li = document.createElement("li");
-        li.innerHTML = "<a data-toggle=\"tab\" href=\"#div" + liItem.id + "\">"
+        li.innerHTML = "<a data-toggle=\"tab\" href=\"#div" + liItem.id.replace(".","_") + "\">"
             + "<button class=\"close closeTab\" type=\"button\" >×</button>"
 
             + liItem.id + "</a>";
@@ -17,7 +17,7 @@ function importJson(liItem) {
         let ul = document.createElement("ul");
         let di = document.createElement("div");
         di.setAttribute("class", "tab-pane fade active in");
-        di.setAttribute("id", "div" + liItem.id);
+        di.setAttribute("id", "div" + liItem.id.replace(".","_"));
         let s = document.createElement("input");
         s.setAttribute("id", "inp=" + js.info.title.toString());
         s.setAttribute("type", "hidden");
@@ -38,32 +38,9 @@ function importJson(liItem) {
 
 
         let dum = document.getElementById("swaggers");
-        groupByTagsDraw(groupedPaths, ul, dum, liItem.id);
+        groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".","_"));
 
     }
-}
-
-
-function removeAssociatedItems(buttonId) {
-    let bId = buttonId.replace("remove=", "bt=");
-    var button = document.getElementById(bId);
-    button.parentNode.removeChild(button);
-
-    let dId = buttonId.replace("remove=", "div=");
-    var dIv = document.getElementById(dId);
-    dIv.parentNode.removeChild(dIv);
-
-    var rbutton = document.getElementById(buttonId);
-    rbutton.parentNode.removeChild(rbutton);
-
-    let apiName = bId.split("/")[0];
-    listt[apiName] = [];
-
-    if (document.getElementsByClassName("JsonContent").length === 1) {
-        document.getElementById("jsonOutput").hidden = true;
-        document.getElementById("jsonOutput").innerHTML = "";
-    }
-
 }
 
 function handleFileSelect(evt) {
@@ -218,11 +195,12 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
         }
     }
     let tabpanediv = document.createElement("div");
-    tabpanediv.setAttribute("class", "tab-pane fade");
+    tabpanediv.setAttribute("class", "tab-pane fade active in");
     tabpanediv.setAttribute("id", "div" + tabid);
     tabpanediv.appendChild(ul);
     di.appendChild(tabpanediv);
-    //outerdiv.appendChild(di);
+
+    hideOtherTabs(tabpanediv);
 
 }
 
