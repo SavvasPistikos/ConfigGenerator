@@ -1,7 +1,7 @@
 function importJson(liItem) {
     buttonIdWithout = liItem.id.split("/")[0];
     //outerdiv = document.getElementById("swaggers");
-    js = (buttonIdWithout === "internal") ? readJson($(liItem).data("id")).content : JSON.parse(readJson($(liItem).data("id")).content);
+    js = (buttonIdWithout === "internal") ? readJson($(liItem).data("id")) : JSON.parse(readJson($(liItem).data("id")).content);
 
     if (document.getElementById("div" + liItem.id) == null) {
         jsonList[buttonIdWithout] = js;

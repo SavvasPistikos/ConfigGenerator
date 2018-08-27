@@ -1,5 +1,5 @@
 function readJson(liService) {
-    var jsontext = null;
+    let jsontext = null;
     let url = "http://localhost:8080/api/v1.0/swaggers/" + liService;
 
     /*    if (service === "internal") {

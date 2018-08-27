@@ -116,7 +116,7 @@ function setDbResults(services) {
         tr.appendChild(tdServ);
         tr.appendChild(tdCont);
         tr.appendChild(tdVer);
-        addCrudButtons(tr);
+        addCrudButtons(tr, services[s].id);
 
         tbody.appendChild(tr);
     }
@@ -124,12 +124,28 @@ function setDbResults(services) {
     return tbody;
 }
 
-function addCrudButtons(trElement) {
+function addCrudButtons(trElement, serviceId) {
     let del = document.createElement("button");
     del.setAttribute("class", "btn btn-danger");
     del.innerText = "Delete";
 
+    $(del).click(function () {
+        let url = "http://localhost:8080/api/v1.0/swaggers/" + serviceId;
+        $.ajax({
+            'async': false,
+            'global': false,
+            'url': url,
+            'type': 'DELETE',
+            'success': function () {
+                $(this).parent().remove();
+                $('.table-responsive').load(location.href + " .table-responsive");
+
+            }
+        });
+    });
+
     let info = document.createElement("button");
+    $(info).data("id", serviceId);
     info.setAttribute("class", "btn btn-info");
     info.innerText = "Info";
     info.setAttribute("data-toggle", "modal");
@@ -146,7 +162,7 @@ function addCrudButtons(trElement) {
 }
 
 function generateModal(infoButton) {
-    let swaggerid = $('#' + $(infoButton).parent().children()[0].innerText).data("id");
+    let swaggerid = $(infoButton).data("id");
     let swaggerDTO = readJson(swaggerid);
     let modalDiv = document.createElement("div");
     modalDiv.setAttribute("class", "modal fade");
@@ -180,7 +196,7 @@ function generateModal(infoButton) {
     footerButton.setAttribute("class", "btn btn-default");
     footerButton.setAttribute("data-dismiss", "modal");
     footerButton.innerText = "Close";
-    $(footerButton).click(function(){
+    $(footerButton).click(function () {
         $('#swaggerInfo').remove();
         $('.modal-backdrop').remove();
     });
