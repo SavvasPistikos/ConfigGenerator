@@ -39,7 +39,8 @@ function importJson(liItem) {
 
         let dum = document.getElementById("swaggers");
         groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".","_"));
-
+    }else{
+        $().trigger()
     }
 }
 
@@ -191,7 +192,6 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
             tagli.appendChild(pathsul);
 
             ul.appendChild(tagli);
-
         }
     }
     let tabpanediv = document.createElement("div");
@@ -199,9 +199,7 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
     tabpanediv.setAttribute("id", "div" + tabid);
     tabpanediv.appendChild(ul);
     di.appendChild(tabpanediv);
-
     hideOtherTabs(tabpanediv);
-
 }
 
 function createCheckBox(onChangeFunction, classString, idString) {

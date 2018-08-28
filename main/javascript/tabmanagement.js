@@ -47,10 +47,7 @@ function setPreviousTab(a) {
     let index;
 
     children.each(function () {
-
-
     });
-
     for (c in children) {
         if (children[c].id !== "generate")
             if (children[c].attribute["href"].split("#")[1] === a.attribute["href"]) {
@@ -61,8 +58,11 @@ function setPreviousTab(a) {
 }
 
 $(document).ready(function () {
-    $("#m").click(function () {
-        getItemsFromDbAndDraw();
+    $("#databasemanager").click(function (e, arg1) {
+        if ($('#manageswaggers').children().length === 0 || arg1 === true) {
+            $('#manageswaggers').empty();
+            getItemsFromDbAndDraw();
+        }
     });
 });
 
@@ -100,6 +100,7 @@ function setCols() {
 
 function setDbResults(services) {
     let tbody = document.createElement("tbody");
+    tbody.appendChild(createInsertRow());
     for (let s in services) {
 
         let tr = document.createElement("tr");
@@ -120,7 +121,6 @@ function setDbResults(services) {
 
         tbody.appendChild(tr);
     }
-
     return tbody;
 }
 
@@ -138,8 +138,7 @@ function addCrudButtons(trElement, serviceId) {
             'type': 'DELETE',
             'success': function () {
                 $(this).parent().remove();
-                $('.table-responsive').load(location.href + " .table-responsive");
-
+                $("#databasemanager").trigger('click', [true]);
             }
         });
     });
@@ -153,8 +152,12 @@ function addCrudButtons(trElement, serviceId) {
     info.setAttribute("onclick", "generateModal(this);");
 
     let upd = document.createElement("button");
+    $(upd).data("id", serviceId);
     upd.setAttribute("class", "btn btn-primary");
     upd.innerText = "Update";
+    upd.setAttribute("data-toggle", "modal");
+    upd.setAttribute("data-target", "#InsertOrUpdateForm");
+    upd.setAttribute("onclick", "fillupModal(this);");
 
     trElement.appendChild(del);
     trElement.appendChild(info);
@@ -205,4 +208,77 @@ function generateModal(infoButton) {
 
     let modalContainer = document.getElementById("modals");
     modalContainer.appendChild(modalDiv);
+}
+
+function fillupModal(updateButtonElement) {
+    let id = $(updateButtonElement).data("id");
+    let service = readJson(id);
+
+    $('#serviceId').val(id);
+    $('#serviceName').val(service.service);
+    $('#swaggerJson').val(service.content);
+    $('#serviceVersion').val(service.version);
+}
+
+function updateService() {
+
+    var service = {
+        'id': $('#serviceId').val(),
+        'service': $('#serviceName').val(),
+        'content': $('#swaggerJson').val(),
+        'version': $('#serviceVersion').val()
+    };
+
+    $.ajax({
+        'type': 'PUT',
+        'url': 'http://localhost:8080/api/v1.0/swaggers',
+        'data': JSON.stringify(service),
+        'contentType': 'application/json',
+        'success': function () {
+            $('#InsertOrUpdateForm').modal('toggle');
+            $("#databasemanager").trigger('click', [true]);
+        }
+    });
+}
+
+function createInsertRow() {
+    let tr = document.createElement("tr");
+    let srvTd = document.createElement("td");
+    let conTd = document.createElement("td");
+    let verTd = document.createElement("td");
+
+    srvTd.appendChild(createInputText("", "srvTd"));
+    conTd.appendChild(createInputText("", "conTd"));
+    verTd.appendChild(createInputText("", "verTd"));
+
+    let add = document.createElement("button");
+    add.setAttribute("class", "btn btn-default");
+    add.innerText = "Add";
+
+    $(add).click(function () {
+
+        var service = {
+            'service': $('#srvTd').val(),
+            'content': $('#conTd').val(),
+            'version': $('#verTd').val()
+        };
+
+        $.ajax({
+            'type': 'POST',
+            'url': 'http://localhost:8080/api/v1.0/swaggers',
+            'data': JSON.stringify(service),
+            'contentType': 'application/json',
+            'success': function () {
+                $("#databasemanager").trigger('click', [true]);
+            }
+        });
+
+    });
+
+    tr.appendChild(srvTd);
+    tr.appendChild(conTd);
+    tr.appendChild(verTd);
+    tr.appendChild(add);
+
+    return tr;
 }

@@ -34,7 +34,7 @@ function getServices() {
 }
 
 $(document).ready(function () {
-    $('.dropdown-submenu a.test').on("click", function (e) {
+    $('.dropdown-menu a.test').on("click", function (e) {
         $(this).next('ul').toggle();
         e.stopPropagation();
         e.preventDefault();
@@ -57,37 +57,40 @@ $(document).ready(
         for (let i = 0; i < services.length; i++) {
             let path = services[i].service;
             let version = services[i].version;
-
+            version = version.replace(".","_");
             if (document.getElementById(path) === null && version === "") {
                 let simpleli = document.createElement("li");
-                simpleli.setAttribute("id", path);
-                simpleli.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + path + "</a>";
-                simpleli.setAttribute("onclick", "importJson(this);");
-                $(simpleli).data("id", services[i].id);
+                let atag = document.createElement("a");
+                atag.innerHTML = "<input type = \"checkbox\" id =" + path + " onclick = \"importJson(this);\"" + "/>" + path;
+                simpleli.appendChild(atag);
                 menu.appendChild(simpleli);
+                $($('#' + path)).data("id", services[i].id);
             }
             else if (document.getElementById(path) === null && version !== "") {
-                addSubmenu(path, version, menu, null,services[i].id);
+                addSubmenu(path, version, menu, null, services[i].id);
             } else if (document.getElementById(path) != null) {
                 if (document.getElementById(path).tagName === "UL") {
                     version = (version === "") ? "default" : version;
                     let ulmenu = document.getElementById(path);
                     let lichild = document.createElement("li");
-                    lichild.setAttribute("id", path + "_" + version);
-                    lichild.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
-                    lichild.setAttribute("onclick", "importJson(this);");
-                    $(lichild).data("id", services[i].id);
+                    let divvv = document.createElement("div");
+                    let atag = document.createElement("a");
+                    atag.appendChild(createCheckBox("","",""));
+                    atag.innerText = path + "_" + version;
+                    //atag.innerHTML = "<input type = \"checkbox\" id =" + path + "_" + version + " onclick = \"importJson(this);\"" + "/>" + version;
+                    divvv.appendChild(atag);
+                    lichild.appendChild(divvv);
                     ulmenu.appendChild(lichild);
+                    $($('#' + path + "_" + version)).data("id", services[i].id);
                 } else {
                     let previousitem = document.getElementById(path);
-                    addSubmenu(path, version, menu, previousitem,services[i].id);
+                    addSubmenu(path, version, menu, previousitem, services[i].id);
                 }
             }
         }
     });
 
-function addSubmenu(path, version, menu, previousitem,serviceId) {
-
+function addSubmenu(path, version, menu, previousitem, serviceId) {
     let lisubmenu = document.createElement("li");
     lisubmenu.setAttribute("class", "dropdown-submenu");
     lisubmenu.innerHTML = "<a class=\"test\" tabindex=\"-1\" href=\"#\">" + path + "<span class=\"caret\"></span></a>";
@@ -97,13 +100,13 @@ function addSubmenu(path, version, menu, previousitem,serviceId) {
     ulmenu.setAttribute("class", "dropdown-submenu");
 
     let lichild = document.createElement("li");
-    lichild.setAttribute("id", path + "_" + version);
-    lichild.innerHTML = "<a tabindex=\"-1\" href=\"#\">" + version + "</a>";
-    lichild.setAttribute("onclick", "importJson(this);");
-    $(lichild).data("id", serviceId);
-
+    let atag = document.createElement("a");
+    atag.innerHTML = "<input type = \"checkbox\" id =" + path + "_" + version + " onclick = \"importJson(this);\"" + "/>" + version;
+    lichild.appendChild(atag);
     ulmenu.appendChild(lichild);
     if (previousitem != null) ulmenu.appendChild(previousitem);
     lisubmenu.appendChild(ulmenu);
     menu.appendChild(lisubmenu);
+    console.log(version);
+    $($('#' + path + "_" + version)).data("id", serviceId);
 }
