@@ -20,6 +20,7 @@ function registerCloseEvent() {
         $('#swaggers a:last').tab('show'); // Select first tab
         $(tabContentId).remove(); //remove respective tab content
         listt[tabContentId.split("div")[1]] = [];
+        generate();
         $('#' + $(this).parent().parent().attr('id').split("close")[1]).prop('checked',false);
 
         let resetoutputarea = true;

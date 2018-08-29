@@ -1,4 +1,4 @@
-function generate(generateButton) {
+function generate() {
     for (let p in listt) {
         if (listt[p].length > 0) {
             let basePath;
