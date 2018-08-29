@@ -73,13 +73,10 @@ $(document).ready(
                     version = (version === "") ? "default" : version;
                     let ulmenu = document.getElementById(path);
                     let lichild = document.createElement("li");
-                    let divvv = document.createElement("div");
                     let atag = document.createElement("a");
-                    atag.appendChild(createCheckBox("","",""));
                     atag.innerText = path + "_" + version;
-                    //atag.innerHTML = "<input type = \"checkbox\" id =" + path + "_" + version + " onclick = \"importJson(this);\"" + "/>" + version;
-                    divvv.appendChild(atag);
-                    lichild.appendChild(divvv);
+                    atag.innerHTML = "<input type = \"checkbox\" id =" + path + "_" + version + " onclick = \"importJson(this);\"" + "/>" + version;
+                    lichild.appendChild(atag);
                     ulmenu.appendChild(lichild);
                     $($('#' + path + "_" + version)).data("id", services[i].id);
                 } else {

@@ -1,6 +1,5 @@
 function importJson(liItem) {
     buttonIdWithout = liItem.id.split("/")[0];
-    //outerdiv = document.getElementById("swaggers");
     js = (buttonIdWithout === "internal") ? readJson($(liItem).data("id")) : JSON.parse(readJson($(liItem).data("id")).content);
 
     if (document.getElementById("div" + liItem.id) == null) {
@@ -8,16 +7,16 @@ function importJson(liItem) {
         let servicesul = document.getElementById("services");
 
         let li = document.createElement("li");
-        li.innerHTML = "<a data-toggle=\"tab\" href=\"#div" + liItem.id.replace(".","_") + "\">"
+        li.innerHTML = "<a data-toggle=\"tab\" href=\"#div" + liItem.id.replace(".", "_") + "\">"
             + "<button class=\"close closeTab\" type=\"button\" >×</button>"
-
             + liItem.id + "</a>";
+        li.id = "close" + liItem.id;
 
         servicesul.appendChild(li);
         let ul = document.createElement("ul");
         let di = document.createElement("div");
         di.setAttribute("class", "tab-pane fade active in");
-        di.setAttribute("id", "div" + liItem.id.replace(".","_"));
+        di.setAttribute("id", "div" + liItem.id.replace(".", "_"));
         let s = document.createElement("input");
         s.setAttribute("id", "inp=" + js.info.title.toString());
         s.setAttribute("type", "hidden");
@@ -36,11 +35,11 @@ function importJson(liItem) {
         ul.appendChild(document.createTextNode("\t\t version = "));
         ul.appendChild(version);
 
-
         let dum = document.getElementById("swaggers");
-        groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".","_"));
-    }else{
-        $().trigger()
+        groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".", "_"));
+    } else {
+        $('#close' + liItem.id).remove();
+        $('#div' + liItem.id).remove();
     }
 }
 
