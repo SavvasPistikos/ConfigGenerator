@@ -1,6 +1,6 @@
 function readJson(liService) {
     let jsontext = null;
-    let url = "http://localhost:8080/api/v1.0/swaggers/" + liService;
+    let url = host + path + "/swaggers/" + liService;
 
     /*    if (service === "internal") {
             url = "http://localhost:8080/api/v1.0/api-swagger/internal";
@@ -24,7 +24,7 @@ function getServices() {
     $.ajax({
         'async': false,
         'global': false,
-        'url': "http://localhost:8080/api/v1.0/swaggers",
+        'url': host + path + "/swaggers",
         'dataType': "json",
         'success': function (data) {
             services = data;
@@ -57,7 +57,7 @@ $(document).ready(
         for (let i = 0; i < services.length; i++) {
             let path = services[i].service;
             let version = services[i].version;
-            version = version.replace(".","_");
+            version = version.replace(".", "_");
             if (document.getElementById(path) === null && version === "") {
                 let simpleli = document.createElement("li");
                 let atag = document.createElement("a");

@@ -1,3 +1,5 @@
+var host = "http://localhost:8080";
+var path = "/api/v1.0";
 var listt = {};
 var jsonList = {};
 var tagList = {};

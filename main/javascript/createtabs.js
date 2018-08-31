@@ -280,13 +280,13 @@ function displayInputText(endpointOptionsCheckbox) {
     let inputElement;
     let endpointInput = endpointOptionsCheckbox.id.includes("end");
 
-    if (endpointInput == true) {
+    if (endpointInput === true) {
         inputElement = document.getElementById("end=" + endpointOptionsCheckbox.className);
     } else {
         inputElement = document.getElementById("tags=" + endpointOptionsCheckbox.className);
     }
 
-    if (endpointOptionsCheckbox.checked == true) {
+    if (endpointOptionsCheckbox.checked === true) {
         inputElement.style.display = "inline";
     }
     else {

@@ -21,7 +21,7 @@ function registerCloseEvent() {
         $(tabContentId).remove(); //remove respective tab content
         listt[tabContentId.split("div")[1]] = [];
         generate();
-        $('#' + $(this).parent().parent().attr('id').split("close")[1]).prop('checked',false);
+        $('#' + $(this).parent().parent().attr('id').split("close")[1]).prop('checked', false);
 
         let resetoutputarea = true;
         for (i in listt) {
@@ -132,7 +132,7 @@ function addCrudButtons(trElement, serviceId) {
     del.innerText = "Delete";
 
     $(del).click(function () {
-        let url = "http://localhost:8080/api/v1.0/swaggers/" + serviceId;
+        let url = host + path + "/swaggers/" + serviceId;
         $.ajax({
             'async': false,
             'global': false,
@@ -233,7 +233,7 @@ function updateService() {
 
     $.ajax({
         'type': 'PUT',
-        'url': 'http://localhost:8080/api/v1.0/swaggers',
+        'url': host + path + "/swaggers",
         'data': JSON.stringify(service),
         'contentType': 'application/json',
         'success': function () {
@@ -267,7 +267,7 @@ function createInsertRow() {
 
         $.ajax({
             'type': 'POST',
-            'url': 'http://localhost:8080/api/v1.0/swaggers',
+            'url': host + path + "/swaggers",
             'data': JSON.stringify(service),
             'contentType': 'application/json',
             'success': function () {
