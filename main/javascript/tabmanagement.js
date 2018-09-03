@@ -11,16 +11,14 @@ $(function () {
 });
 
 function registerCloseEvent() {
-
     $(".closeTab").click(function () {
-
         //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
         var tabContentId = $(this).parent().attr("href");
         $(this).parent().parent().remove(); //remove li of tab
         $('#swaggers a:last').tab('show'); // Select first tab
-        $(tabContentId).remove(); //remove respective tab content
-        list[tabContentId.split("div")[1]] = [];
+        list[$(tabContentId).data("service")] = [];
         generate();
+        $(tabContentId).remove(); //remove respective tab content
         $('#' + $(this).parent().parent().attr('id').split("close")[1]).prop('checked', false);
 
         let resetoutputarea = true;
@@ -30,6 +28,7 @@ function registerCloseEvent() {
         if (resetoutputarea) {
             document.getElementById("jsonOutput").innerHTML = "";
         }
+
     });
 }
 

@@ -3,7 +3,6 @@ function generate() {
         if (list[p].length > 0) {
             let basePath;
             let apiName = p.replace(",", "/").split("/")[0];
-
             if (apiss.apis[apiName] == null) {
                 if (document.getElementById("vers=" + p).value !== "") {
                     apiss.apis[apiName] = {url: "", version: "", paths: []};
@@ -52,9 +51,6 @@ function generate() {
                 }
                 path.method = res[1];
 
-
-                /*eval("path.tags" + " = " + "jsonList[\"" + apiName + "\"].paths[\"" + res[0] + "\"]."
-                    + res[1].toLocaleLowerCase() + ".tags;");*/
                 apiss.apis[apiName].paths.push(path);
             }
 

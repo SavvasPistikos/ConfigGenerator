@@ -59,7 +59,10 @@ $(document).ready(
                     atag.innerHTML = "<input type = \"checkbox\" id =" + value.service + " onclick = \"importJson(this);\"" + "/>" + value.service;
                     simpleli.appendChild(atag);
                     menu.appendChild(simpleli);
-                    $("#" + value.service).data("id", value.id);
+                    let jelem = $("#" + value.service);
+                    jelem.data("id", value.id);
+                    jelem.data("service", value.service);
+                    jelem.data("version","");
                 } else if (document.getElementById(value.service) === null && value.version !== "") {
                     addSubmenu(value.service, value.version.replace(".","_"), menu, null, value.id);
                 } else if (document.getElementById(value.service) != null) {
@@ -72,7 +75,10 @@ $(document).ready(
                         atag.innerHTML = "<input type = \"checkbox\" id =" + value.service + value.version.replace(".","_") + " onclick = \"importJson(this);\"" + "/>" + value.version;
                         lichild.appendChild(atag);
                         ulmenu.appendChild(lichild);
-                        $("#" + value.service + value.version.replace(".","_")).data("id", value.id);
+                        let jelem = $("#" + value.service + value.version.replace(".","_"));
+                        jelem.data("id", value.id);
+                        jelem.data("service", value.service);
+                        jelem.data("version", "/" + value.version);
                     } else {
                         let previousitem = document.getElementById(value.service);
                         addSubmenu(value.service, value.version.replace(".","_"), menu, previousitem, value.id);
@@ -100,5 +106,8 @@ function addSubmenu(path, version, menu, previousitem, serviceId) {
     lisubmenu.appendChild(ulmenu);
     menu.appendChild(lisubmenu);
     console.log(version);
-    $("#" + path + version.replace(".","_")).data("id", serviceId);
+    let jelem =  $("#" + path + version.replace(".","_"));
+    jelem.data("id", serviceId);
+    jelem.data("service", path);
+    jelem.data("version", "/" + version);
 }

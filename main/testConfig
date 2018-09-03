@@ -1,0 +1,274 @@
+{
+  "apis": {
+    "internalApis": {
+      "internal": true,
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/wagers",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/wagers/verification",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/wagers/{serialNumber}/status",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/wagers/{serialNumber}/validation",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/wagers/{serialNumber}/winnings",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/wagers/{serialNumber}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/transactions/{guid}",
+          "method": "DELETE"
+        }
+      ]
+    },
+    "hl": {
+      "url": "http://10.85.34.17:10000",
+      "paths": [
+        {
+          "endpoint": "/api/scratchGeoInfo",
+          "path": "/lotoswebservice/scratchGeoInfo",
+          "method": "POST",
+          "tags": "HL Scratch"
+        }
+      ]
+    },
+    "l5hws": {
+      "url": "http://10.70.7.103:10000",
+      "paths": [
+        {
+          "endpoint": "/api/claimed/coupons",
+          "path": "/lotoswebservice/claimed/coupons",
+          "method": "POST",
+          "tags": "High Winnings System"
+        }
+      ]
+    },
+    "voucher": {
+      "url": "http://voucher-system:8080",
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/vouchers/{voucherId}/redemption",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/vouchers/{voucherId}/cashout",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/vouchers/{voucherId}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/vouchers",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/vouchers",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/vouchers/{voucherId}/cancellation",
+          "method": "PUT"
+        }
+      ]
+    },
+    "ats": {
+      "url": "http://ats-service:8080",
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/ats/documents/documentHash/{id}",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/ats/documents/documentHash/{id}",
+          "method": "PUT"
+        },
+        {
+          "endpoint": "/api/v1.0/submit",
+          "method": "POST"
+        },
+        {
+          "endpoint": "/api/v1.0/ats/documents/documentHash",
+          "method": "GET"
+        },
+        {
+          "endpoint": "/api/v1.0/ats/documents/documentHash",
+          "method": "POST"
+        }
+      ]
+    },
+    "auth": {
+      "url": "http://auth.dev.pat.l10.intralot.com",
+      "version": "v1.0",
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/authentication/token",
+          "method": "POST",
+          "path": "/oauth/token",
+          "display": true
+        },
+        {
+          "endpoint": "/api/v1.0/authentication/token",
+          "method": "DELETE",
+          "path": "/oauth/token",
+          "display": false
+        },
+        {
+          "endpoint": "/api/v1.0/authentication/refresh_token",
+          "method": "DELETE",
+          "path": "/oauth/refresh_token",
+          "display": false
+        },
+        {
+          "endpoint": "/api/v1.0/authentication/check_token",
+          "method": "GET",
+          "path": "/oauth/check_token",
+          "display": false
+        },
+        {
+          "endpoint": "/api/v1.0/authentication/token_key",
+          "method": "GET",
+          "path": "/oauth/token_key",
+          "display": false
+        }
+      ]
+    },
+    "infostore": {
+      "version": "opap",
+      "url": "http://infostore:8888",
+      "paths": [
+        {
+          "endpoint": "/api/v1.0/games/custom-statistics/kinoStats3",
+          "path": "/api/opap/v1.0/games/custom-statistics/kinoStats3",
+          "method": "GET",
+          "tags": [
+            "Game Operations V1.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v1.0/games/{gameId}/highest-prize",
+          "path": "/api/opap/v1.0/games/{gameId}/highest-prize",
+          "method": "GET",
+          "tags": [
+            "Game Operations V1.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v1.0/highest-prizes/{gameId}/{drawId}",
+          "method": "POST",
+          "display": false
+        },
+        {
+          "endpoint": "/api/v1.0/highest-prizes/{gameId}/{drawId}",
+          "method": "DELETE",
+          "display": false
+        },
+        {
+          "endpoint": "/api/v1.0/games/custom-statistics/kinoStats",
+          "path": "/api/opap/v1.0/games/custom-statistics/kinoStats",
+          "method": "GET",
+          "tags": [
+            "Game Operations V1.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/upcoming/{limit}",
+          "path": "/api/opap/v3.0/draws/{gameId}/upcoming/{limit}",
+          "method": "GET",
+          "tags": [
+            "Draw Operations V3.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/active",
+          "path": "/api/opap/v3.0/draws/{gameId}/active",
+          "method": "GET",
+          "tags": [
+            "Draw Operations V3.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/draw-date/{fromDate}/{toDate}",
+          "path": "/api/opap/v3.0/draws/{gameId}/draw-date/{fromDate}/{toDate}",
+          "method": "GET",
+          "tags": [
+            "Draw Operations V3.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/draw-id/{fromDrawId}/{toDrawId}",
+          "path": "/api/opap/v3.0/draws/{gameId}/draw-id/{fromDrawId}/{toDrawId}",
+          "method": "GET",
+          "tags": [
+            "Draw Operations V3.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/visual-draw/{visualDraw}",
+          "path": "/api/opap/v3.0/draws/{gameId}/visual-draw/{visualDraw}",
+          "method": "GET",
+          "tags": [
+            "Draw Operations V3.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v1.0/draws/{gameId}/{drawId}",
+          "method": "PUT",
+          "display": false
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/{drawId}",
+          "path": "/api/opap/v3.0/draws/{gameId}/{drawId}",
+          "method": "GET",
+          "tags": [
+            "Draw Operations V3.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v3.0/draws/active",
+          "path": "/api/opap/v3.0/draws/active",
+          "method": "GET",
+          "tags": [
+            "Draw Operations V3.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/draw-date/{fromDate}/{toDate}/draw-id",
+          "path": "/api/opap/v3.0/draws/{gameId}/draw-date/{fromDate}/{toDate}/draw-id",
+          "method": "GET",
+          "tags": [
+            "Draw Operations V3.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/last/{limit}",
+          "path": "/api/opap/v3.0/draws/{gameId}/last/{limit}",
+          "method": "GET",
+          "tags": [
+            "Draw Operations V3.0"
+          ]
+        },
+        {
+          "endpoint": "/api/v3.0/draws/{gameId}/last-result-and-active",
+          "path": "/api/opap/v3.0/draws/{gameId}/last-result-and-active",
+          "method": "GET",
+          "tags": [
+            "Draw Operations V3.0"
+          ]
+        }
+      ]
+    }
+  }
+}

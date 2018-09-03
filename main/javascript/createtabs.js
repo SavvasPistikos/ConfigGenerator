@@ -1,6 +1,8 @@
 function importJson(liItem) {
-    buttonIdWithout = liItem.id.split("/")[0];
-    js = (buttonIdWithout === "internal") ? readJson($('#' + liItem.id).data("id")) : JSON.parse(readJson($('#' + liItem.id).data("id")).content);
+    let jliItem = $('#' + liItem.id);
+    let tabName = jliItem.data("service") + jliItem.data("version");
+    buttonIdWithout = jliItem.data("service");
+    js = (buttonIdWithout === "internal") ? readJson(jliItem.data("id")) : JSON.parse(readJson(jliItem.data("id")).content);
 
     if (document.getElementById("div" + liItem.id) == null) {
         jsonList[buttonIdWithout] = js;
@@ -9,7 +11,7 @@ function importJson(liItem) {
         let li = document.createElement("li");
         li.innerHTML = "<a data-toggle=\"tab\" href=\"#div" + liItem.id.replace(".", "_") + "\">"
             + "<button class=\"close closeTab\" type=\"button\" >×</button>"
-            + liItem.id + "</a>";
+            + tabName + "</a>";
         li.id = "close" + liItem.id;
 
         servicesul.appendChild(li);
@@ -33,6 +35,7 @@ function importJson(liItem) {
 
         let dum = document.getElementById("swaggers");
         groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".", "_"));
+        $("#" + di.id).data("service",jliItem.data("service"));
     } else {
         $('#close' + liItem.id).remove();
         $('#div' + liItem.id).remove();
@@ -69,8 +72,8 @@ function importConfig(impJson) {
         if (a === "internalApis") {
             continue;
         }
-        let version = (impJson.apis[a].version != null) ? "/" + impJson.apis[a].version : "";
-        importJson(document.getElementById(a + version.replace(".","_")));
+        let version = (impJson.apis[a].version != null) ? impJson.apis[a].version : "";
+        importJson(document.getElementById(a + version.replace(".", "_")));
         document.getElementById("url=" + a).value = impJson.apis[a].url;
 
         for (p in impJson.apis[a].paths) {
@@ -81,15 +84,19 @@ function importConfig(impJson) {
                     checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
                 }
             } else {
-                checkbox = (impJson.apis[a].paths[p].path == null) ?
-                    document.getElementById(impJson.apis[a].paths[p].endpoint.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method)
-                    : document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method)
-                ;
+                if (impJson.apis[a].paths[p].path == null) {
+                    checkbox = (jsonList[a].basePath !== null) ?
+                        document.getElementById(impJson.apis[a].paths[p].endpoint.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method)
+                        : document.getElementById(impJson.apis[a].paths[p].endpoint + "," + impJson.apis[a].paths[p].method);
+                } else {
+                    checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
+                }
             }
             checkbox.checked = true;
             addToList(checkbox);
         }
     }
+    generate();
 }
 
 function groupByTags(jsonFileName) {
