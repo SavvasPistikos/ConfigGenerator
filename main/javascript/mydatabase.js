@@ -1,11 +1,9 @@
 function readJson(liService) {
     let jsontext = null;
     let url = host + path + "/swaggers/" + liService;
-
     /*    if (service === "internal") {
             url = "http://localhost:8080/api/v1.0/api-swagger/internal";
         }*/
-
     $.ajax({
         'async': false,
         'global': false,
@@ -44,8 +42,8 @@ $(document).ready(function () {
 $(document).ready(
     function generateDropDown() {
         //document.getElementById('upload').addEventListener('change', handleFileSelect, false);
-        var ulmenu = document.getElementsByClassName("dropdown-menu");
-        var menu = ulmenu[0];
+        let ulmenu = document.getElementsByClassName("dropdown-menu");
+        let menu = ulmenu[0];
         let services = getServices();
 
         let li = document.createElement("li");
@@ -54,37 +52,34 @@ $(document).ready(
         li.innerHTML = "<a role=\"menuitem\" tabindex=\"-1\" href=\"#\">" + "internal";
         menu.appendChild(li);
 
-        for (let i = 0; i < services.length; i++) {
-            let path = services[i].service;
-            let version = services[i].version;
-            version = version.replace(".", "_");
-            if (document.getElementById(path) === null && version === "") {
-                let simpleli = document.createElement("li");
-                let atag = document.createElement("a");
-                atag.innerHTML = "<input type = \"checkbox\" id =" + path + " onclick = \"importJson(this);\"" + "/>" + path;
-                simpleli.appendChild(atag);
-                menu.appendChild(simpleli);
-                $($('#' + path)).data("id", services[i].id);
-            }
-            else if (document.getElementById(path) === null && version !== "") {
-                addSubmenu(path, version, menu, null, services[i].id);
-            } else if (document.getElementById(path) != null) {
-                if (document.getElementById(path).tagName === "UL") {
-                    version = (version === "") ? "default" : version;
-                    let ulmenu = document.getElementById(path);
-                    let lichild = document.createElement("li");
+        services.forEach(function (value) {
+                if (document.getElementById(value.service) === null && value.version === "") {
+                    let simpleli = document.createElement("li");
                     let atag = document.createElement("a");
-                    atag.innerText = path + "_" + version;
-                    atag.innerHTML = "<input type = \"checkbox\" id =" + path + "_" + version + " onclick = \"importJson(this);\"" + "/>" + version;
-                    lichild.appendChild(atag);
-                    ulmenu.appendChild(lichild);
-                    $($('#' + path + "_" + version)).data("id", services[i].id);
-                } else {
-                    let previousitem = document.getElementById(path);
-                    addSubmenu(path, version, menu, previousitem, services[i].id);
+                    atag.innerHTML = "<input type = \"checkbox\" id =" + value.service + " onclick = \"importJson(this);\"" + "/>" + value.service;
+                    simpleli.appendChild(atag);
+                    menu.appendChild(simpleli);
+                    $("#" + value.service).data("id", value.id);
+                } else if (document.getElementById(value.service) === null && value.version !== "") {
+                    addSubmenu(value.service, value.version.replace(".","_"), menu, null, value.id);
+                } else if (document.getElementById(value.service) != null) {
+                    if (document.getElementById(value.service).tagName === "UL") {
+                        value.version = (value.version === "") ? "default" : escape(value.version);
+                        let ulmenu = document.getElementById(value.service);
+                        let lichild = document.createElement("li");
+                        let atag = document.createElement("a");
+                        atag.innerText = value.service + "/" + value.version;
+                        atag.innerHTML = "<input type = \"checkbox\" id =" + value.service + value.version.replace(".","_") + " onclick = \"importJson(this);\"" + "/>" + value.version;
+                        lichild.appendChild(atag);
+                        ulmenu.appendChild(lichild);
+                        $("#" + value.service + value.version.replace(".","_")).data("id", value.id);
+                    } else {
+                        let previousitem = document.getElementById(value.service);
+                        addSubmenu(value.service, value.version.replace(".","_"), menu, previousitem, value.id);
+                    }
                 }
             }
-        }
+        );
     });
 
 function addSubmenu(path, version, menu, previousitem, serviceId) {
@@ -98,12 +93,12 @@ function addSubmenu(path, version, menu, previousitem, serviceId) {
 
     let lichild = document.createElement("li");
     let atag = document.createElement("a");
-    atag.innerHTML = "<input type = \"checkbox\" id =" + path + "_" + version + " onclick = \"importJson(this);\"" + "/>" + version;
+    atag.innerHTML = "<input type = \"checkbox\" id =" + path + version + " onclick = \"importJson(this);\"" + "/>" + version;
     lichild.appendChild(atag);
     ulmenu.appendChild(lichild);
     if (previousitem != null) ulmenu.appendChild(previousitem);
     lisubmenu.appendChild(ulmenu);
     menu.appendChild(lisubmenu);
     console.log(version);
-    $($('#' + path + "_" + version)).data("id", serviceId);
+    $("#" + path + version.replace(".","_")).data("id", serviceId);
 }

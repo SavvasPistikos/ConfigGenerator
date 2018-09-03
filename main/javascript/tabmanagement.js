@@ -19,13 +19,13 @@ function registerCloseEvent() {
         $(this).parent().parent().remove(); //remove li of tab
         $('#swaggers a:last').tab('show'); // Select first tab
         $(tabContentId).remove(); //remove respective tab content
-        listt[tabContentId.split("div")[1]] = [];
+        list[tabContentId.split("div")[1]] = [];
         generate();
         $('#' + $(this).parent().parent().attr('id').split("close")[1]).prop('checked', false);
 
         let resetoutputarea = true;
-        for (i in listt) {
-            resetoutputarea = resetoutputarea & (listt[i].length === 0);
+        for (i in list) {
+            resetoutputarea = resetoutputarea & (list[i].length === 0);
         }
         if (resetoutputarea) {
             document.getElementById("jsonOutput").innerHTML = "";

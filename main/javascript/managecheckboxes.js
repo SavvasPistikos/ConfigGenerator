@@ -1,7 +1,7 @@
 function addToList(checkboxElem) {
     writetosessionStorage(checkboxElem);
-    if (listt[checkboxElem.className] == null) {
-        listt[checkboxElem.className] = [];
+    if (list[checkboxElem.className] == null) {
+        list[checkboxElem.className] = [];
     }
     let checkboxid;
     const res = checkboxElem.id.split(",");
@@ -26,7 +26,7 @@ function addToList(checkboxElem) {
         }
 
         for (let i = 0; i < res.length - 1; i++) {
-            listt[checkboxElem.className].push(checkboxid + "," + res[i + 1]);
+            list[checkboxElem.className].push(checkboxid + "," + res[i + 1]);
             checkboxElem.checked = true;
             var ch = document.getElementById(pathi + "," + res[i + 1]);
             if (ch != null) {
@@ -57,8 +57,8 @@ function addToList(checkboxElem) {
         }
         for (let j = 0; j < res.length - 1; j++) {
             checkboxid = pathi + "," + res[j + 1];
-            listt[checkboxElem.className] = removeA(
-                listt[checkboxElem.className], checkboxid.replace("parent=", "")
+            list[checkboxElem.className] = removeA(
+                list[checkboxElem.className], checkboxid.replace("parent=", "")
             );
             ch = document.getElementById(checkboxid);
             if (ch != null) {
@@ -176,7 +176,6 @@ function checkIfAllTagsCheckboxShouldBeChecked(tagChb) {
     }
 
     document.getElementById(foundTag + "," + tagChb.className).checked = checked;
-
 }
 
 function getOnlyChildCheckboxes(checkboxElem) {

@@ -1,6 +1,6 @@
 function importJson(liItem) {
     buttonIdWithout = liItem.id.split("/")[0];
-    js = (buttonIdWithout === "internal") ? readJson($(liItem).data("id")) : JSON.parse(readJson($(liItem).data("id")).content);
+    js = (buttonIdWithout === "internal") ? readJson($('#' + liItem.id).data("id")) : JSON.parse(readJson($('#' + liItem.id).data("id")).content);
 
     if (document.getElementById("div" + liItem.id) == null) {
         jsonList[buttonIdWithout] = js;
@@ -17,10 +17,6 @@ function importJson(liItem) {
         let di = document.createElement("div");
         di.setAttribute("class", "tab-pane fade active in");
         di.setAttribute("id", "div" + liItem.id.replace(".", "_"));
-        let s = document.createElement("input");
-        s.setAttribute("id", "inp=" + js.info.title.toString());
-        s.setAttribute("type", "hidden");
-        di.appendChild(s);
 
         let groupedPaths = groupByTags(buttonIdWithout);
         allGroupedByTags[buttonIdWithout] = groupedPaths;
@@ -61,6 +57,12 @@ function handleFileSelect(evt) {
     }
 }
 
+function handleCopyPaste() {
+    let config = $("#input-field").val();
+    let impJson = JSON.parse(config);
+    importConfig(impJson);
+}
+
 function importConfig(impJson) {
     for (a in impJson.apis) {
         apiss.apis[a] = impJson.apis[a];
@@ -68,7 +70,7 @@ function importConfig(impJson) {
             continue;
         }
         let version = (impJson.apis[a].version != null) ? "/" + impJson.apis[a].version : "";
-        importJson(document.getElementById(a + version));
+        importJson(document.getElementById(a + version.replace(".","_")));
         document.getElementById("url=" + a).value = impJson.apis[a].url;
 
         for (p in impJson.apis[a].paths) {
