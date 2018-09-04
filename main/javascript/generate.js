@@ -23,7 +23,8 @@ function generate() {
                     method: "",
                     tags: [],
                     display: true,
-                    authorize: false
+                    authorize: false,
+                    transactionLog : false
                 };
                 let res = list[p][i].split(",");
 
@@ -33,6 +34,7 @@ function generate() {
 
                 path.display = document.getElementById("disp" + list[p][i]).checked;
                 path.authorize = document.getElementById("auth" + list[p][i]).checked;
+                path.transactionLog = document.getElementById("log" + list[p][i]).checked;
                 path.path = basePath + res[0];
                 if (document.getElementById("end" + list[p][i]).checked === true) {
                     path.endpoint = document.getElementById("end=" + list[p][i]).value;

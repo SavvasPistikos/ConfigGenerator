@@ -46,12 +46,6 @@ $(document).ready(
         let menu = ulmenu[0];
         let services = getServices();
 
-        let li = document.createElement("li");
-        li.setAttribute("id", "internal");
-        li.setAttribute("onclick", "importJson(this);");
-        li.innerHTML = "<a role=\"menuitem\" tabindex=\"-1\" href=\"#\">" + "internal";
-        menu.appendChild(li);
-
         services.forEach(function (value) {
                 if (document.getElementById(value.service) === null && value.version === "") {
                     let simpleli = document.createElement("li");

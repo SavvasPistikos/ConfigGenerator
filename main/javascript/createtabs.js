@@ -2,7 +2,7 @@ function importJson(liItem) {
     let jliItem = $('#' + liItem.id);
     let tabName = jliItem.data("service") + jliItem.data("version");
     buttonIdWithout = jliItem.data("service");
-    js = (buttonIdWithout === "internal") ? readJson(jliItem.data("id")) : JSON.parse(readJson(jliItem.data("id")).content);
+    js = JSON.parse(readJson(jliItem.data("id")).content);
 
     if (document.getElementById("div" + liItem.id) == null) {
         jsonList[buttonIdWithout] = js;
@@ -235,6 +235,15 @@ function createInputText(value, idString) {
 
 function createOptionsUL(classString, tag) {
     let optionsUl = document.createElement("ul");
+
+    let logLi = document.createElement("li");
+    let logCheckbox = createCheckBox(null, tag, "");
+    logCheckbox.className = tag;
+    logCheckbox.id = "log" + classString;
+    let logTextNode = document.createTextNode("Log");
+    logLi.appendChild(logCheckbox);
+    logLi.appendChild(logTextNode);
+
     let authorizeLi = document.createElement("li");
     let authorizeCheckbox = createCheckBox(null, tag, "");
     authorizeCheckbox.className = tag;
@@ -246,6 +255,7 @@ function createOptionsUL(classString, tag) {
     let displayLi = document.createElement("li");
     let displayCheckBox = createCheckBox(null, tag, "");
     displayCheckBox.className = tag;
+    displayCheckBox.checked = true;
     displayCheckBox.id = "disp" + classString;
     let displayTextNode = document.createTextNode("Display");
     displayLi.appendChild(displayCheckBox);
@@ -276,7 +286,7 @@ function createOptionsUL(classString, tag) {
     tagsIn.style.display = "none";
     tagsLi.appendChild(tagsIn);
 
-
+    optionsUl.appendChild(logLi);
     optionsUl.appendChild(authorizeLi);
     optionsUl.appendChild(displayLi);
     optionsUl.appendChild(endpointLi);
@@ -314,6 +324,12 @@ function trimId(tag) {
 }
 
 function createAllOptionsCheckbox(tagliElement, tag) {
+    let logCheckbox = createCheckBox("LogAllSubTagEndpoints(this);", tag, "");
+    logCheckbox.className = tag;
+    let logTextNode = document.createTextNode("Log All");
+    tagliElement.appendChild(logCheckbox);
+    tagliElement.appendChild(logTextNode);
+
     let authorizeCheckbox = createCheckBox("AuthorizeAllSubTagEndpoints(this);", tag, "");
     authorizeCheckbox.className = tag;
     let authorizeTextNode = document.createTextNode("Authorize All");
@@ -327,6 +343,27 @@ function createAllOptionsCheckbox(tagliElement, tag) {
     tagliElement.appendChild(displayTextNode);
 
 }
+
+
+function LogAllSubTagEndpoints(logAllElement) {
+    let logCheckboxes = document.getElementsByClassName(logAllElement.className);
+    let arrayLogCheckboxes = Array.from(logCheckboxes).filter(getOnlyLogCheckboxes);
+
+    for (ach in arrayLogCheckboxes) {
+        arrayLogCheckboxes[ach].checked = logAllElement.checked;
+    }
+}
+
+function getOnlyLogCheckboxes(logCheckboxElem) {
+    if (logCheckboxElem instanceof HTMLInputElement
+        && logCheckboxElem.getAttribute('type') === 'checkbox'
+        && logCheckboxElem.id !== ""
+        && logCheckboxElem.id.includes("log")
+    ) {
+        return logCheckboxElem;
+    }
+}
+
 
 function AuthorizeAllSubTagEndpoints(authorizeAllElement) {
     let authCheckboxes = document.getElementsByClassName(authorizeAllElement.className);
