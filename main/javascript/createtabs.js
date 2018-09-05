@@ -68,7 +68,7 @@ function handleCopyPaste() {
 
 function importConfig(impJson) {
     for (a in impJson.apis) {
-        apiss.apis[a] = impJson.apis[a];
+        apiList.apis[a] = impJson.apis[a];
         if (a === "internalApis") {
             continue;
         }

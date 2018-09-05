@@ -3,18 +3,18 @@ function generate() {
         if (list[p].length > 0) {
             let basePath;
             let apiName = p.replace(",", "/").split("/")[0];
-            if (apiss.apis[apiName] == null) {
+            if (apiList.apis[apiName] == null) {
                 if (document.getElementById("vers=" + p).value !== "") {
-                    apiss.apis[apiName] = {url: "", version: "", paths: []};
-                    apiss.apis[apiName].version = document.getElementById("vers=" + p).value;
+                    apiList.apis[apiName] = {url: "", version: "", paths: []};
+                    apiList.apis[apiName].version = document.getElementById("vers=" + p).value;
                 }
                 else if (p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "") === "") {
-                    apiss.apis[apiName] = {url: "", paths: []};
+                    apiList.apis[apiName] = {url: "", paths: []};
                 }
 
-                apiss.apis[apiName].url = document.getElementById("url=" + apiName).value;
+                apiList.apis[apiName].url = document.getElementById("url=" + apiName).value;
             }
-            apiss.apis[apiName].paths = [];
+            apiList.apis[apiName].paths = [];
 
             for (let i in list[p]) {
                 let path = {
@@ -53,15 +53,15 @@ function generate() {
                 }
                 path.method = res[1];
 
-                apiss.apis[apiName].paths.push(path);
+                apiList.apis[apiName].paths.push(path);
             }
 
         }
     }
 
     let jsonOutput = document.getElementById("jsonOutput");
-    var yaml = json2yaml(apiss);
+    var yaml = json2yaml(apiList);
     jsonOutput.innerHTML = yaml;
-    console.log(JSON.stringify(apiss, null, 2));
-    apiss = {apis: {}};
+    console.log(JSON.stringify(apiList, null, 2));
+    apiList = {apis: {}};
 }
