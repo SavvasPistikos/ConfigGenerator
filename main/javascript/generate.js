@@ -64,4 +64,8 @@ function generate() {
     jsonOutput.innerHTML = yaml;
     console.log(JSON.stringify(apiList, null, 2));
     apiList = {apis: {}};
+    $('#generate').click(function(e){
+        e.preventDefault();
+        $('#outer a[href="#output"]').tab('show');
+    });
 }
