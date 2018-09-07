@@ -24,7 +24,7 @@ function generate() {
                     tags: [],
                     display: true,
                     authorize: false,
-                    transactionLog : false
+                    transactionTypeId: ""
                 };
                 let res = list[p][i].split(",");
 
@@ -34,7 +34,10 @@ function generate() {
 
                 path.display = document.getElementById("disp" + list[p][i]).checked;
                 path.authorize = document.getElementById("auth" + list[p][i]).checked;
-                path.transactionLog = document.getElementById("log" + list[p][i]).checked;
+
+                if (document.getElementById("trns" + list[p][i]).checked === true) {
+                    path.transactionLog = document.getElementById("trns=" + list[p][i]).value;
+                }
                 path.path = basePath + res[0];
                 if (document.getElementById("end" + list[p][i]).checked === true) {
                     path.endpoint = document.getElementById("end=" + list[p][i]).value;
@@ -64,7 +67,7 @@ function generate() {
     jsonOutput.innerHTML = yaml;
     console.log(JSON.stringify(apiList, null, 2));
     apiList = {apis: {}};
-    $('#generate').click(function(e){
+    $('#generate').click(function (e) {
         e.preventDefault();
         $('#outer a[href="#output"]').tab('show');
     });

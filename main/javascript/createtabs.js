@@ -35,7 +35,7 @@ function importJson(liItem) {
 
         let dum = document.getElementById("swaggers");
         groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".", "_"));
-        $("#" + di.id).data("service",jliItem.data("service"));
+        $("#" + di.id).data("service", jliItem.data("service"));
     } else {
         $('#close' + liItem.id).remove();
         $('#div' + liItem.id).remove();
@@ -236,14 +236,6 @@ function createInputText(value, idString) {
 function createOptionsUL(classString, tag) {
     let optionsUl = document.createElement("ul");
 
-    let logLi = document.createElement("li");
-    let logCheckbox = createCheckBox(null, tag, "");
-    logCheckbox.className = tag;
-    logCheckbox.id = "log" + classString;
-    let logTextNode = document.createTextNode("Log");
-    logLi.appendChild(logCheckbox);
-    logLi.appendChild(logTextNode);
-
     let authorizeLi = document.createElement("li");
     let authorizeCheckbox = createCheckBox(null, tag, "");
     authorizeCheckbox.className = tag;
@@ -286,9 +278,21 @@ function createOptionsUL(classString, tag) {
     tagsIn.style.display = "none";
     tagsLi.appendChild(tagsIn);
 
-    optionsUl.appendChild(logLi);
+    let trnsTypeIdLi = document.createElement("li");
+    let trnsTypeIdCheckBox = createCheckBox("displayInputText(this);", classString, "trns" + classString);
+    trnsTypeIdLi.appendChild(trnsTypeIdCheckBox);
+    trnsTypeIdLi.appendChild(document.createTextNode("\t\t TransactionType Id"));
+    let trnsTypeIdIn = document.createElement("input");
+    trnsTypeIdIn.className = tag;
+    trnsTypeIdIn.id = "trns=" + classString;
+    trnsTypeIdIn.setAttribute("type", "text");
+    trnsTypeIdIn.value = "";
+    trnsTypeIdIn.style.display = "none";
+    trnsTypeIdLi.appendChild(trnsTypeIdIn);
+
     optionsUl.appendChild(authorizeLi);
     optionsUl.appendChild(displayLi);
+    optionsUl.appendChild(trnsTypeIdLi);
     optionsUl.appendChild(endpointLi);
     optionsUl.appendChild(tagsLi);
 
@@ -297,12 +301,13 @@ function createOptionsUL(classString, tag) {
 
 function displayInputText(endpointOptionsCheckbox) {
     let inputElement;
-    let endpointInput = endpointOptionsCheckbox.id.includes("end");
 
-    if (endpointInput === true) {
+    if (endpointOptionsCheckbox.id.includes("end")) {
         inputElement = document.getElementById("end=" + endpointOptionsCheckbox.className);
-    } else {
+    } else if (endpointOptionsCheckbox.id.includes("tags")) {
         inputElement = document.getElementById("tags=" + endpointOptionsCheckbox.className);
+    } else if (endpointOptionsCheckbox.id.includes("trns")) {
+        inputElement = document.getElementById("trns=" + endpointOptionsCheckbox.className);
     }
 
     if (endpointOptionsCheckbox.checked === true) {
@@ -324,12 +329,6 @@ function trimId(tag) {
 }
 
 function createAllOptionsCheckbox(tagliElement, tag) {
-    let logCheckbox = createCheckBox("LogAllSubTagEndpoints(this);", tag, "");
-    logCheckbox.className = tag;
-    let logTextNode = document.createTextNode("Log All");
-    tagliElement.appendChild(logCheckbox);
-    tagliElement.appendChild(logTextNode);
-
     let authorizeCheckbox = createCheckBox("AuthorizeAllSubTagEndpoints(this);", tag, "");
     authorizeCheckbox.className = tag;
     let authorizeTextNode = document.createTextNode("Authorize All");
