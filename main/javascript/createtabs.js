@@ -253,6 +253,14 @@ function createOptionsUL(classString, tag) {
     displayLi.appendChild(displayCheckBox);
     displayLi.appendChild(displayTextNode);
 
+/*    let idepondentLi = document.createElement("li");
+    let idepondentCheckBox = createCheckBox(null, tag, "");
+    idepondentCheckBox .className = tag;
+    idepondentCheckBox .id = "disp" + classString;
+    let idepondentTextNode = document.createTextNode("Idepondent");
+    idepondentLi.appendChild(idepondentCheckBox );
+    idepondentLi.appendChild(idepondentTextNode);*/
+
     let endpointLi = document.createElement("li");
     let endpointCheckBox = createCheckBox("displayInputText(this);", classString, "end" + classString);
     endpointLi.appendChild(endpointCheckBox);
@@ -292,6 +300,7 @@ function createOptionsUL(classString, tag) {
 
     optionsUl.appendChild(authorizeLi);
     optionsUl.appendChild(displayLi);
+    //optionsUl.appendChild(idepondentLi);
     optionsUl.appendChild(trnsTypeIdLi);
     optionsUl.appendChild(endpointLi);
     optionsUl.appendChild(tagsLi);
