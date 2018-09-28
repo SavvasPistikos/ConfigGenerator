@@ -6,19 +6,19 @@ function importJson(liItem) {
 
     if (document.getElementById("div" + liItem.id) == null) {
         jsonList[buttonIdWithout] = js;
-        let servicesul = document.getElementById("services");
+        let servicesul = $("#services");
 
-        let li = document.createElement("li");
-        li.innerHTML = "<a data-toggle=\"tab\" href=\"#div" + liItem.id.replace(".", "_") + "\">"
+        let li = $('<li>');
+        li.html("<a data-toggle=\"tab\" href=\"#div" + liItem.id.replace(".", "_") + "\">"
             + "<button class=\"close closeTab\" type=\"button\" >×</button>"
-            + tabName + "</a>";
-        li.id = "close" + liItem.id;
+            + tabName + "</a>");
+        li.attr("id", "close" + liItem.id);
 
-        servicesul.appendChild(li);
-        let ul = document.createElement("ul");
-        let di = document.createElement("div");
-        di.setAttribute("class", "tab-pane fade active in");
-        di.setAttribute("id", "div" + liItem.id.replace(".", "_"));
+        servicesul.append(li);
+        let ul = $('<ul>');
+        let di = $('<div>')
+            .attr("class","tab-pane fade active in")
+            .attr("id","div" + liItem.id.replace(".", "_"));
 
         let groupedPaths = groupByTags(buttonIdWithout);
         allGroupedByTags[buttonIdWithout] = groupedPaths;
@@ -27,13 +27,13 @@ function importJson(liItem) {
         let url = createInputText(null, "url=" + buttonIdWithout);
         let version = createInputText(null, "vers=" + buttonIdWithout);
 
-        ul.appendChild(allCheckbox);
-        ul.appendChild(document.createTextNode("\t\t Url = "));
-        ul.appendChild(url);
-        ul.appendChild(document.createTextNode("\t\t version = "));
-        ul.appendChild(version);
+        ul.append(allCheckbox);
+        ul.append(document.createTextNode("\t\t Url = "));
+        ul.append(url);
+        ul.append(document.createTextNode("\t\t version = "));
+        ul.append(version);
 
-        let dum = document.getElementById("swaggers");
+        let dum = $("#swaggers");
         groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".", "_"));
         $("#" + di.id).data("service", jliItem.data("service"));
     } else {
@@ -42,26 +42,20 @@ function importJson(liItem) {
     }
 }
 
-function handleFileSelect(evt) {
-    //Retrieve the first (and only!) File from the FileList object
-    var f = evt.target.files[0];
-
-    if (f) {
-        var r = new FileReader();
-        r.onload = function (e) {
-            importedJsonConfig = e.target.result;
-            var impJson = JSON.parse(importedJsonConfig);
-            importConfig(impJson);
-            document.getElementById("upload").value = "";
-        };
-        r.readAsText(f);
-    } else {
-        alert("Failed to load file");
-    }
-}
-
 function handleCopyPaste() {
+    let url = host + path + "/yaml";
     let config = $("#input-field").val();
+    $.ajax({
+        'async': false,
+        'global': false,
+        'url': url,
+        'data': config,
+        'success': function (data) {
+            let impJson = JSON.parse(data);
+        }
+    });
+
+
     let impJson = JSON.parse(config);
     importConfig(impJson);
 }
@@ -148,26 +142,26 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
     for (let tag in groupedPaths) {
         let elementsid = trimId(tag);
 
-        let tagli = document.createElement("li");
-        let tagCheckbox = document.createElement("input");
-        tagCheckbox.type = "checkbox";
-        tagCheckbox.setAttribute("onchange", "addAllTagsToList(this);");
-        tagCheckbox.setAttribute("class", tag);
-        tagCheckbox.setAttribute("id", tag + "," + buttonIdWithout);
-        tagli.appendChild(tagCheckbox);
+        let tagli = $('<li>');
+        let tagCheckbox = $('<input>');
+        tagCheckbox.attr("type","checkbox");
+        tagCheckbox.attr("onchange", "addAllTagsToList(this);")
+            .attr("class", tag)
+            .attr("id", tag + "," + buttonIdWithout);
+        tagli.append(tagCheckbox);
 
-        let tagButton = document.createElement("button");
-        tagButton.setAttribute("id", "btr" + elementsid);
-        tagButton.setAttribute("data-toggle", "collapse");
-        tagButton.setAttribute("data-target", "#ul" + elementsid);
-        tagButton.innerHTML = tag;
-        tagli.appendChild(tagButton);
+        let tagButton = $('<button>');
+        tagButton.attr("id", "btr" + elementsid)
+            .attr("data-toggle", "collapse")
+            .attr("data-target", "#ul" + elementsid);
+        tagButton.html(tag);
+        tagli.append(tagButton);
 
         createAllOptionsCheckbox(tagli, tag);
 
-        var pathsul = document.createElement("ul");
-        pathsul.setAttribute("class", "panel-collapse collapse");
-        pathsul.setAttribute("id", "ul" + elementsid);
+        var pathsul =$('<ul>');
+        pathsul.attr("class", "panel-collapse collapse")
+            .attr("id", "ul" + elementsid);
 
         for (let path in groupedPaths[tag]) {
             var pathli = document.createElement("li");
@@ -196,17 +190,17 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
             pathli.appendChild(document.createTextNode(text));
 
             pathli.appendChild(internalpathul);
-            pathsul.appendChild(pathli);
-            tagli.appendChild(pathsul);
+            pathsul.append(pathli);
+            tagli.append(pathsul);
 
-            ul.appendChild(tagli);
+            ul.append(tagli);
         }
     }
     let tabpanediv = document.createElement("div");
     tabpanediv.setAttribute("class", "tab-pane fade active in");
     tabpanediv.setAttribute("id", "div" + tabid);
-    tabpanediv.appendChild(ul);
-    di.appendChild(tabpanediv);
+    $(tabpanediv).append(ul);
+    di.append(tabpanediv);
     hideOtherTabs(tabpanediv);
 }
 
@@ -332,14 +326,14 @@ function createAllOptionsCheckbox(tagliElement, tag) {
     let authorizeCheckbox = createCheckBox("AuthorizeAllSubTagEndpoints(this);", tag, "");
     authorizeCheckbox.className = tag;
     let authorizeTextNode = document.createTextNode("Authorize All");
-    tagliElement.appendChild(authorizeCheckbox);
-    tagliElement.appendChild(authorizeTextNode);
+    tagliElement.append(authorizeCheckbox);
+    tagliElement.append(authorizeTextNode);
 
     let displayCheckbox = createCheckBox("DisplayAllSubTagEndpoints(this);", tag, "");
     displayCheckbox.className = tag;
     let displayTextNode = document.createTextNode("Display All");
-    tagliElement.appendChild(displayCheckbox);
-    tagliElement.appendChild(displayTextNode);
+    tagliElement.append(displayCheckbox);
+    tagliElement.append(displayTextNode);
 
 }
 
