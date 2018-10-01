@@ -17,8 +17,8 @@ function importJson(liItem) {
         servicesul.append(li);
         let ul = $('<ul>');
         let di = $('<div>')
-            .attr("class","tab-pane fade active in")
-            .attr("id","div" + liItem.id.replace(".", "_"));
+            .attr("class", "tab-pane fade active in")
+            .attr("id", "div" + liItem.id.replace(".", "_"));
 
         let groupedPaths = groupByTags(buttonIdWithout);
         allGroupedByTags[buttonIdWithout] = groupedPaths;
@@ -144,7 +144,7 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
 
         let tagli = $('<li>');
         let tagCheckbox = $('<input>');
-        tagCheckbox.attr("type","checkbox");
+        tagCheckbox.attr("type", "checkbox");
         tagCheckbox.attr("onchange", "addAllTagsToList(this);")
             .attr("class", tag)
             .attr("id", tag + "," + buttonIdWithout);
@@ -159,40 +159,17 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
 
         createAllOptionsCheckbox(tagli, tag);
 
-        var pathsul =$('<ul>');
+        let pathsul = $('<ul>');
         pathsul.attr("class", "panel-collapse collapse")
             .attr("id", "ul" + elementsid);
 
         for (let path in groupedPaths[tag]) {
-            var pathli = document.createElement("li");
-            pathli.setAttribute("class", "list-group");
-            var internalpathul = document.createElement("ul");
-
-
             for (let i in groupedPaths[tag][path].methods) {
-                var ili = document.createElement("li");
-
-                let icheckbox = createCheckBox("addToList(this);",
-                    buttonIdWithout
-                    , groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods[i]);
-
-                ili.appendChild(icheckbox);
-                ili.appendChild(document.createTextNode(groupedPaths[tag][path].methods[i]));
-                ili.appendChild(createOptionsUL(groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods[i], tag));
-                internalpathul.appendChild(ili);
+                let pathsli = $('<li>');
+                pathsli.append(generateButton(groupedPaths[tag][path], groupedPaths[tag][path].methods[i]));
+                pathsul.append(pathsli);
             }
-
-            let checkbox = createCheckBox("addToList(this);", buttonIdWithout
-                , "parent" + "=" + groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods);
-
-            text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + groupedPaths[tag][path].endpoint : groupedPaths[tag][path].endpoint;
-            pathli.appendChild(checkbox);
-            pathli.appendChild(document.createTextNode(text));
-
-            pathli.appendChild(internalpathul);
-            pathsul.append(pathli);
             tagli.append(pathsul);
-
             ul.append(tagli);
         }
     }
@@ -202,6 +179,25 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
     $(tabpanediv).append(ul);
     di.append(tabpanediv);
     hideOtherTabs(tabpanediv);
+}
+
+function generateButton(path, method) {
+    let button = $('<button>');
+    button.attr("data-toggle", "modal")
+        .attr("onclick", "generateEndpointModal();");
+
+    if (method === "POST") {
+        button.attr("class", "btn btn-success");
+    } else if (method === "DELETE") {
+        button.attr("class", "btn btn-danger");
+    } else if (method === "GET") {
+        button.attr("class", "btn btn-primary")
+    } else if (method === "PUT") {
+        button.attr("class", "btn btn-warning")
+    }
+
+    button.text(method + "\t" + path.endpoint);
+    return button;
 }
 
 function createCheckBox(onChangeFunction, classString, idString) {
@@ -226,6 +222,25 @@ function createInputText(value, idString) {
     inputext.value = value;
     return inputext;
 }
+
+/*function generateEndpointModal(){
+    let modalDiv = $('<div>');
+    modalDiv.attr("id",endPointInfo)
+        .attr("class","modal fade")
+        .attr("role","dialog");
+
+    let modalDialog = $('<div>');
+    modalDialog.className = "modal-dialog";
+    modalDialog.append(modalDialog);
+
+    let modalContent = $('<div>');
+    modalContent.className = "modal-content";
+    modalDialog.append(modalContent);
+
+    let modalHeader = $('<div>');
+    modalHeader.className =
+
+}*/
 
 function createOptionsUL(classString, tag) {
     let optionsUl = document.createElement("ul");
