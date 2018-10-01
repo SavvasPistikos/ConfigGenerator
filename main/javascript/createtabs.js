@@ -45,18 +45,18 @@ function importJson(liItem) {
 function handleCopyPaste() {
     let url = host + path + "/yaml";
     let config = $("#input-field").val();
+    let impJson;
     $.ajax({
         'async': false,
         'global': false,
         'url': url,
+        'type': 'POST',
+        'contentType': 'application/json',
         'data': config,
         'success': function (data) {
-            let impJson = JSON.parse(data);
+            impJson = data;
         }
     });
-
-
-    let impJson = JSON.parse(config);
     importConfig(impJson);
 }
 

@@ -1,7 +1,6 @@
 $(function () {
     $("#services").on("click", "a", function (e) {
         e.preventDefault();
-
         $(this).tab('show');
         registerCloseEvent();
         $currentTab = $(this);
