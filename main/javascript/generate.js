@@ -24,7 +24,7 @@ function generate() {
                     tags: [],
                     display: true,
                     authorize: false,
-                    transactionTypeId: ""
+                    trnsTypeId: ""
                 };
                 let res = list[p][i].split(",");
 
