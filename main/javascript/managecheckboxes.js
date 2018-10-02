@@ -3,6 +3,7 @@ function addToList(checkboxElem) {
     writetosessionStorage(checkboxElem);
 */
     let celem = $(checkboxElem);
+
 /*    checkIfAllTagsCheckboxShouldBeChecked(checkboxElem);
     checkIfAllCheckboxShouldBeChecked(checkboxElem);*/
 }

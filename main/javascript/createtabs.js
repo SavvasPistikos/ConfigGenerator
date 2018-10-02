@@ -182,10 +182,18 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
     hideOtherTabs(tabpanediv);
 }
 
+function hashCode(s) {
+    for(var i = 0, h = 0; i < s.length; i++)
+        h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+    return h;
+}
+
 function generateButton(path, method) {
     let button = $('<button>');
-    button.attr("data-toggle", "modal")
-        .attr("onclick", "generateEndpointModal();");
+
+    button.attr("data-toggle", "collapse")
+        .attr("data-target", "#optionsul")
+        .attr("onclick","createOptionsUL("optionsul","","",this);");
 
     if (method === "POST") {
         button.attr("class", "btn btn-success");
@@ -253,8 +261,11 @@ function createInputText(value, idString) {
 
 }*/
 
-function createOptionsUL(classString, tag) {
+function createOptionsUL(pId,tag,classString,button) {
+
+    let parent = $(button).parent();
     let optionsUl = document.createElement("ul");
+    optionsUl.id = pId;
 
     let authorizeLi = document.createElement("li");
     let authorizeCheckbox = createCheckBox(null, tag, "");
@@ -316,7 +327,10 @@ function createOptionsUL(classString, tag) {
     optionsUl.appendChild(endpointLi);
     optionsUl.appendChild(tagsLi);
 
-    return optionsUl;
+    optionsUl.setAttribute("class", "panel-collapse collapse");
+
+
+    parent.appenc($(optionsUl));
 }
 
 function displayInputText(endpointOptionsCheckbox) {
