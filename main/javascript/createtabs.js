@@ -166,6 +166,7 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
         for (let path in groupedPaths[tag]) {
             for (let i in groupedPaths[tag][path].methods) {
                 let pathsli = $('<li>');
+                pathsli.append(generateCheckbox(groupedPaths[tag][path], groupedPaths[tag][path].methods[i]));
                 pathsli.append(generateButton(groupedPaths[tag][path], groupedPaths[tag][path].methods[i]));
                 pathsul.append(pathsli);
             }
@@ -198,6 +199,16 @@ function generateButton(path, method) {
 
     button.text(method + "\t" + path.endpoint);
     return button;
+}
+
+function generateCheckbox(path,method){
+    checkbox = $('<input>');
+    checkbox.attr("type","checkbox")
+        .attr("onchange","addTolist(this)");
+    checkbox.data("path",path);
+    checkbox.data("method",method);
+
+    return checkbox;
 }
 
 function createCheckBox(onChangeFunction, classString, idString) {

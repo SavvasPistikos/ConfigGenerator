@@ -1,77 +1,10 @@
 function addToList(checkboxElem) {
+/*
     writetosessionStorage(checkboxElem);
-    if (list[checkboxElem.className] == null) {
-        list[checkboxElem.className] = [];
-    }
-    let checkboxid;
-    const res = checkboxElem.id.split(",");
-    let pathi = res[0];
-    let parentpath = "parent=" + pathi;
-    if (checkboxElem.checked) {
-        let chs = [];
-        let parent = pathi.includes("parent=");
-        if (parent === true) {
-            pathi = pathi.replace("parent=", "");
-            checkboxid = pathi;
-        } else {
-            checkboxid = pathi;
-            pathi = "parent=" + checkboxid;
-
-            for (let i = 0; i < verbs.length; i++) {
-                if (document.getElementById(checkboxid + "," + verbs[i]) != null) {
-                    parentpath += "," + verbs[i];
-                    chs.push(document.getElementById(checkboxid + "," + verbs[i]))
-                }
-            }
-        }
-
-        for (let i = 0; i < res.length - 1; i++) {
-            list[checkboxElem.className].push(checkboxid + "," + res[i + 1]);
-            checkboxElem.checked = true;
-            var ch = document.getElementById(pathi + "," + res[i + 1]);
-            if (ch != null) {
-                ch.checked = true;
-            }
-
-        }
-        if (checkIfparentshouldbeChecked(chs) && parent === false) {
-            ch = document.getElementById(parentpath);
-            ch.checked = true;
-        }
-    } else {
-        let chs = [];
-        let parent = pathi.includes("parent=");
-        if (parent === true) {
-            pathi = pathi.replace("parent=", "");
-            checkboxid = pathi;
-        } else {
-            checkboxid = pathi;
-            pathi = "parent=" + checkboxid;
-
-            for (let i = 0; i < verbs.length; i++) {
-                if (document.getElementById(checkboxid + "," + verbs[i]) != null) {
-                    parentpath += "," + verbs[i];
-                    chs.push(document.getElementById(checkboxid + "," + verbs[i]))
-                }
-            }
-        }
-        for (let j = 0; j < res.length - 1; j++) {
-            checkboxid = pathi + "," + res[j + 1];
-            list[checkboxElem.className] = removeA(
-                list[checkboxElem.className], checkboxid.replace("parent=", "")
-            );
-            ch = document.getElementById(checkboxid);
-            if (ch != null) {
-                ch.checked = false;
-            }
-        }
-        if (checkIfparentshouldbeUnChecked(chs) && parent === false) {
-            ch = document.getElementById(parentpath);
-            ch.checked = false;
-        }
-    }
-    checkIfAllTagsCheckboxShouldBeChecked(checkboxElem);
-    checkIfAllCheckboxShouldBeChecked(checkboxElem);
+*/
+    let celem = $(checkboxElem);
+/*    checkIfAllTagsCheckboxShouldBeChecked(checkboxElem);
+    checkIfAllCheckboxShouldBeChecked(checkboxElem);*/
 }
 
 function checkIfparentshouldbeChecked(children) {
