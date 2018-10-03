@@ -193,7 +193,7 @@ function generateButton(path, method) {
 
     button.attr("data-toggle", "collapse")
         .attr("data-target", "#optionsul")
-        .attr("onclick","createOptionsUL("optionsul","","",this);");
+        .attr("onclick","createOptionsUL(\"optionsul\",this);");
 
     if (method === "POST") {
         button.attr("class", "btn btn-success");
@@ -242,55 +242,40 @@ function createInputText(value, idString) {
     return inputext;
 }
 
-/*function generateEndpointModal(){
-    let modalDiv = $('<div>');
-    modalDiv.attr("id",endPointInfo)
-        .attr("class","modal fade")
-        .attr("role","dialog");
+function createOptionsUL(pId,button) {
 
-    let modalDialog = $('<div>');
-    modalDialog.className = "modal-dialog";
-    modalDialog.append(modalDialog);
-
-    let modalContent = $('<div>');
-    modalContent.className = "modal-content";
-    modalDialog.append(modalContent);
-
-    let modalHeader = $('<div>');
-    modalHeader.className =
-
-}*/
-
-function createOptionsUL(pId,tag,classString,button) {
+    let options = document.getElementById("optionsul");
+    if(options !== null)
+        options.remove();
 
     let parent = $(button).parent();
     let optionsUl = document.createElement("ul");
     optionsUl.id = pId;
 
     let authorizeLi = document.createElement("li");
-    let authorizeCheckbox = createCheckBox(null, tag, "");
-    authorizeCheckbox.className = tag;
-    authorizeCheckbox.id = "auth" + classString;
+    let authorizeCheckbox = createCheckBox(null, "", "");
+    authorizeCheckbox.className = "";
+    authorizeCheckbox.id = "auth" + "";
     let authorizeTextNode = document.createTextNode("Authorize");
     authorizeLi.appendChild(authorizeCheckbox);
     authorizeLi.appendChild(authorizeTextNode);
 
     let displayLi = document.createElement("li");
-    let displayCheckBox = createCheckBox(null, tag, "");
-    displayCheckBox.className = tag;
+    let displayCheckBox = createCheckBox(null, "", "");
+    displayCheckBox.className = "";
     displayCheckBox.checked = true;
-    displayCheckBox.id = "disp" + classString;
+    displayCheckBox.id = "disp" + "";
     let displayTextNode = document.createTextNode("Display");
     displayLi.appendChild(displayCheckBox);
     displayLi.appendChild(displayTextNode);
 
     let endpointLi = document.createElement("li");
-    let endpointCheckBox = createCheckBox("displayInputText(this);", classString, "end" + classString);
+    let endpointCheckBox = createCheckBox("displayInputText(this);", "", "end" + "");
     endpointLi.appendChild(endpointCheckBox);
     endpointLi.appendChild(document.createTextNode("\t\t Endpoint"));
     let endpointIn = document.createElement("input");
-    endpointIn.className = tag;
-    endpointIn.id = "end=" + classString;
+    endpointIn.className = "";
+    endpointIn.id = "end=" + "";
     endpointIn.setAttribute("type", "text");
     endpointIn.value = "";
     endpointIn.style.display = "none";
@@ -298,24 +283,24 @@ function createOptionsUL(pId,tag,classString,button) {
 
 
     let tagsLi = document.createElement("li");
-    let tagsCheckBox = createCheckBox("displayInputText(this);", classString, "tag" + classString);
+    let tagsCheckBox = createCheckBox("displayInputText(this);", "", "" + "");
     tagsLi.appendChild(tagsCheckBox);
     tagsLi.appendChild(document.createTextNode("\t\t Tags"));
     let tagsIn = document.createElement("input");
-    tagsIn.className = tag;
-    tagsIn.id = "tags=" + classString;
+    tagsIn.className = "";
+    tagsIn.id = "tags=" + "";
     tagsIn.setAttribute("type", "text");
     tagsIn.value = "";
     tagsIn.style.display = "none";
     tagsLi.appendChild(tagsIn);
 
     let trnsTypeIdLi = document.createElement("li");
-    let trnsTypeIdCheckBox = createCheckBox("displayInputText(this);", classString, "trns" + classString);
+    let trnsTypeIdCheckBox = createCheckBox("displayInputText(this);", "", "trns" + "");
     trnsTypeIdLi.appendChild(trnsTypeIdCheckBox);
     trnsTypeIdLi.appendChild(document.createTextNode("\t\t TransactionType Id"));
     let trnsTypeIdIn = document.createElement("input");
-    trnsTypeIdIn.className = tag;
-    trnsTypeIdIn.id = "trns=" + classString;
+    trnsTypeIdIn.className = "";
+    trnsTypeIdIn.id = "trns=" + "";
     trnsTypeIdIn.setAttribute("type", "text");
     trnsTypeIdIn.value = "";
     trnsTypeIdIn.style.display = "none";
@@ -330,7 +315,7 @@ function createOptionsUL(pId,tag,classString,button) {
     optionsUl.setAttribute("class", "panel-collapse collapse");
 
 
-    parent.appenc($(optionsUl));
+    parent.append($(optionsUl));
 }
 
 function displayInputText(endpointOptionsCheckbox) {
