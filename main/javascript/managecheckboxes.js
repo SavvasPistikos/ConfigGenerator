@@ -1,11 +1,26 @@
 function addToList(checkboxElem) {
-/*
-    writetosessionStorage(checkboxElem);
-*/
-    let celem = $(checkboxElem);
+    let optionsUl = $(checkboxElem).siblings().get(1);
+    let pathDTO = {
+        path: "",
+        endpoint: "",
+        method: "",
+        tags: [],
+        display: true,
+        authorize: false,
+        trnsTypeId: "",
+        persist: {
+            headers: [],
+            queryParams: []
+        }
+    };
 
-/*    checkIfAllTagsCheckboxShouldBeChecked(checkboxElem);
-    checkIfAllCheckboxShouldBeChecked(checkboxElem);*/
+    pathDTO.path = $(checkboxElem).data("path");
+    pathDTO.method = $(checkboxElem).data("method");
+    pathDTO.authorize = ($($(optionsUl).children().get(0)).children().val() === "on");
+    pathDTO.display = ($($(optionsUl).children().get(1)).children().val() === "on");
+    pathDTO.trnsTypeId = $(optionsUl).children().get(2).value;
+    pathDTO.endpoint = $(optionsUl).children().get(3).value;
+    console.log("Asdasd");
 }
 
 function checkIfparentshouldbeChecked(children) {

@@ -1,6 +1,6 @@
 function readJson(liService) {
     let jsontext = null;
-    let url = host + path + "/swaggers/" + liService;
+    let url = host + basePath + "/swaggers/" + liService;
     /*    if (service === "internal") {
             url = "http://localhost:8080/api/v1.0/api-swagger/internal";
         }*/
@@ -22,7 +22,7 @@ function getServices() {
     $.ajax({
         'async': false,
         'global': false,
-        'url': host + path + "/swaggers",
+        'url': host + basePath + "/swaggers",
         'dataType': "json",
         'success': function (data) {
             services = data;

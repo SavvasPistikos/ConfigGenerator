@@ -18,12 +18,12 @@ function importJson(liItem) {
         let ul = $('<ul>');
         let di = $('<div>')
             .attr("class", "tab-pane fade active in")
-            .attr("id", "div" + liItem.id.replace(".", "_"));
+            .attr("id", liItem.id.replace(".", "_"));
 
         let groupedPaths = groupByTags(buttonIdWithout);
         allGroupedByTags[buttonIdWithout] = groupedPaths;
 
-        let allCheckbox = createCheckBox("addAllToList(this);", buttonIdWithout, null);
+        let allCheckbox = createCheckBox("addAllToList(this);");
         let url = createInputText(null, "url=" + buttonIdWithout);
         let version = createInputText(null, "vers=" + buttonIdWithout);
 
@@ -43,7 +43,7 @@ function importJson(liItem) {
 }
 
 function handleCopyPaste() {
-    let url = host + path + "/yaml";
+    let url = host + basePath + "/yaml";
     let config = $("#input-field").val();
     let impJson;
     $.ajax({
@@ -146,8 +146,6 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
         let tagCheckbox = $('<input>');
         tagCheckbox.attr("type", "checkbox");
         tagCheckbox.attr("onchange", "addAllTagsToList(this);")
-            .attr("class", tag)
-            .attr("id", tag + "," + buttonIdWithout);
         tagli.append(tagCheckbox);
 
         let tagButton = $('<button>');
@@ -168,6 +166,7 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
                 let pathsli = $('<li>');
                 pathsli.append(generateCheckbox(groupedPaths[tag][path], groupedPaths[tag][path].methods[i]));
                 pathsli.append(generateButton(groupedPaths[tag][path], groupedPaths[tag][path].methods[i]));
+                pathsli.append(createOptionsUL(groupedPaths[tag][path].endpoint +  groupedPaths[tag][path].methods[i]));
                 pathsul.append(pathsli);
             }
             tagli.append(pathsul);
@@ -183,17 +182,16 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
 }
 
 function hashCode(s) {
-    for(var i = 0, h = 0; i < s.length; i++)
+    for (var i = 0, h = 0; i < s.length; i++)
         h = Math.imul(31, h) + s.charCodeAt(i) | 0;
     return h;
 }
 
 function generateButton(path, method) {
     let button = $('<button>');
-
+    button.data("created", false);
     button.attr("data-toggle", "collapse")
-        .attr("data-target", "#optionsul")
-        .attr("onclick","createOptionsUL(\"optionsul\",this);");
+        .attr("data-target", "#" + hashCode(path.endpoint + method).toString())
 
     if (method === "POST") {
         button.attr("class", "btn btn-success");
@@ -209,24 +207,20 @@ function generateButton(path, method) {
     return button;
 }
 
-function generateCheckbox(path,method){
+function generateCheckbox(path, method) {
     checkbox = $('<input>');
-    checkbox.attr("type","checkbox")
-        .attr("onchange","addTolist(this)");
-    checkbox.data("path",path);
-    checkbox.data("method",method);
+    checkbox.attr("type", "checkbox")
+        .attr("onchange", "addToList(this)");
+    checkbox.data("path", path.endpoint);
+    checkbox.data("method", method);
 
     return checkbox;
 }
 
-function createCheckBox(onChangeFunction, classString, idString) {
+function createCheckBox(onChangeFunction) {
     let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
 
-    if (idString != null)
-        checkbox.id = idString;
-    if (classString !== "")
-        checkbox.className = classString;
     if (onChangeFunction != null)
         checkbox.setAttribute("onchange", onChangeFunction);
     return checkbox;
@@ -242,16 +236,10 @@ function createInputText(value, idString) {
     return inputext;
 }
 
-function createOptionsUL(pId,button) {
+function createOptionsUL(id) {
 
-    let options = document.getElementById("optionsul");
-    if(options !== null)
-        options.remove();
-
-    let parent = $(button).parent();
     let optionsUl = document.createElement("ul");
-    optionsUl.id = pId;
-
+    optionsUl.id = hashCode(id);
     let authorizeLi = document.createElement("li");
     let authorizeCheckbox = createCheckBox(null, "", "");
     authorizeCheckbox.className = "";
@@ -270,7 +258,7 @@ function createOptionsUL(pId,button) {
     displayLi.appendChild(displayTextNode);
 
     let endpointLi = document.createElement("li");
-    let endpointCheckBox = createCheckBox("displayInputText(this);", "", "end" + "");
+    let endpointCheckBox = createCheckBox("displayInputText(this);");
     endpointLi.appendChild(endpointCheckBox);
     endpointLi.appendChild(document.createTextNode("\t\t Endpoint"));
     let endpointIn = document.createElement("input");
@@ -283,7 +271,7 @@ function createOptionsUL(pId,button) {
 
 
     let tagsLi = document.createElement("li");
-    let tagsCheckBox = createCheckBox("displayInputText(this);", "", "" + "");
+    let tagsCheckBox = createCheckBox("displayInputText(this);");
     tagsLi.appendChild(tagsCheckBox);
     tagsLi.appendChild(document.createTextNode("\t\t Tags"));
     let tagsIn = document.createElement("input");
@@ -295,7 +283,7 @@ function createOptionsUL(pId,button) {
     tagsLi.appendChild(tagsIn);
 
     let trnsTypeIdLi = document.createElement("li");
-    let trnsTypeIdCheckBox = createCheckBox("displayInputText(this);", "", "trns" + "");
+    let trnsTypeIdCheckBox = createCheckBox("displayInputText(this);");
     trnsTypeIdLi.appendChild(trnsTypeIdCheckBox);
     trnsTypeIdLi.appendChild(document.createTextNode("\t\t TransactionType Id"));
     let trnsTypeIdIn = document.createElement("input");
@@ -314,20 +302,12 @@ function createOptionsUL(pId,button) {
 
     optionsUl.setAttribute("class", "panel-collapse collapse");
 
-
-    parent.append($(optionsUl));
+    return $(optionsUl);
 }
 
 function displayInputText(endpointOptionsCheckbox) {
-    let inputElement;
-
-    if (endpointOptionsCheckbox.id.includes("end")) {
-        inputElement = document.getElementById("end=" + endpointOptionsCheckbox.className);
-    } else if (endpointOptionsCheckbox.id.includes("tags")) {
-        inputElement = document.getElementById("tags=" + endpointOptionsCheckbox.className);
-    } else if (endpointOptionsCheckbox.id.includes("trns")) {
-        inputElement = document.getElementById("trns=" + endpointOptionsCheckbox.className);
-    }
+    let inputElement = $(endpointOptionsCheckbox).parent()
+        .children().get(1);
 
     if (endpointOptionsCheckbox.checked === true) {
         inputElement.style.display = "inline";
@@ -349,13 +329,11 @@ function trimId(tag) {
 
 function createAllOptionsCheckbox(tagliElement, tag) {
     let authorizeCheckbox = createCheckBox("AuthorizeAllSubTagEndpoints(this);", tag, "");
-    authorizeCheckbox.className = tag;
     let authorizeTextNode = document.createTextNode("Authorize All");
     tagliElement.append(authorizeCheckbox);
     tagliElement.append(authorizeTextNode);
 
     let displayCheckbox = createCheckBox("DisplayAllSubTagEndpoints(this);", tag, "");
-    displayCheckbox.className = tag;
     let displayTextNode = document.createTextNode("Display All");
     tagliElement.append(displayCheckbox);
     tagliElement.append(displayTextNode);

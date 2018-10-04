@@ -130,7 +130,7 @@ function addCrudButtons(trElement, serviceId) {
     del.innerText = "Delete";
 
     $(del).click(function () {
-        let url = host + path + "/swaggers/" + serviceId;
+        let url = host + basePath + "/swaggers/" + serviceId;
         $.ajax({
             'async': false,
             'global': false,
@@ -231,7 +231,7 @@ function updateService() {
 
     $.ajax({
         'type': 'PUT',
-        'url': host + path + "/swaggers",
+        'url': host + basePath + "/swaggers",
         'data': JSON.stringify(service),
         'contentType': 'application/json',
         'success': function () {
@@ -265,7 +265,7 @@ function createInsertRow() {
 
         $.ajax({
             'type': 'POST',
-            'url': host + path + "/swaggers",
+            'url': host + basePath + "/swaggers",
             'data': JSON.stringify(service),
             'contentType': 'application/json',
             'success': function () {
