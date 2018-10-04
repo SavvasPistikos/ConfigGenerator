@@ -166,7 +166,7 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
                 let pathsli = $('<li>');
                 pathsli.append(generateCheckbox(groupedPaths[tag][path], groupedPaths[tag][path].methods[i]));
                 pathsli.append(generateButton(groupedPaths[tag][path], groupedPaths[tag][path].methods[i]));
-                pathsli.append(createOptionsUL(groupedPaths[tag][path].endpoint +  groupedPaths[tag][path].methods[i]));
+                pathsli.append(createOptionsUL(groupedPaths[tag][path].endpoint + groupedPaths[tag][path].methods[i]));
                 pathsul.append(pathsli);
             }
             tagli.append(pathsul);
@@ -236,12 +236,37 @@ function createInputText(value, idString) {
     return inputext;
 }
 
+function writeToButton(element) {
+    let el = $(element);
+    let parent = $(el.parent());
+    let outercheckbox = parent.parent().siblings().get(0);
+
+    if (el.is(":checkbox")) {
+        $(outercheckbox).data(parent.text().toLocaleLowerCase(),element.checked);
+    } else{
+        $(outercheckbox).data(parent.text().trim().toLowerCase(),el.val());
+    }
+}
+
+function displayInputText(endpointOptionsCheckbox) {
+    let inputElement = $(endpointOptionsCheckbox).parent()
+        .children().get(1);
+
+    if (endpointOptionsCheckbox.checked === true) {
+        inputElement.style.display = "inline";
+    }
+    else {
+        inputElement.value = "";
+        inputElement.style.display = "none";
+    }
+}
+
 function createOptionsUL(id) {
 
     let optionsUl = document.createElement("ul");
     optionsUl.id = hashCode(id);
     let authorizeLi = document.createElement("li");
-    let authorizeCheckbox = createCheckBox(null, "", "");
+    let authorizeCheckbox = createCheckBox("writeToButton(this);", "", "");
     authorizeCheckbox.className = "";
     authorizeCheckbox.id = "auth" + "";
     let authorizeTextNode = document.createTextNode("Authorize");
@@ -249,7 +274,7 @@ function createOptionsUL(id) {
     authorizeLi.appendChild(authorizeTextNode);
 
     let displayLi = document.createElement("li");
-    let displayCheckBox = createCheckBox(null, "", "");
+    let displayCheckBox = createCheckBox("writeToButton(this);", "", "");
     displayCheckBox.className = "";
     displayCheckBox.checked = true;
     displayCheckBox.id = "disp" + "";
@@ -265,6 +290,7 @@ function createOptionsUL(id) {
     endpointIn.className = "";
     endpointIn.id = "end=" + "";
     endpointIn.setAttribute("type", "text");
+    endpointIn.setAttribute("onfocusout","writeToButton(this)");
     endpointIn.value = "";
     endpointIn.style.display = "none";
     endpointLi.appendChild(endpointIn);
@@ -278,6 +304,7 @@ function createOptionsUL(id) {
     tagsIn.className = "";
     tagsIn.id = "tags=" + "";
     tagsIn.setAttribute("type", "text");
+    tagsIn.setAttribute("onfocusout","writeToButton(this)");
     tagsIn.value = "";
     tagsIn.style.display = "none";
     tagsLi.appendChild(tagsIn);
@@ -285,11 +312,12 @@ function createOptionsUL(id) {
     let trnsTypeIdLi = document.createElement("li");
     let trnsTypeIdCheckBox = createCheckBox("displayInputText(this);");
     trnsTypeIdLi.appendChild(trnsTypeIdCheckBox);
-    trnsTypeIdLi.appendChild(document.createTextNode("\t\t TransactionType Id"));
+    trnsTypeIdLi.appendChild(document.createTextNode("\t\t trnsTypeId"));
     let trnsTypeIdIn = document.createElement("input");
     trnsTypeIdIn.className = "";
     trnsTypeIdIn.id = "trns=" + "";
     trnsTypeIdIn.setAttribute("type", "text");
+    trnsTypeIdIn.setAttribute("onfocusout","writeToButton(this)");
     trnsTypeIdIn.value = "";
     trnsTypeIdIn.style.display = "none";
     trnsTypeIdLi.appendChild(trnsTypeIdIn);
@@ -303,20 +331,6 @@ function createOptionsUL(id) {
     optionsUl.setAttribute("class", "panel-collapse collapse");
 
     return $(optionsUl);
-}
-
-function displayInputText(endpointOptionsCheckbox) {
-    let inputElement = $(endpointOptionsCheckbox).parent()
-        .children().get(1);
-
-    if (endpointOptionsCheckbox.checked === true) {
-        inputElement.style.display = "inline";
-    }
-    else {
-        inputElement.value = "";
-        inputElement.style.display = "none";
-    }
-
 }
 
 function trimId(tag) {

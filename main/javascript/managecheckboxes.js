@@ -16,10 +16,13 @@ function addToList(checkboxElem) {
 
     pathDTO.path = $(checkboxElem).data("path");
     pathDTO.method = $(checkboxElem).data("method");
-    pathDTO.authorize = ($($(optionsUl).children().get(0)).children().val() === "on");
-    pathDTO.display = ($($(optionsUl).children().get(1)).children().val() === "on");
-    pathDTO.trnsTypeId = $(optionsUl).children().get(2).value;
-    pathDTO.endpoint = $(optionsUl).children().get(3).value;
+    pathDTO.authorize = $(checkboxElem).data("authorize");
+    pathDTO.display = ($(checkboxElem).data("display") === undefined) ? true : $(checkboxElem).data("display");
+    pathDTO.endpoint = $(checkboxElem).data("endpoint");
+    pathDTO.trnsTypeId = $(checkboxElem).data("trnstypeid");
+    pathDTO.endpoint = $(checkboxElem).data("method");
+    let tags = $(checkboxElem).data("tags").trim();
+    pathDTO.tags = tags.split(",");
     console.log("Asdasd");
 }
 
