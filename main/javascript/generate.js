@@ -26,39 +26,21 @@ function generate() {
                     authorize: false,
                     trnsTypeId: ""
                 };
-                let res = list[p][i].split(",");
 
                 basePath = (jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
                     ? jsonList[apiName].basePath
                     : "";
 
-                path.display = document.getElementById("disp" + list[p][i]).checked;
-                path.authorize = document.getElementById("auth" + list[p][i]).checked;
-
-                if (document.getElementById("trns" + list[p][i]).checked === true) {
-                    path.transactionLog = document.getElementById("trns=" + list[p][i]).value;
-                }
-                path.path = basePath + res[0];
-                if (document.getElementById("end" + list[p][i]).checked === true) {
-                    path.endpoint = document.getElementById("end=" + list[p][i]).value;
-                } else {
-                    path.endpoint = path.path;
-                }
-                eval("tempPath" + " = " + "jsonList[\"" + apiName + "\"].paths[\"" + res[0] + "\"]."
-                    + res[1].toLocaleLowerCase() + ";");
-
-                if (document.getElementById("tag" + list[p][i]).checked === true) {
-                    path.tags.push(document.getElementById("tags=" + list[p][i]).value);
-                } else {
-                    if (tempPath.tags != null) {
-                        path.tags = tempPath.tags;
-                    }
-                }
-                path.method = res[1];
+                path.path = basePath + list[p][i].path;
+                path.endpoint = (list[p][i].endpoint === "") ? path.path : "";
+                path.method = list[p][i].method;
+                path.display = list[p][i].display;
+                path.authorize = list[p][i].authorize;
+                path.trnsTypeId = list[p][i].trnsTypeId;
+                path.tags = list[p][i].tags;
 
                 apiList.apis[apiName].paths.push(path);
             }
-
         }
     }
 
