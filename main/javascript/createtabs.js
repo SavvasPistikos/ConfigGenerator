@@ -24,6 +24,7 @@ function importJson(liItem) {
         allGroupedByTags[buttonIdWithout] = groupedPaths;
 
         let allCheckbox = createCheckBox("addAllToList(this);");
+        $(allCheckbox).data("childCheckboxes", 0);
         let url = createInputText(null, "url=" + buttonIdWithout);
         let version = createInputText(null, "vers=" + buttonIdWithout);
 
@@ -34,7 +35,8 @@ function importJson(liItem) {
         ul.append(version);
 
         let dum = $("#swaggers");
-        groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".", "_"));
+        groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".", "_"), allCheckbox);
+        $(allCheckbox).data("maxChildren", $(allCheckbox).data("childCheckboxes"));
         $("#" + di.id).data("service", jliItem.data("service"));
     } else {
         $('#close' + liItem.id).remove();
@@ -138,7 +140,7 @@ function groupByTags(jsonFileName) {
     return groupedPaths;
 }
 
-function groupByTagsDraw(groupedPaths, ul, di, tabid) {
+function groupByTagsDraw(groupedPaths, ul, di, tabid, allCheckBoxElem) {
     for (let tag in groupedPaths) {
         let elementsid = trimId(tag);
 
@@ -146,6 +148,7 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
         let tagCheckbox = $('<input>');
         tagCheckbox.attr("type", "checkbox")
             .attr("onchange", "triggerAllTagsToList(this);");
+        tagCheckbox.data("childCheckboxes",0);
         tagli.append(tagCheckbox);
 
         let tagButton = $('<button>');
@@ -163,6 +166,7 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
 
         for (let path in groupedPaths[tag]) {
             for (let i in groupedPaths[tag][path].methods) {
+                tagCheckbox.data("childCheckboxes",tagCheckbox.data("childCheckboxes") + 1);
                 let pathsli = $('<li>');
                 let checkbox = generateCheckbox(groupedPaths[tag][path], groupedPaths[tag][path].methods[i], tabid);
                 pathsli.append(checkbox);
@@ -174,7 +178,9 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid) {
             tagli.append(pathsul);
             ul.append(tagli);
         }
-
+        $(tagCheckbox).data("maxChildren",  tagCheckbox.data("childCheckboxes"));
+        $(tagCheckbox).data("updatedParent",  false);
+        $(allCheckBoxElem).data("childCheckboxes", $(allCheckBoxElem).data("childCheckboxes") + 1);
     }
     let tabpanediv = document.createElement("div");
     tabpanediv.setAttribute("class", "tab-pane fade active in");
