@@ -104,7 +104,7 @@ function setDbResults(services) {
         let importCheckbox = document.createElement("input");
         importCheckbox.setAttribute("onchange", "importJson(this)");
         importCheckbox.setAttribute("type", "checkbox");
-        importCheckbox.id = ID();
+        importCheckbox.id = services[s].service + services[s].version;
 
         $(importCheckbox).data("id", services[s].id);
         $(importCheckbox).data("service", services[s].service);

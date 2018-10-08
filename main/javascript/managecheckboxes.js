@@ -21,7 +21,7 @@ function addToList(checkboxElem) {
         pathDTO.method = $(checkboxElem).data("method");
         pathDTO.authorize = ($(checkboxElem).data("authorize") === undefined) ? true : $(checkboxElem).data("authorize");
         pathDTO.display = ($(checkboxElem).data("display") === undefined) ? true : $(checkboxElem).data("display");
-        pathDTO.endpoint = ($(checkboxElem).data("endpoint") === undefined) ? "" : $(checkboxElem).data("endpoint") === undefined;
+        pathDTO.endpoint = ($(checkboxElem).data("endpoint") === undefined) ? "" : $(checkboxElem).data("endpoint");
         pathDTO.trnsTypeId = ($(checkboxElem).data("trnstypeid") === undefined) ? "" : $(checkboxElem).data("trnstypeid");
         if ($(checkboxElem).data("tags") !== undefined) {
             let tags = $(checkboxElem).data("tags").trim();
@@ -60,6 +60,11 @@ function addAllToList(allCheckBoxElement) {
 
 function triggerAllTagsToList(tagCheckBoxElement) {
     let ul = $(tagCheckBoxElement).siblings().get(3);
+    //TODO
+    /*
+    Set it to false because cannot think of some thing better for the manageParentCheckboxes
+     */
+    tagCheckBoxElement.checked = false;
     jQuery.each($(ul).children(), function (i, child) {
         let fchild = $(child).children().get(0);
         if (fchild.checked === false || tagCheckBoxElement.checked === false)

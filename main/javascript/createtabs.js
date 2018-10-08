@@ -1,11 +1,10 @@
 function importJson(liItem) {
     let jliItem = $(liItem);
     let tabName = jliItem.data("service") + jliItem.data("version");
-    buttonIdWithout = jliItem.data("service");
     js = JSON.parse(readJson(jliItem.data("id")).content);
 
     if (document.getElementById("div" + jliItem.data("service")) == null) {
-        jsonList[buttonIdWithout] = js;
+        jsonList[jliItem.data("service")] = js;
         let servicesul = $("#services");
 
         let li = $('<li>');
@@ -26,8 +25,8 @@ function importJson(liItem) {
 
         let allCheckbox = createCheckBox("addAllToList(this);");
         $(allCheckbox).data("childCheckboxes", 0);
-        let url = createInputText(null, "url=" + buttonIdWithout);
-        let version = createInputText(null, "vers=" + buttonIdWithout);
+        let url = createInputText(null, "url=" + jliItem.data("service"));
+        let version = createInputText(null, "vers=" + jliItem.data("service"));
 
         ul.append(allCheckbox);
         ul.append(document.createTextNode("\t\t Url = "));
@@ -71,28 +70,40 @@ function importConfig(impJson) {
             continue;
         }
         let version = (impJson.apis[a].version != null) ? impJson.apis[a].version : "";
-        importJson(document.getElementById(a + version.replace(".", "_")));
+        importJson(document.getElementById(a + version));
         document.getElementById("url=" + a).value = impJson.apis[a].url;
 
         for (p in impJson.apis[a].paths) {
-            let checkbox;
-            if (impJson.apis[a].paths[p].path != null && impJson.apis[a].paths[p].endpoint != null) {
-                checkbox = document.getElementById(impJson.apis[a].paths[p].path.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method);
-                if (checkbox == null) {
-                    checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
-                }
-            } else {
-                if (impJson.apis[a].paths[p].path == null) {
-                    checkbox = (jsonList[a].basePath !== null) ?
-                        document.getElementById(impJson.apis[a].paths[p].endpoint.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method)
-                        : document.getElementById(impJson.apis[a].paths[p].endpoint + "," + impJson.apis[a].paths[p].method);
-                } else {
-                    checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
-                }
-            }
-            checkbox.checked = true;
-            addToList(checkbox);
+            let basePath = (jsonList[a].basePath === undefined) ? "" : jsonList[a].basePath;
+            basePath = (basePath === "/") ? "" : basePath;
+            let pathString = (impJson.apis[a].paths[p].path === undefined) ?
+                impJson.apis[a].paths[p].method + "\t" + basePath + impJson.apis[a].paths[p].endpoint
+                : impJson.apis[a].paths[p].method + "\t" + basePath + impJson.apis[a].paths[p].path;
+            pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
+            let button = $('.btn:contains(' + pathString + ')');
+            let checkbox = $(button).siblings().get(0);
+            $(checkbox).trigger("click", checkbox);
         }
+
+        /*        for (p in impJson.apis[a].paths) {
+                    let checkbox;
+                    if (impJson.apis[a].paths[p].path != null && impJson.apis[a].paths[p].endpoint != null) {
+                        checkbox = document.getElementById(impJson.apis[a].paths[p].path.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method);
+                        if (checkbox == null) {
+                            checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
+                        }
+                    } else {
+                        if (impJson.apis[a].paths[p].path == null) {
+                            checkbox = (jsonList[a].basePath !== null) ?
+                                document.getElementById(impJson.apis[a].paths[p].endpoint.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method)
+                                : document.getElementById(impJson.apis[a].paths[p].endpoint + "," + impJson.apis[a].paths[p].method);
+                        } else {
+                            checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
+                        }
+                    }
+                    checkbox.checked = true;
+                    addToList(checkbox);
+                }*/
     }
     generate();
 }
@@ -172,7 +183,9 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid, allCheckBoxElem) {
                 let pathsli = $('<li>');
                 let checkbox = generateCheckbox(groupedPaths[tag][path], groupedPaths[tag][path].methods[i], tabid);
                 pathsli.append(checkbox);
-                let b = generateButton(groupedPaths[tag][path], groupedPaths[tag][path].methods[i]);
+                let basePath = (jsonList[tabid].basePath === undefined) ? "" : jsonList[tabid].basePath;
+                basePath = (basePath === "/") ? "" : basePath;
+                let b = generateButton(groupedPaths[tag][path], groupedPaths[tag][path].methods[i], basePath);
                 pathsli.append(b);
                 pathsli.append(createOptionsUL(b.data("toggleId"), checkbox));
                 pathsul.append(pathsli);
@@ -192,7 +205,7 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid, allCheckBoxElem) {
     hideOtherTabs(tabpanediv);
 }
 
-function generateButton(path, method) {
+function generateButton(path, method, basepath) {
     let button = $('<button>');
     let togglelId = ID();
     button.data("created", false);
@@ -209,7 +222,7 @@ function generateButton(path, method) {
         button.attr("class", "btn btn-warning")
     }
 
-    button.text(method + "\t" + path.endpoint);
+    button.text(method + "\t" + basepath + path.endpoint);
     button.data("toggleId", togglelId);
     return button;
 }
