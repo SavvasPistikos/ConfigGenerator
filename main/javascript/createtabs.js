@@ -1,24 +1,25 @@
 function importJson(liItem) {
-    let jliItem = $('#' + liItem.id);
+    let jliItem = $(liItem);
     let tabName = jliItem.data("service") + jliItem.data("version");
     buttonIdWithout = jliItem.data("service");
     js = JSON.parse(readJson(jliItem.data("id")).content);
 
-    if (document.getElementById("div" + liItem.id) == null) {
+    if (document.getElementById("div" + jliItem.data("service")) == null) {
         jsonList[buttonIdWithout] = js;
         let servicesul = $("#services");
 
         let li = $('<li>');
-        li.html("<a data-toggle=\"tab\" href=\"#div" + liItem.id.replace(".", "_") + "\">"
+        li.html("<a data-toggle=\"tab\" href=\"#div" + jliItem.data("service") + "\">"
             + "<button class=\"close closeTab\" type=\"button\" >×</button>"
             + tabName + "</a>");
-        li.attr("id", "close" + liItem.id);
+        li.attr("id", "close" + jliItem.data("service"));
+        li.data("checkboxId", liItem.id);
 
         servicesul.append(li);
         let ul = $('<ul>');
-        let di = $('<div>')
-            .attr("class", "tab-pane fade active in")
-            .attr("id", liItem.id.replace(".", "_"));
+        let di = $('<div>');
+        di.attr("class", "tab-pane fade active in")
+            .attr("id", jliItem.data("service"));
 
         let groupedPaths = groupByTags(buttonIdWithout);
         allGroupedByTags[buttonIdWithout] = groupedPaths;
@@ -35,12 +36,13 @@ function importJson(liItem) {
         ul.append(version);
 
         let dum = $("#swaggers");
-        groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".", "_"), allCheckbox);
+        groupByTagsDraw(groupedPaths, ul, dum, jliItem.data("service"), allCheckbox);
         $(allCheckbox).data("maxChildren", $(allCheckbox).data("childCheckboxes"));
         $("#" + di.id).data("service", jliItem.data("service"));
+        li.tab('show');
     } else {
-        $('#close' + liItem.id).remove();
-        $('#div' + liItem.id).remove();
+        $('#close' + jliItem.data("service")).remove();
+        $('#div' + jliItem.data("service")).remove();
     }
 }
 
@@ -148,7 +150,7 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid, allCheckBoxElem) {
         let tagCheckbox = $('<input>');
         tagCheckbox.attr("type", "checkbox")
             .attr("onchange", "triggerAllTagsToList(this);");
-        tagCheckbox.data("childCheckboxes",0);
+        tagCheckbox.data("childCheckboxes", 0);
         tagli.append(tagCheckbox);
 
         let tagButton = $('<button>');
@@ -166,7 +168,7 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid, allCheckBoxElem) {
 
         for (let path in groupedPaths[tag]) {
             for (let i in groupedPaths[tag][path].methods) {
-                tagCheckbox.data("childCheckboxes",tagCheckbox.data("childCheckboxes") + 1);
+                tagCheckbox.data("childCheckboxes", tagCheckbox.data("childCheckboxes") + 1);
                 let pathsli = $('<li>');
                 let checkbox = generateCheckbox(groupedPaths[tag][path], groupedPaths[tag][path].methods[i], tabid);
                 pathsli.append(checkbox);
@@ -178,12 +180,13 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid, allCheckBoxElem) {
             tagli.append(pathsul);
             ul.append(tagli);
         }
-        $(tagCheckbox).data("maxChildren",  tagCheckbox.data("childCheckboxes"));
+        $(tagCheckbox).data("maxChildren", tagCheckbox.data("childCheckboxes"));
         $(allCheckBoxElem).data("childCheckboxes", $(allCheckBoxElem).data("childCheckboxes") + 1);
     }
     let tabpanediv = document.createElement("div");
     tabpanediv.setAttribute("class", "tab-pane fade active in");
     tabpanediv.setAttribute("id", "div" + tabid);
+    $(tabpanediv).data("service", tabid);
     $(tabpanediv).append(ul);
     di.append(tabpanediv);
     hideOtherTabs(tabpanediv);
@@ -314,8 +317,10 @@ function createOptionsUL(id, checkbox) {
     tagsIn.setAttribute("onfocusout", "writeToButton(this)");
     eval("tempPath" + " = " + "jsonList[\"" + checkbox.data("service") + "\"].paths[\"" + checkbox.data("path") + "\"]."
         + checkbox.data("method").toLocaleLowerCase() + ";");
-    tagsIn.value = tempPath.tags.toString();
-    checkbox.data("tags", tempPath.tags.toString());
+    if (tempPath.tags !== undefined) {
+        tagsIn.value = tempPath.tags.toString();
+        checkbox.data("tags", tempPath.tags.toString());
+    }
     tagsIn.style.display = "none";
     tagsLi.appendChild(tagsIn);
 

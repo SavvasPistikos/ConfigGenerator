@@ -13,12 +13,12 @@ function registerCloseEvent() {
     $(".closeTab").click(function () {
         //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
         var tabContentId = $(this).parent().attr("href");
+        $('#' + $(this).parent().parent().data("checkboxId")).prop('checked', false);
         $(this).parent().parent().remove(); //remove li of tab
         $('#swaggers a:last').tab('show'); // Select first tab
         list[$(tabContentId).data("service")] = [];
         generate();
         $(tabContentId).remove(); //remove respective tab content
-        $('#' + $(this).parent().parent().attr('id').split("close")[1]).prop('checked', false);
 
         let resetoutputarea = true;
         for (i in list) {
@@ -57,15 +57,6 @@ function setPreviousTab(a) {
     }
 }
 
-$(document).ready(function () {
-    $("#databasemanager").click(function (e, arg1) {
-        if ($('#manageswaggers').children().length === 0 || arg1 === true) {
-            $('#manageswaggers').empty();
-            getItemsFromDbAndDraw();
-        }
-    });
-});
-
 function getItemsFromDbAndDraw() {
     let container = document.createElement("div");
     container.setAttribute("class", "container");
@@ -85,6 +76,10 @@ function getItemsFromDbAndDraw() {
 function setCols() {
     let thr = document.createElement("thead");
     let tr = document.createElement("tr");
+
+    let thCheck = document.createElement("th");
+    thCheck.innerText = "Add To Configuration";
+    tr.appendChild(thCheck);
     let thSer = document.createElement("th");
     thSer.innerText = "Service";
     tr.appendChild(thSer);
@@ -105,6 +100,17 @@ function setDbResults(services) {
 
         let tr = document.createElement("tr");
 
+        let tdCheckbox = document.createElement("td");
+        let importCheckbox = document.createElement("input");
+        importCheckbox.setAttribute("onchange", "importJson(this)");
+        importCheckbox.setAttribute("type", "checkbox");
+        importCheckbox.id = ID();
+
+        $(importCheckbox).data("id", services[s].id);
+        $(importCheckbox).data("service", services[s].service);
+        $(importCheckbox).data("version", services[s].version);
+        tdCheckbox.appendChild(importCheckbox);
+
         let tdServ = document.createElement("td");
         tdServ.innerText = services[s].service;
 
@@ -114,6 +120,7 @@ function setDbResults(services) {
         let tdVer = document.createElement("td");
         tdVer.innerText = services[s].version;
 
+        tr.appendChild(tdCheckbox);
         tr.appendChild(tdServ);
         tr.appendChild(tdCont);
         tr.appendChild(tdVer);
@@ -243,6 +250,7 @@ function updateService() {
 
 function createInsertRow() {
     let tr = document.createElement("tr");
+    let checkTd = document.createElement("td");
     let srvTd = document.createElement("td");
     let conTd = document.createElement("td");
     let verTd = document.createElement("td");
@@ -275,6 +283,7 @@ function createInsertRow() {
 
     });
 
+    tr.appendChild(checkTd);
     tr.appendChild(srvTd);
     tr.appendChild(conTd);
     tr.appendChild(verTd);

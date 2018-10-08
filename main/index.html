@@ -64,6 +64,7 @@
             float: bottom;
         }
     </style>
+
 </head>
 <body>
 
@@ -73,7 +74,6 @@
     <div class="tabbable boxed parentTabs">
         <ul class="nav nav-tabs" id="outer">
             <li id="databasemanager"><a data-toggle="tab" href="#manageswaggers">Manage Swaggers</a></li>
-            <li class="active"><a data-toggle="tab" href="#dropdownlist">Load Swaggers</a></li>
             <li><a data-toggle="tab" href="#manage">Edit Configuration</a></li>
             <li><a data-toggle="tab" href="#import">Import Config</a></li>
             <li><a data-toggle="tab" href="#output">Output</a></li>
@@ -82,20 +82,15 @@
         <div class="tab-content">
             <div id="manageswaggers" class="tab-pane fade">
             </div>
-            <div id="dropdownlist" class="tab-pane fade in active">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                    </ul>
-                </div>
-            </div>
+
             <div id="manage" class="tab-pane fade">
                 <div class="tabbable">
                     <ul id="services" class="nav nav-tabs">
                         <li id="generate">
                             <div id="buttons">
-                                <button type="button" class="btn btn-outline-secondary" onclick=generate(this)>Generate</button>
+                                <button type="button" class="btn btn-outline-secondary" onclick=generate(this)>
+                                    Generate
+                                </button>
                             </div>
                         </li>
                     </ul>
@@ -105,7 +100,8 @@
             </div>
             <div id="import" class="tab-pane fade">
                 <div class="input-group">
-                    <textarea class="form-control custom-control" rows="30" style="resize:none" id="input-field"></textarea>
+                    <textarea class="form-control custom-control" rows="30" style="resize:none"
+                              id="input-field"></textarea>
                     <span class="input-group-addon btn btn-primary" onclick=handleCopyPaste()>Import</span>
                 </div>
             </div>
