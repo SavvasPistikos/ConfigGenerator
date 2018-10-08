@@ -1,5 +1,5 @@
 function addToList(checkboxElem) {
-    let parent  = $(checkboxElem).parent();
+    let parent = $(checkboxElem).parent();
     let parentCheckbox = $(parent).parent().siblings().get(0);
     if ($(checkboxElem).data("checked") === false) {
         let pathDTO = {
@@ -16,10 +16,6 @@ function addToList(checkboxElem) {
             },
             id: ""
         };
-
-        $(parentCheckbox).data("childCheckboxes",$(parentCheckbox).data("childCheckboxes") - 1);
-        manageParentCheckboxes($(parent).parent().siblings().get(0));
-
 
         pathDTO.path = $(checkboxElem).data("path");
         pathDTO.method = $(checkboxElem).data("method");
@@ -39,15 +35,17 @@ function addToList(checkboxElem) {
 
         list[$(checkboxElem).data("service")].push(pathDTO);
         $(checkboxElem).data("checked", true);
-    } else if ($(checkboxElem).data("checked") === true) {
-        $(parentCheckbox).data("childCheckboxes",$(parentCheckbox).data("childCheckboxes") + 1);
-        manageParentCheckboxes($(parent).parent().siblings().get(0));
 
+        $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") - 1);
+        manageParentCheckboxes($(parent).parent().siblings().get(0));
+    } else if ($(checkboxElem).data("checked") === true) {
         list[$(checkboxElem).data("service")] = list[$(checkboxElem).data("service")]
             .filter(function (item) {
                 return item.id !== $(checkboxElem).data("pathId");
             });
         $(checkboxElem).data("checked", false);
+        $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") + 1);
+        manageParentCheckboxes($(parent).parent().siblings().get(0));
     }
 }
 
@@ -69,29 +67,24 @@ function triggerAllTagsToList(tagCheckBoxElement) {
     });
 }
 
-function manageParentCheckboxes(parentCheckbox){
+function manageParentCheckboxes(parentCheckbox) {
     let grandParentCheckBox = $(parentCheckbox).parent().siblings().get(0);
     let previousState = parentCheckbox.checked;
     parentCheckbox.checked = $(parentCheckbox).data("childCheckboxes") === 0;
 
-    if(grandParentCheckBox !== undefined){
-        if (parentCheckbox.checked === true &&   $(parentCheckbox).data("childCheckboxes") === 0) {
+    if (grandParentCheckBox !== undefined) {
+        if (parentCheckbox.checked === true && $(parentCheckbox).data("childCheckboxes") === 0) {
             $(grandParentCheckBox).data("childCheckboxes", $(grandParentCheckBox).data("childCheckboxes") - 1);
-            $(parentCheckbox).data("updatedParent",false);
-            manageParentCheckboxes(grandParentCheckBox);
-        }else if(parentCheckbox.checked === false &&   ($(parentCheckbox).data("childCheckboxes") === $(parentCheckbox).data("maxChildren"))){
+        } else if (parentCheckbox.checked === false && ($(parentCheckbox).data("childCheckboxes") === $(parentCheckbox).data("maxChildren"))) {
             $(grandParentCheckBox).data("childCheckboxes", $(grandParentCheckBox).data("childCheckboxes") + 1);
-            manageParentCheckboxes(grandParentCheckBox);
-        }else if((previousState && !parentCheckbox.checked)
-            && ($(parentCheckbox).data("childCheckboxes") <= $(parentCheckbox).data("maxChildren"))
-        && $(parentCheckbox).data("updatedParent") === false){
-            $(parentCheckbox).data("updatedParent",true);
+        } else if (previousState && !parentCheckbox.checked && $(parentCheckbox).data("childCheckboxes") === 1) {
             $(grandParentCheckBox).data("childCheckboxes", $(grandParentCheckBox).data("childCheckboxes") + 1);
-            manageParentCheckboxes(grandParentCheckBox);
+        } else if (!previousState && parentCheckbox.checked && ($(parentCheckbox).data("childCheckboxes") === $(parentCheckbox).data("maxChildren"))) {
+            $(grandParentCheckBox).data("childCheckboxes", $(grandParentCheckBox).data("childCheckboxes") + -1);
         }
+        manageParentCheckboxes(grandParentCheckBox);
     }
 }
-
 
 window.onbeforeunload = function (e) {
     document.body = localStorage.getItem("body");

@@ -179,7 +179,6 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid, allCheckBoxElem) {
             ul.append(tagli);
         }
         $(tagCheckbox).data("maxChildren",  tagCheckbox.data("childCheckboxes"));
-        $(tagCheckbox).data("updatedParent",  false);
         $(allCheckBoxElem).data("childCheckboxes", $(allCheckBoxElem).data("childCheckboxes") + 1);
     }
     let tabpanediv = document.createElement("div");
@@ -188,13 +187,6 @@ function groupByTagsDraw(groupedPaths, ul, di, tabid, allCheckBoxElem) {
     $(tabpanediv).append(ul);
     di.append(tabpanediv);
     hideOtherTabs(tabpanediv);
-}
-
-/**
- * @return {string}
- */
-function ID() {
-    return '_' + Math.random().toString(36).substr(2, 9);
 }
 
 function generateButton(path, method) {
@@ -372,27 +364,6 @@ function createAllOptionsCheckbox(tagliElement, tag) {
 
 }
 
-
-function LogAllSubTagEndpoints(logAllElement) {
-    let logCheckboxes = document.getElementsByClassName(logAllElement.className);
-    let arrayLogCheckboxes = Array.from(logCheckboxes).filter(getOnlyLogCheckboxes);
-
-    for (ach in arrayLogCheckboxes) {
-        arrayLogCheckboxes[ach].checked = logAllElement.checked;
-    }
-}
-
-function getOnlyLogCheckboxes(logCheckboxElem) {
-    if (logCheckboxElem instanceof HTMLInputElement
-        && logCheckboxElem.getAttribute('type') === 'checkbox'
-        && logCheckboxElem.id !== ""
-        && logCheckboxElem.id.includes("log")
-    ) {
-        return logCheckboxElem;
-    }
-}
-
-
 function AuthorizeAllSubTagEndpoints(authorizeAllElement) {
     let authCheckboxes = document.getElementsByClassName(authorizeAllElement.className);
     let arrayAuthCheckboxes = Array.from(authCheckboxes).filter(getOnlyAuthCheckboxes);
@@ -402,31 +373,9 @@ function AuthorizeAllSubTagEndpoints(authorizeAllElement) {
     }
 }
 
-function getOnlyAuthCheckboxes(authCheckboxElem) {
-    if (authCheckboxElem instanceof HTMLInputElement
-        && authCheckboxElem.getAttribute('type') === 'checkbox'
-        && authCheckboxElem.id !== ""
-        && authCheckboxElem.id.includes("auth")
-    ) {
-        return authCheckboxElem;
-    }
-}
-
-function DisplayAllSubTagEndpoints(displayAllElement) {
-    let dispCheckboxes = document.getElementsByClassName(displayAllElement.className);
-    let arrayDispCheckboxes = Array.from(dispCheckboxes).filter(getOnlyDispCheckboxes);
-
-    for (ach in arrayDispCheckboxes) {
-        arrayDispCheckboxes[ach].checked = displayAllElement.checked;
-    }
-}
-
-function getOnlyDispCheckboxes(dispCheckboxElem) {
-    if (dispCheckboxElem instanceof HTMLInputElement
-        && dispCheckboxElem.getAttribute('type') === 'checkbox'
-        && dispCheckboxElem.id !== ""
-        && dispCheckboxElem.id.includes("disp")
-    ) {
-        return dispCheckboxElem;
-    }
+/**
+ * @return {string}
+ */
+function ID() {
+    return '_' + Math.random().toString(36).substr(2, 9);
 }
