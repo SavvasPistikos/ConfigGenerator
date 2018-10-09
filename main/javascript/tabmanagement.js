@@ -9,6 +9,15 @@ $(function () {
     });
 });
 
+$(document).ready(function () {
+    $("#databasemanager").click(function (e, arg1) {
+        if ($('#manageswaggers').children().length === 0 || arg1 === true) {
+            $('#manageswaggers').empty();
+            getItemsFromDbAndDraw();
+        }
+    });
+});
+
 function registerCloseEvent() {
     $(".closeTab").click(function () {
         //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
