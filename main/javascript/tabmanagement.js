@@ -9,6 +9,16 @@ $(function () {
     });
 });
 
+$(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#swaggers").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+});
+
+
 function registerCloseEvent() {
     $(".closeTab").click(function () {
         //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
