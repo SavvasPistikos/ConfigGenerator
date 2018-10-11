@@ -9,14 +9,15 @@ $(function () {
     });
 });
 
-$(document).ready(function () {
-    $("#databasemanager").click(function (e, arg1) {
-        if ($('#manageswaggers').children().length === 0 || arg1 === true) {
-            $('#manageswaggers').empty();
-            getItemsFromDbAndDraw();
-        }
+$(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#swaggers").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
     });
 });
+
 
 function registerCloseEvent() {
     $(".closeTab").click(function () {
