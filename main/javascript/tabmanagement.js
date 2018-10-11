@@ -9,12 +9,37 @@ $(function () {
     });
 });
 
-$(document).ready(function(){
-    $("#myInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#swaggers").filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
+$(document).ready(function () {
+    $("#databasemanager").click(function (e, arg1) {
+        if ($('#manageswaggers').children().length === 0 || arg1 === true) {
+            $('#manageswaggers').empty();
+            getItemsFromDbAndDraw();
+        }
+    });
+});
+
+$(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+        var value = $(this).val().trim();
+        let ul = $($(this).children()).children('ul');
+        let innerUl = ul.children('li').children('ul');
+        if (!(value === "")) {
+            $("#swaggers").filter(function () {
+                let buttons = innerUl.children('li').children(':button');
+                buttons.each(function () {
+                    if ($(this).text().trim().includes(value)) {
+                        $(this).parent().fadeIn();
+                        let tagUl = $(this).parent().parent();
+                        if (tagUl.is(':hidden')) {
+                            tagUl.siblings(':button').trigger('click');
+                        }
+                    } else {
+                        $(this).parent().fadeOut();
+                    }
+                })
+            });
+        } else {
+        }
     });
 });
 

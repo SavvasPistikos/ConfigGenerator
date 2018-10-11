@@ -222,7 +222,7 @@ function generateButton(path, method, basepath) {
         button.attr("class", "btn btn-warning")
     }
 
-    button.text(method + "\t" + basepath + path.endpoint);
+    button.text(method + " " + basepath + path.endpoint);
     button.data("toggleId", togglelId);
     return button;
 }
