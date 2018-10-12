@@ -20,26 +20,24 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $("#myInput").on("keyup", function () {
-        var value = $(this).val().trim();
-        let ul = $($(this).children()).children('ul');
-        let innerUl = ul.children('li').children('ul');
-        if (!(value === "")) {
-            $("#swaggers").filter(function () {
-                let buttons = innerUl.children('li').children(':button');
-                buttons.each(function () {
-                    if ($(this).text().trim().includes(value)) {
-                        $(this).parent().fadeIn();
-                        let tagUl = $(this).parent().parent();
-                        if (tagUl.is(':hidden')) {
-                            tagUl.siblings(':button').trigger('click');
-                        }
-                    } else {
-                        $(this).parent().fadeOut();
+        let value = $(this).val().trim();
+        $("#swaggers").filter(function () {
+            let ul = $($(this).children()).children('ul');
+            let innerUl = ul.children('li').children('ul');
+            let buttons = innerUl.children('li').children(':button');
+
+            buttons.each(function () {
+                if ($(this).text().trim().includes(value)) {
+                    $(this).parent().fadeIn(250);
+                    let tagUl = $(this).parent().parent();
+                    if (tagUl.is(':hidden')) {
+                        tagUl.siblings(':button').trigger('click');
                     }
-                })
+                } else {
+                    $(this).parent().fadeOut(250);
+                }
             });
-        } else {
-        }
+        });
     });
 });
 
