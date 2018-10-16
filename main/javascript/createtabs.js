@@ -9,7 +9,7 @@ function importJson(liItem) {
 
         let li = $('<li>');
         li.html("<a data-toggle=\"tab\" href=\"#div" + jliItem.data("service") + "\">"
-            + "<button class=\"close closeTab\" type=\"button\" >×</button>"
+            + "<button class=\"close closeTab\" type=\"button\" onclick=\"closeTab(this)\" >×</button>"
             + tabName + "</a>");
         li.attr("id", "close" + jliItem.data("service"));
         li.data("checkboxId", liItem.id);

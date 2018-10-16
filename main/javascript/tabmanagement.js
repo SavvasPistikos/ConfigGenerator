@@ -1,13 +1,24 @@
-$(function () {
-    $("#services").on("click", "a", function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-        registerCloseEvent();
-        $currentTab = $(this);
-        //$previousTab = setPreviousTab(this);
+function closeTab(closeTabButton) {
+    //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
+    var tabContentId = $(closeTabButton).parent().attr("href");
+    $('#' + $(closeTabButton).parent().parent().data("checkboxId")).prop('checked', false);
+    $(closeTabButton).parent().parent().remove(); //remove li of tab
+    $(tabContentId).remove(); //remove respective tab content
+    let first = $('#services a:first'); // Select first tab
+    if(first !== undefined) {
+        $(first).tab('show');
+    }
+    list[$(tabContentId).data("service")] = [];
+    generate();
 
-    });
-});
+    let resetOutputArea = true;
+    for (i in list) {
+        resetOutputArea = resetOutputArea & (list[i].length === 0);
+    }
+    if (resetOutputArea) {
+        document.getElementById("jsonOutput").innerHTML = "";
+    }
+}
 
 $(document).ready(function () {
     $("#databasemanager").click(function (e, arg1) {
@@ -40,29 +51,6 @@ $(document).ready(function () {
         });
     });
 });
-
-
-function registerCloseEvent() {
-    $(".closeTab").click(function () {
-        //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
-        var tabContentId = $(this).parent().attr("href");
-        $('#' + $(this).parent().parent().data("checkboxId")).prop('checked', false);
-        $(this).parent().parent().remove(); //remove li of tab
-        $('#swaggers a:last').tab('show'); // Select first tab
-        list[$(tabContentId).data("service")] = [];
-        generate();
-        $(tabContentId).remove(); //remove respective tab content
-
-        let resetoutputarea = true;
-        for (i in list) {
-            resetoutputarea = resetoutputarea & (list[i].length === 0);
-        }
-        if (resetoutputarea) {
-            document.getElementById("jsonOutput").innerHTML = "";
-        }
-
-    });
-}
 
 function hideOtherTabs(tabelement) {
 
