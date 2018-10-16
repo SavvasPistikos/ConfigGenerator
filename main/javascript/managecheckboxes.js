@@ -21,7 +21,7 @@ function addToList(checkboxElem) {
         pathDTO.method = $(checkboxElem).data("method");
         pathDTO.authorize = ($(checkboxElem).data("authorize") === undefined) ? true : $(checkboxElem).data("authorize");
         pathDTO.display = ($(checkboxElem).data("display") === undefined) ? true : $(checkboxElem).data("display");
-        pathDTO.endpoint = ($(checkboxElem).data("endpoint") === undefined) ? "" : $(checkboxElem).data("endpoint");
+        pathDTO.endpoint = ($(checkboxElem).data("endpoint") === undefined) ? pathDTO.path : $(checkboxElem).data("endpoint");
         pathDTO.trnsTypeId = ($(checkboxElem).data("trnstypeid") === undefined) ? "" : $(checkboxElem).data("trnstypeid");
         if ($(checkboxElem).data("tags") !== undefined) {
             let tags = $(checkboxElem).data("tags").trim();

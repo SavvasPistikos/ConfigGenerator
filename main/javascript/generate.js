@@ -18,7 +18,6 @@ function generate() {
 
             for (let i in list[p]) {
                 let path = {
-                    path: "",
                     endpoint: "",
                     method: "",
                     tags: [],
@@ -31,8 +30,12 @@ function generate() {
                     ? jsonList[apiName].basePath
                     : "";
 
-                path.path = basePath + list[p][i].path;
-                path.endpoint = (list[p][i].endpoint === "") ? path.path : list[p][i].endpoint;
+                if(list[p][i].path !== list[p][i].endpoint){
+                    path.path = basePath + list[p][i].path;
+                    path.endpoint = (list[p][i].endpoint === "") ? path.path : list[p][i].endpoint;
+                } else{
+                    path.endpoint = list[p][i].endpoint;
+                }
                 path.method = list[p][i].method;
                 path.display = list[p][i].display;
                 path.authorize = list[p][i].authorize;

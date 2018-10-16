@@ -143,6 +143,12 @@
                                id="swaggerJson" placeholder="Swagger Json"/>
                     </div>
                     <div class="form-group">
+                        <label for="serviceSwaggerUrl">Swagger Url</label>
+                        <input type="text" class="form-control"
+                               id="serviceSwaggerUrl" placeholder="SwaggerUrl"/>
+                        <input id = "urlUpdate" type = "checkbox"/>
+                    </div>
+                    <div class="form-group">
                         <label for="serviceVersion">Version</label>
                         <input type="text" class="form-control"
                                id="serviceVersion" placeholder="Version"/>
@@ -157,7 +163,7 @@
                         Close
                     </button>
                     <button type="button" class="btn btn-primary" onclick="updateService();">
-                        Save changes
+                        Update Swagger
                     </button>
                 </div>
             </div>

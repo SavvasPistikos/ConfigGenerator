@@ -257,19 +257,34 @@ function fillupModal(updateButtonElement) {
     $('#serviceId').val(id);
     $('#serviceName').val(service.service);
     $('#swaggerJson').val(service.content);
+    $('#serviceSwaggerUrl').val(service.swaggerurl);
     $('#serviceVersion').val(service.version);
 }
 
 function updateService() {
-
     var service = {
         'id': $('#serviceId').val(),
         'service': $('#serviceName').val(),
         'content': $('#swaggerJson').val(),
+        'swaggerurl': $('#serviceSwaggerUrl').val(),
         'version': $('#serviceVersion').val()
     };
 
+    if (document.getElementById("urlUpdate").checked === true && service.swaggerurl !== '') {
+        $.ajax({
+            'async': false,
+            'global': false,
+            'type': 'GET',
+            'url': service.swaggerurl,
+            'dataType': "text",
+            'success': function (data) {
+                service.content = data;
+            }
+        });
+    }
     $.ajax({
+        'async': false,
+        'global': false,
         'type': 'PUT',
         'url': host + basePath + "/swaggers",
         'data': JSON.stringify(service),
@@ -279,6 +294,7 @@ function updateService() {
             $("#databasemanager").trigger('click', [true]);
         }
     });
+    document.getElementById("urlUpdate").checked = false;
 }
 
 function createInsertRow() {
@@ -297,19 +313,35 @@ function createInsertRow() {
     add.innerText = "Add";
 
     $(add).click(function () {
-
         var service = {
             'service': $('#srvTd').val(),
             'content': $('#conTd').val(),
+            'swaggerurl': '',
             'version': $('#verTd').val()
         };
+        if (service.content.startsWith("http")) {
+            let url = service.content;
+            $.ajax({
+                'async': false,
+                'global': false,
+                'type': 'GET',
+                'url': url,
+                'dataType': "text",
+                'success': function (data) {
+                    service.swaggerurl = service.content;
+                    service.content = data;
+                }
+            });
+        }
 
         $.ajax({
+            'async': false,
+            'global': false,
             'type': 'POST',
             'url': host + basePath + "/swaggers",
             'data': JSON.stringify(service),
             'contentType': 'application/json',
-            'success': function () {
+            'success': function (data) {
                 $("#databasemanager").trigger('click', [true]);
             }
         });
