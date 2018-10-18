@@ -30,9 +30,17 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $("#myInput").on("keyup", function () {
+    $("#myInput").on("keyup", function (event) {
         let value = $(this).val().trim();
-        $("#swaggers").filter(function () {
+        let swaggersEl = $("#swaggers");
+        if(value === "" || event.originalEvent.getModifierState("CapsLock")){
+            let tagli = swaggersEl.children().children('ul').children('li');
+            for(li of tagli){
+                resetTagLi(li);
+            }
+            return;
+        }
+        swaggersEl.filter(function () {
             let ul = $($(this).children()).children('ul');
             let innerUl = ul.children('li').children('ul');
             let buttons = innerUl.children('li').children(':button');
@@ -51,6 +59,10 @@ $(document).ready(function () {
         });
     });
 });
+
+function resetTagLi(tagliElement){
+    $(tagliElement).children('ul').tab('hide');
+}
 
 function hideOtherTabs(tabelement) {
 
