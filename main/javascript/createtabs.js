@@ -84,26 +84,6 @@ function importConfig(impJson) {
             let checkbox = $(button).siblings().get(0);
             $(checkbox).trigger("click", checkbox);
         }
-
-        /*        for (p in impJson.apis[a].paths) {
-                    let checkbox;
-                    if (impJson.apis[a].paths[p].path != null && impJson.apis[a].paths[p].endpoint != null) {
-                        checkbox = document.getElementById(impJson.apis[a].paths[p].path.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method);
-                        if (checkbox == null) {
-                            checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
-                        }
-                    } else {
-                        if (impJson.apis[a].paths[p].path == null) {
-                            checkbox = (jsonList[a].basePath !== null) ?
-                                document.getElementById(impJson.apis[a].paths[p].endpoint.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method)
-                                : document.getElementById(impJson.apis[a].paths[p].endpoint + "," + impJson.apis[a].paths[p].method);
-                        } else {
-                            checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
-                        }
-                    }
-                    checkbox.checked = true;
-                    addToList(checkbox);
-                }*/
     }
     generate();
 }
@@ -262,12 +242,23 @@ function createInputText(value, idString) {
 function writeToButton(element) {
     let el = $(element);
     let parent = $(el.parent());
+    let attributeName = parent.text().trim().toLowerCase();
     let outercheckbox = parent.parent().siblings().get(0);
 
     if (el.is(":checkbox")) {
-        $(outercheckbox).data(parent.text().toLocaleLowerCase(), element.checked);
+        $(outercheckbox).data(attributeName, element.checked);
     } else {
-        $(outercheckbox).data(parent.text().trim().toLowerCase(), el.val());
+        $(outercheckbox).data(attributeName, el.val());
+    }
+    updatePath($(outercheckbox), attributeName);
+}
+
+function updatePath(outercheckbox, attributeName) {
+    let serviceList = list[outercheckbox.data("service")];
+    for (path of serviceList) {
+        if (path.path === outercheckbox.data("path")) {
+            path[attributeName] = outercheckbox.data(attributeName);
+        }
     }
 }
 
