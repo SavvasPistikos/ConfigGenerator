@@ -5,7 +5,7 @@ function closeTab(closeTabButton) {
     $(closeTabButton).parent().parent().remove(); //remove li of tab
     $(tabContentId).remove(); //remove respective tab content
     let first = $('#services a:first'); // Select first tab
-    if(first !== undefined) {
+    if (first !== undefined) {
         $(first).tab('show');
     }
     list[$(tabContentId).data("service")] = [];
@@ -33,9 +33,9 @@ $(document).ready(function () {
     $("#myInput").on("keyup", function (event) {
         let value = $(this).val().trim();
         let swaggersEl = $("#swaggers");
-        if(value === "" || event.originalEvent.getModifierState("CapsLock")){
+        if (value === "") {
             let tagli = swaggersEl.children().children('ul').children('li');
-            for(li of tagli){
+            for (li of tagli) {
                 resetTagLi(li);
             }
             return;
@@ -47,21 +47,30 @@ $(document).ready(function () {
 
             buttons.each(function () {
                 if ($(this).text().trim().includes(value)) {
-                    $(this).parent().fadeIn(250);
+                    $(this).parent().fadeIn(100);
                     let tagUl = $(this).parent().parent();
                     if (tagUl.is(':hidden')) {
                         tagUl.siblings(':button').trigger('click');
                     }
                 } else {
-                    $(this).parent().fadeOut(250);
+                    $(this).parent().fadeOut(100);
                 }
             });
         });
     });
 });
 
-function resetTagLi(tagliElement){
-    $(tagliElement).children('ul').tab('hide');
+function resetTagLi(tagliElement) {
+    if ($(tagliElement).children('ul').is('.collapse:not(.show)')) {
+        $(tagliElement).children('ul').collapse("hide");
+    } else {
+        $(tagliElement).children('ul').collapse("show");
+    }
+    let pathli = $(tagliElement).children('ul').children('li');
+    pathli.each(function () {
+       $(this).fadeIn(300);
+    });
+
 }
 
 function hideOtherTabs(tabelement) {
