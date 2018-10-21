@@ -77,10 +77,10 @@ function importConfig(impJson) {
             let basePath = (jsonList[a].basePath === undefined) ? "" : jsonList[a].basePath;
             basePath = (basePath === "/") ? "" : basePath;
             let pathString = (impJson.apis[a].paths[p].path === undefined) ?
-                impJson.apis[a].paths[p].method + "\t" + basePath + impJson.apis[a].paths[p].endpoint
-                : impJson.apis[a].paths[p].method + "\t" + basePath + impJson.apis[a].paths[p].path;
+                impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].endpoint
+                : impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].path;
             pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
-            let button = $('.btn:contains(' + pathString + ')');
+            let button = $('.btn:contains(' + pathString +')');
             let checkbox = $(button).siblings().get(0);
             $(checkbox).trigger("click", checkbox);
         }
