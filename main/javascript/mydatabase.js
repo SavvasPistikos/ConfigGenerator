@@ -1,4 +1,4 @@
-function readJson(liService) {
+function getSwaggerJsonFromDatabase(liService) {
     let jsontext = null;
     let url = host + basePath + "/swaggers/" + liService;
     /*    if (service === "internal") {
@@ -16,7 +16,7 @@ function readJson(liService) {
     return jsontext;
 }
 
-function getServices() {
+function getAllServicesFromDatabase() {
     var services = null;
 
     $.ajax({

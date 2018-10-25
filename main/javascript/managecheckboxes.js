@@ -91,7 +91,31 @@ function manageParentCheckboxes(parentCheckbox) {
     }
 }
 
-window.onbeforeunload = function (e) {
+/*window.onbeforeunload = function (e) {
     document.body = localStorage.getItem("body");
     return 'Dialog text here.';
-};
+};*/
+
+
+function writeToButton(element) {
+    let el = $(element);
+    let parent = $(el.parent());
+    let attributeName = parent.text().trim();
+    let outercheckbox = parent.parent().siblings().get(0);
+
+    if (el.is(":checkbox")) {
+        $(outercheckbox).data(attributeName, element.checked);
+    } else {
+        $(outercheckbox).data(attributeName, el.val());
+    }
+    updatePath($(outercheckbox), attributeName);
+}
+
+function updatePath(outercheckbox, attributeName) {
+    let serviceList = list[outercheckbox.data("service")];
+    for (path of  serviceList) {
+        if (path.path === outercheckbox.data("path")) {
+            path[attributeName] = outercheckbox.data(attributeName);
+        }
+    }
+}
