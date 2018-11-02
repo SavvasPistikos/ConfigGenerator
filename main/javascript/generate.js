@@ -39,7 +39,7 @@ function generate() {
                 path.method = list[p][i].method;
                 path.display = list[p][i].display;
                 path.authorize = list[p][i].authorize;
-                path.trnsTypeId = list[p][i].trnsTypeId;
+                path.trnsTypeId = list[p][i].trnstypeid;
                 path.tags = list[p][i].tags;
 
                 apiList.apis[apiName].paths.push(path);

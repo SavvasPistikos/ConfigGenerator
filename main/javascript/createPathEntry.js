@@ -41,6 +41,8 @@ function generateCheckbox(path, method, service) {
     let checkbox = $('<input>');
     checkbox.attr("type", "checkbox")
         .attr("onchange", "addToList(this)");
+    checkbox.data("authorize", true);
+    checkbox.data("display", true);
     checkbox.data("path", path.endpoint);
     checkbox.data("method", method);
     checkbox.data("pathId", ID());
@@ -57,6 +59,7 @@ function createOptionsUL(id, checkbox) {
     let authorizeLi = document.createElement("li");
     let authorizeCheckbox = createCheckBox("writeToButton(this);", "", "");
     authorizeCheckbox.className = "";
+    authorizeCheckbox.checked = true;
     authorizeCheckbox.id = "auth" + "";
     let authorizeTextNode = document.createTextNode("Authorize");
     authorizeLi.appendChild(authorizeCheckbox);
@@ -76,16 +79,14 @@ function createOptionsUL(id, checkbox) {
     endpointLi.appendChild(endpointCheckBox);
     endpointLi.appendChild(document.createTextNode("\t\t Endpoint"));
     let endpointIn = document.createElement("input");
-    endpointIn.className = "";
+    endpointIn.className = "configInputText";
     endpointIn.id = "end=" + "";
     endpointIn.setAttribute("type", "text");
-    endpointIn.setAttribute("onfocusout", "writeToButton(this)");
     endpointIn.value = "";
     endpointIn.style.display = "none";
     endpointLi.appendChild(endpointIn);
 
-
-    let tagsLi = document.createElement("li");
+    /*let tagsLi = document.createElement("li");
     let tagsCheckBox = createCheckBox("displayInputText(this);");
     tagsLi.appendChild(tagsCheckBox);
     tagsLi.appendChild(document.createTextNode("\t\t Tags"));
@@ -114,13 +115,13 @@ function createOptionsUL(id, checkbox) {
     trnsTypeIdIn.setAttribute("onfocusout", "writeToButton(this)");
     trnsTypeIdIn.value = "";
     trnsTypeIdIn.style.display = "none";
-    trnsTypeIdLi.appendChild(trnsTypeIdIn);
+    trnsTypeIdLi.appendChild(trnsTypeIdIn);*/
 
     optionsUl.appendChild(authorizeLi);
     optionsUl.appendChild(displayLi);
-    optionsUl.appendChild(trnsTypeIdLi);
-    optionsUl.appendChild(endpointLi);
-    optionsUl.appendChild(tagsLi);
+    optionsUl.appendChild(endpointLi)
+    /*optionsUl.appendChild(trnsTypeIdLi);
+    optionsUl.appendChild(tagsLi);*/
 
     optionsUl.setAttribute("class", "panel-collapse collapse");
 

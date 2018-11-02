@@ -21,6 +21,12 @@
         $('#close' + jliItem.data("service")).remove();
         $('#div' + jliItem.data("service")).remove();
     }
+     $(".configInputText").on("focusout", function () {
+         if($(this).val() === ""){
+             $($(this).siblings().get(0)).trigger("click");
+         }
+        writeToButton(this);
+     });
 }
 
 function createTab(jliItem){

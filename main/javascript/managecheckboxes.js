@@ -9,7 +9,7 @@ function addToList(checkboxElem) {
             tags: [],
             display: true,
             authorize: false,
-            trnsTypeId: "",
+            trnstypeid: "",
             persist: {
                 headers: [],
                 queryParams: []
@@ -104,18 +104,20 @@ function writeToButton(element) {
     let outercheckbox = parent.parent().siblings().get(0);
 
     if (el.is(":checkbox")) {
-        $(outercheckbox).data(attributeName, element.checked);
+        $(outercheckbox).data(attributeName.toLowerCase(), element.checked);
     } else {
-        $(outercheckbox).data(attributeName, el.val());
+        $(outercheckbox).data(attributeName.toLowerCase(), el.val());
     }
-    updatePath($(outercheckbox), attributeName);
+    updatePath($(outercheckbox), attributeName.toLowerCase());
 }
 
 function updatePath(outercheckbox, attributeName) {
     let serviceList = list[outercheckbox.data("service")];
-    for (path of  serviceList) {
-        if (path.path === outercheckbox.data("path")) {
-            path[attributeName] = outercheckbox.data(attributeName);
+    if(serviceList !== undefined) {
+        for (path of  serviceList) {
+            if (path.path === outercheckbox.data("path")) {
+                path[attributeName] = outercheckbox.data(attributeName);
+            }
         }
     }
 }
