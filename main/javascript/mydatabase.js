@@ -32,6 +32,7 @@ function getAllServicesFromDatabase() {
 }
 
 $(document).ready(function () {
+    createInternalApisTab();
     $('.dropdown-menu a.test').on("click", function (e) {
         $(this).next('ul').toggle();
         e.stopPropagation();

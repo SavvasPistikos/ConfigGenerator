@@ -20,7 +20,6 @@ function generate() {
                 let path = {
                     endpoint: "",
                     method: "",
-                    tags: [],
                     display: true,
                     authorize: false,
                     trnsTypeId: ""
@@ -36,11 +35,13 @@ function generate() {
                 } else{
                     path.endpoint = list[p][i].endpoint;
                 }
+                if(list[p][i].tags !== ""){
+                    path.tags = list[p][i].tags;
+                }
                 path.method = list[p][i].method;
                 path.display = list[p][i].display;
                 path.authorize = list[p][i].authorize;
                 path.trnsTypeId = list[p][i].trnstypeid;
-                path.tags = list[p][i].tags;
 
                 apiList.apis[apiName].paths.push(path);
             }

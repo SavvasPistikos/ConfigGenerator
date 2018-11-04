@@ -22,10 +22,13 @@ function addToList(checkboxElem) {
         pathDTO.authorize = ($(checkboxElem).data("authorize") === undefined) ? true : $(checkboxElem).data("authorize");
         pathDTO.display = ($(checkboxElem).data("display") === undefined) ? true : $(checkboxElem).data("display");
         pathDTO.endpoint = ($(checkboxElem).data("endpoint") === undefined) ? pathDTO.path : $(checkboxElem).data("endpoint");
-        pathDTO.trnsTypeId = ($(checkboxElem).data("trnstypeid") === undefined) ? "" : $(checkboxElem).data("trnstypeid");
+        pathDTO.trnstypeid = ($(checkboxElem).data("trnstypeid") === undefined) ? "" : $(checkboxElem).data("trnstypeid");
+
         if ($(checkboxElem).data("tags") !== undefined) {
-            let tags = $(checkboxElem).data("tags").trim();
-            pathDTO.tags = tags.split(",");
+            let tags = $(checkboxElem).data("tags").split(",");
+            for (let i in tags) {
+                pathDTO.tags.push(tags[i]);
+            }
         }
         pathDTO.id = $(checkboxElem).data("pathId");
 
@@ -116,6 +119,11 @@ function updatePath(outercheckbox, attributeName) {
     if(serviceList !== undefined) {
         for (path of  serviceList) {
             if (path.path === outercheckbox.data("path")) {
+                if(attributeName === "tags"){
+                    let tags = outercheckbox.data(attributeName).split(",");
+                    path[attributeName] = (tags.length === 1 && tags[0] === "") ? "" : tags ;
+                    return;
+                }
                 path[attributeName] = outercheckbox.data(attributeName);
             }
         }

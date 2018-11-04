@@ -1,16 +1,19 @@
-function getPathEntry(path, method, service) {
+function getPathEntry(path, method, service, internal) {
 
     let pathsli = $('<li>');
     let checkbox = generateCheckbox(path, method, service);
+    let basePath = "";
 
-    let basePath = (jsonList[service].basePath === undefined) ? "" : jsonList[service].basePath;
+    if(internal === false){
+    basePath = (jsonList[service].basePath === undefined) ? "" : jsonList[service].basePath;
     basePath = (basePath === "/") ? "" : basePath;
+    }
 
     let b = generateButton(path, method, basePath);
 
     pathsli.append(checkbox);
     pathsli.append(b);
-    pathsli.append(createOptionsUL(b.data("toggleId"), checkbox));
+    pathsli.append(createOptionsUL(b.data("toggleId"), checkbox, internal));
 
     return pathsli;
 }
@@ -32,7 +35,7 @@ function generateButton(path, method, basepath) {
         button.attr("class", "btn btn-warning")
     }
 
-    button.text(method + " " + basepath + path.endpoint);
+    button.text(method + " " + basepath + path);
     button.data("toggleId", togglelId);
     return button;
 }
@@ -43,7 +46,7 @@ function generateCheckbox(path, method, service) {
         .attr("onchange", "addToList(this)");
     checkbox.data("authorize", true);
     checkbox.data("display", true);
-    checkbox.data("path", path.endpoint);
+    checkbox.data("path", path);
     checkbox.data("method", method);
     checkbox.data("pathId", ID());
     checkbox.data("checked", false);
@@ -52,7 +55,7 @@ function generateCheckbox(path, method, service) {
     return checkbox;
 }
 
-function createOptionsUL(id, checkbox) {
+function createOptionsUL(id, checkbox, internal) {
 
     let optionsUl = document.createElement("ul");
     optionsUl.id = id;
@@ -76,6 +79,7 @@ function createOptionsUL(id, checkbox) {
 
     let endpointLi = document.createElement("li");
     let endpointCheckBox = createCheckBox("displayInputText(this);");
+    endpointCheckBox.className = "configInputCheckbox";
     endpointLi.appendChild(endpointCheckBox);
     endpointLi.appendChild(document.createTextNode("\t\t Endpoint"));
     let endpointIn = document.createElement("input");
@@ -86,42 +90,47 @@ function createOptionsUL(id, checkbox) {
     endpointIn.style.display = "none";
     endpointLi.appendChild(endpointIn);
 
-    /*let tagsLi = document.createElement("li");
+    let tagsLi = document.createElement("li");
     let tagsCheckBox = createCheckBox("displayInputText(this);");
+    tagsCheckBox.className = "configInputCheckbox";
     tagsLi.appendChild(tagsCheckBox);
     tagsLi.appendChild(document.createTextNode("\t\t Tags"));
     let tagsIn = document.createElement("input");
-    tagsIn.className = "";
+    tagsIn.className = "configInputText";
     tagsIn.id = "tags=" + "";
     tagsIn.setAttribute("type", "text");
     tagsIn.setAttribute("onfocusout", "writeToButton(this)");
-    eval("tempPath" + " = " + "jsonList[\"" + checkbox.data("service") + "\"].paths[\"" + checkbox.data("path") + "\"]."
-        + checkbox.data("method").toLocaleLowerCase() + ";");
-    if (tempPath.tags !== undefined) {
-        tagsIn.value = tempPath.tags.toString();
-        checkbox.data("tags", tempPath.tags.toString());
+
+    if(internal === false) {
+        eval("tempPath" + " = " + "jsonList[\"" + checkbox.data("service") + "\"].paths[\"" + checkbox.data("path") + "\"]."
+            + checkbox.data("method").toLocaleLowerCase() + ";");
+        if (tempPath.tags !== undefined) {
+            tagsIn.value = tempPath.tags.toString();
+            checkbox.data("tags", tempPath.tags.toString());
+        }
+        tagsIn.style.display = "none";
+        tagsLi.appendChild(tagsIn);
     }
-    tagsIn.style.display = "none";
-    tagsLi.appendChild(tagsIn);
 
     let trnsTypeIdLi = document.createElement("li");
     let trnsTypeIdCheckBox = createCheckBox("displayInputText(this);");
+    trnsTypeIdCheckBox.className = "configInputCheckbox";
     trnsTypeIdLi.appendChild(trnsTypeIdCheckBox);
     trnsTypeIdLi.appendChild(document.createTextNode("\t\t trnsTypeId"));
     let trnsTypeIdIn = document.createElement("input");
-    trnsTypeIdIn.className = "";
+    trnsTypeIdIn.className = "configInputText";
     trnsTypeIdIn.id = "trns=" + "";
     trnsTypeIdIn.setAttribute("type", "text");
     trnsTypeIdIn.setAttribute("onfocusout", "writeToButton(this)");
     trnsTypeIdIn.value = "";
     trnsTypeIdIn.style.display = "none";
-    trnsTypeIdLi.appendChild(trnsTypeIdIn);*/
+    trnsTypeIdLi.appendChild(trnsTypeIdIn);
 
     optionsUl.appendChild(authorizeLi);
     optionsUl.appendChild(displayLi);
-    optionsUl.appendChild(endpointLi)
-    /*optionsUl.appendChild(trnsTypeIdLi);
-    optionsUl.appendChild(tagsLi);*/
+    optionsUl.appendChild(endpointLi);
+    optionsUl.appendChild(trnsTypeIdLi);
+    optionsUl.appendChild(tagsLi);
 
     optionsUl.setAttribute("class", "panel-collapse collapse");
 

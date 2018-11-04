@@ -1,4 +1,4 @@
- function importJson(liItem) {
+function importJson(liItem) {
     let jliItem = $(liItem);
     js = JSON.parse(getSwaggerJsonFromDatabase(jliItem.data("id")).content);
 
@@ -16,17 +16,12 @@
         groupByTagsDraw(groupedPaths, ul, $("#swaggers"), jliItem.data("service"), allCheckbox);
         $(allCheckbox).data("maxChildren", $(allCheckbox).data("childCheckboxes"));
         $("#" + di.id).data("service", jliItem.data("service"));
-        $($("#services").children().get(2)).tab('show');
+        $($("#services").children().get(3)).tab('show');
     } else {
         $('#close' + jliItem.data("service")).remove();
         $('#div' + jliItem.data("service")).remove();
     }
-     $(".configInputText").on("focusout", function () {
-         if($(this).val() === ""){
-             $($(this).siblings().get(0)).trigger("click");
-         }
-        writeToButton(this);
-     });
+    addEventListeners();
 }
 
 function createTab(jliItem){
@@ -81,7 +76,8 @@ function importConfig(impJson) {
             continue;
         }
         let version = (impJson.apis[a].version != null) ? impJson.apis[a].version : "";
-        importJson(document.getElementById(a + version));
+        let serviceCheckbox = document.getElementById(a + version);
+        $(serviceCheckbox).trigger("click");
         document.getElementById("url=" + a).value = impJson.apis[a].url;
 
         for (p in impJson.apis[a].paths) {
@@ -147,6 +143,7 @@ function groupByTags(jsonFileName) {
 function groupByTagsDraw(groupedPaths, ul, di, service, allCheckBoxElem) {
     for (let tag in groupedPaths) {
         let elementsid = trimId(tag);
+        elementsid = (elementsid === "default") ? service + elementsid : elementsid;
 
         let tagli = $('<li>');
         let tagCheckbox = $('<input>');
@@ -171,7 +168,7 @@ function groupByTagsDraw(groupedPaths, ul, di, service, allCheckBoxElem) {
         for (let path in groupedPaths[tag]) {
             for (let i in groupedPaths[tag][path].methods) {
                 tagCheckbox.data("childCheckboxes", tagCheckbox.data("childCheckboxes") + 1);
-                let pathsli = getPathEntry(groupedPaths[tag][path], groupedPaths[tag][path].methods[i], service);
+                let pathsli = getPathEntry(groupedPaths[tag][path].endpoint, groupedPaths[tag][path].methods[i], service, false);
                 pathsul.append(pathsli);
             }
             tagli.append(pathsul);
@@ -259,4 +256,23 @@ function AuthorizeAllSubTagEndpoints(authorizeAllElement) {
  */
 function ID() {
     return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function addEventListeners(){
+
+    $(".configInputText").on("focusout", function () {
+        if($(this).val() === ""){
+            $($(this).siblings().get(0)).trigger("click");
+        }
+        writeToButton(this);
+    });
+
+    $(".configInputCheckbox").on("click", function () {
+        if(this.checked === false ) {
+            if($(this).parent().text().trim().toLowerCase() === "tags") {
+                $(this).next().val("");
+            }
+        }
+        writeToButton($(this).next());
+    });
 }
