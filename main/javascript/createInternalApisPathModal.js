@@ -1,6 +1,6 @@
-function generateInterApiPathModal(){
+function generateInterApiPathModal() {
 
-    if(document.getElementById("addInternalPath") !== null){
+    if (document.getElementById("addInternalPath") !== null) {
         let pathInput = document.getElementById("internalSwaggerPath");
         pathInput.value = "";
         let methodInput = document.getElementById("internalSwaggerPathMethod");
@@ -32,7 +32,7 @@ function generateInterApiPathModal(){
     modalContainer.appendChild(divModalFade);
 }
 
-function createHeader(){
+function createHeader() {
 
     let div = document.createElement("div");
     div.className = "modal-header";
@@ -52,7 +52,7 @@ function createHeader(){
     return div;
 }
 
-function createBody(){
+function createBody() {
 
     let div = document.createElement("div");
     div.className = "modal-body";
@@ -61,14 +61,14 @@ function createBody(){
     divFormGroup.className = "form-group";
 
     let label = document.createElement("label");
-    label.setAttribute("for", "path");
-    label.innerText = "Path";
+    label.setAttribute("for", "endpoint");
+    label.innerText = "Endpoint";
 
     let input = document.createElement("input");
     input.setAttribute("type", "text");
     input.className = "form-control";
     input.id = "internalSwaggerPath";
-    input.placeholder = "Swagger Path";
+    input.placeholder = "Internal Endpoint Path";
 
     divFormGroup.appendChild(label);
     divFormGroup.appendChild(input);
@@ -85,7 +85,7 @@ function createBody(){
     inputMethod.setAttribute("type", "text");
     inputMethod.className = "form-control";
     inputMethod.id = "internalSwaggerPathMethod";
-    inputMethod.placeholder = "Swagger Path Method";
+    inputMethod.placeholder = "Method";
 
     divFormGroupMethod.appendChild(labelMethod);
     divFormGroupMethod.appendChild(inputMethod);
@@ -96,7 +96,7 @@ function createBody(){
     return div;
 }
 
-function createFooter(){
+function createFooter() {
 
     let div = document.createElement("div");
     div.className = "modal-footer";
@@ -117,17 +117,35 @@ function createFooter(){
     return div;
 }
 
-function addInternalPath(){
+function addInternalPath() {
 
-    let internalPath = document.getElementById("internalSwaggerPath").value;
-    let internalPathMethod = document.getElementById("internalSwaggerPathMethod").value;
+    let internalEndpoint = document.getElementById("internalSwaggerPath").value;
+    let method = document.getElementById("internalSwaggerPathMethod").value;
     let internalPathsList = $("#internalPathsList");
 
-    let pathEntry = getPathEntry(internalPath, internalPathMethod , "internalApis", true);
+    let pathEntry = getPathEntry(internalEndpoint, method, "internalApis", true);
 
     internalPathsList.append($(pathEntry));
     internalPathsList.show();
 
     $('#addInternalPath').modal('toggle');
 
+}
+
+function importInternalPaths(internalEndpoints) {
+    let internalPathsList = $("#internalPathsList");
+    for (endpoint in internalEndpoints) {
+        let pathEntry = getPathEntry(internalEndpoints[endpoint].endpoint, internalEndpoints[endpoint].method, "internalApis", true);
+        internalPathsList.append($(pathEntry));
+/*        let checkbox = $(pathEntry).children().get(0);
+        $(checkbox).trigger("click");*/
+    }
+    internalPathsList.show();
+    let outerCheckbox = internalPathsList.parent().children(':checkbox');
+    $(outerCheckbox).data("maxChildren", internalPathsList.children().length);
+    $(outerCheckbox).data("childCheckboxes", internalPathsList.children().length);
+    internalPathsList.children().each(function () {
+        let checkbox = $(this).children().get(0);
+        $(checkbox).trigger("click");
+    });
 }

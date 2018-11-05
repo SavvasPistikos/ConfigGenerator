@@ -1,10 +1,11 @@
-function createInternalApisTab(){
+function createInternalApisTab() {
     let servicesul = $("#services");
     let tabName = "internalApis";
-    let li = $('<li>');
-    li.html("<a data-toggle=\"tab\" href=\"#divinternalApis"+ "\">"
+
+/*    let li = $('<li>');
+    li.html("<a data-toggle=\"tab\" href=\"#divinternalApis" + "\">"
         + tabName + "</a>");
-    servicesul.append(li);
+    servicesul.append(li);*/
 
     let internalApisTabContent = $("#swaggers");
 
@@ -13,7 +14,8 @@ function createInternalApisTab(){
         .attr("id", "divinternalApis");
     tabpanediv.data("service", tabName);
 
-    let ul = $('<ul>');
+    //let ul = $('<ul>');
+    let ul = createTab("internalApis", "", "internal", true);
     let button = $('<button>');
     button.attr("");
     button.html("Add internalApi Endpoint");
@@ -29,4 +31,5 @@ function createInternalApisTab(){
     ul.append(internalPathsList);
     tabpanediv.append(ul);
     internalApisTabContent.append(tabpanediv);
+    $(servicesul.children().get(2)).tab('show');
 }

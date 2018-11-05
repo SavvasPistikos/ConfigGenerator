@@ -1,6 +1,13 @@
 function addToList(checkboxElem) {
     let parent = $(checkboxElem).parent();
-    let parentCheckbox = $(parent).parent().siblings().get(0);
+    let parentCheckbox;
+
+    if ($(checkboxElem).data("service") === "internalApis") {
+        parentCheckbox = parent.parent().parent().children().get(0);
+    } else {
+        parentCheckbox = $(parent).parent().siblings().get(0);
+    }
+
     if ($(checkboxElem).data("checked") === false) {
         let pathDTO = {
             path: "",
@@ -40,7 +47,7 @@ function addToList(checkboxElem) {
         $(checkboxElem).data("checked", true);
 
         $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") - 1);
-        manageParentCheckboxes($(parent).parent().siblings().get(0));
+        manageParentCheckboxes(parentCheckbox);
     } else if ($(checkboxElem).data("checked") === true) {
         list[$(checkboxElem).data("service")] = list[$(checkboxElem).data("service")]
             .filter(function (item) {
@@ -48,12 +55,17 @@ function addToList(checkboxElem) {
             });
         $(checkboxElem).data("checked", false);
         $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") + 1);
-        manageParentCheckboxes($(parent).parent().siblings().get(0));
+        manageParentCheckboxes(parentCheckbox);
     }
 }
 
 function addAllToList(allCheckBoxElement) {
-    let parent = $(allCheckBoxElement).parent();
+    let parent;
+    if ($(allCheckBoxElement).data("internal") === true) {
+        parent = $(allCheckBoxElement).siblings('li');
+    } else {
+        parent = $(allCheckBoxElement).parent();
+    }
     jQuery.each($(parent).children("li"), function (i, child) {
         let fchild = $(child).children().get(0);
         if (fchild.checked === false || allCheckBoxElement.checked === false)
@@ -116,12 +128,12 @@ function writeToButton(element) {
 
 function updatePath(outercheckbox, attributeName) {
     let serviceList = list[outercheckbox.data("service")];
-    if(serviceList !== undefined) {
+    if (serviceList !== undefined) {
         for (path of  serviceList) {
             if (path.path === outercheckbox.data("path")) {
-                if(attributeName === "tags"){
+                if (attributeName === "tags") {
                     let tags = outercheckbox.data(attributeName).split(",");
-                    path[attributeName] = (tags.length === 1 && tags[0] === "") ? "" : tags ;
+                    path[attributeName] = (tags.length === 1 && tags[0] === "") ? "" : tags;
                     return;
                 }
                 path[attributeName] = outercheckbox.data(attributeName);

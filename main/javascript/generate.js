@@ -4,7 +4,7 @@ function generate() {
             let basePath;
             let apiName = p.replace(",", "/").split("/")[0];
             if (apiList.apis[apiName] == null) {
-                if (document.getElementById("vers=" + p).value !== "") {
+                if (document.getElementById("vers=" + p) !== null && document.getElementById("vers=" + p).value !== "") {
                     apiList.apis[apiName] = {url: "", version: "", paths: []};
                     apiList.apis[apiName].version = document.getElementById("vers=" + p).value;
                 }
@@ -12,7 +12,9 @@ function generate() {
                     apiList.apis[apiName] = {url: "", paths: []};
                 }
 
-                apiList.apis[apiName].url = document.getElementById("url=" + apiName).value;
+                if (document.getElementById("url=" + apiName) !== null) {
+                    apiList.apis[apiName].url = document.getElementById("url=" + apiName).value;
+                }
             }
             apiList.apis[apiName].paths = [];
 
@@ -20,26 +22,27 @@ function generate() {
                 let path = {
                     endpoint: "",
                     method: "",
-                    display: true,
                     authorize: false,
                     trnsTypeId: ""
                 };
 
-                basePath = (jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
+                basePath = (jsonList[apiName] !== undefined && jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
                     ? jsonList[apiName].basePath
                     : "";
 
-                if(list[p][i].path !== list[p][i].endpoint){
+                if (list[p][i].path !== list[p][i].endpoint) {
                     path.path = basePath + list[p][i].path;
                     path.endpoint = (list[p][i].endpoint === "") ? path.path : list[p][i].endpoint;
-                } else{
+                } else {
                     path.endpoint = list[p][i].endpoint;
                 }
-                if(list[p][i].tags !== ""){
+                if (list[p][i].tags !== "" && list[p][i].tags.length > 0) {
                     path.tags = list[p][i].tags;
                 }
                 path.method = list[p][i].method;
-                path.display = list[p][i].display;
+                if (list[p][i].display === false) {
+                    path.display = list[p][i].display;
+                }
                 path.authorize = list[p][i].authorize;
                 path.trnsTypeId = list[p][i].trnstypeid;
 

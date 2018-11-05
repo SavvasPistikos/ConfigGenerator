@@ -8,7 +8,7 @@ function importJson(liItem) {
         di.attr("class", "tab-pane fade active in")
             .attr("id", jliItem.data("service"));
 
-        let ul = createTab(jliItem);
+        let ul = createTab(jliItem.data("service"), jliItem.data("version"), jliItem.attr("id"), false);
         let allCheckbox = $(ul).children().get(0);
         let groupedPaths = groupByTags(buttonIdWithout);
         allGroupedByTags[buttonIdWithout] = groupedPaths;
@@ -24,30 +24,38 @@ function importJson(liItem) {
     addEventListeners();
 }
 
-function createTab(jliItem){
+function createTab(service, version, id, internal) {
     let servicesul = $("#services");
-    let tabName = jliItem.data("service") + jliItem.data("version");
+    let tabName = service + version;
+    let li;
 
-    let li = $('<li>');
-    li.html("<a data-toggle=\"tab\" href=\"#div" + jliItem.data("service") + "\">"
-        + "<button class=\"close closeTab\" type=\"button\" onclick=\"closeTab(this)\" >×</button>"
-        + tabName + "</a>");
-    li.attr("id", "close" + jliItem.data("service"));
-    li.data("checkboxId", jliItem.attr("id"));
+    if (internal === false) {
+        li = $('<li>');
+        li.html("<a data-toggle=\"tab\" href=\"#div" + service + "\">"
+            + "<button class=\"close closeTab\" type=\"button\" onclick=\"closeTab(this)\" >×</button>"
+            + tabName + "</a>");
+        li.attr("id", "close" + service);
+        li.data("checkboxId", id);
+    } else {
+        li = $('<li>');
+        li.html("<a data-toggle=\"tab\" href=\"#divinternalApis" + "\">"
+            + tabName + "</a>");
+    }
 
     servicesul.append(li);
     let ul = $('<ul>');
 
     let allCheckbox = createCheckBox("addAllToList(this);");
     $(allCheckbox).data("childCheckboxes", 0);
-    let url = createInputText(null, "url=" + jliItem.data("service"));
-    let version = createInputText(null, "vers=" + jliItem.data("service"));
+    $(allCheckbox).data("internal", internal);
+    let url = createInputText(null, "url=" + service);
+    let versionInput = createInputText(null, "vers=" + service);
 
     ul.append(allCheckbox);
     ul.append(document.createTextNode("\t\t Url = "));
     ul.append(url);
     ul.append(document.createTextNode("\t\t version = "));
-    ul.append(version);
+    ul.append(versionInput);
     return ul;
 }
 
@@ -73,6 +81,7 @@ function importConfig(impJson) {
     for (a in impJson.apis) {
         apiList.apis[a] = impJson.apis[a];
         if (a === "internalApis") {
+            importInternalPaths(impJson.apis[a].paths);
             continue;
         }
         let version = (impJson.apis[a].version != null) ? impJson.apis[a].version : "";
@@ -87,7 +96,7 @@ function importConfig(impJson) {
                 impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].endpoint
                 : impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].path;
             pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
-            let button = $('.btn:contains(' + pathString +')');
+            let button = $('.btn:contains(' + pathString + ')');
             let checkbox = $(button).siblings().get(0);
             $(checkbox).trigger("click", checkbox);
         }
@@ -220,7 +229,6 @@ function displayInputText(endpointOptionsCheckbox) {
 }
 
 
-
 function trimId(tag) {
     let elementId;
     elementId = tag.replace(/\s/g, '');
@@ -258,18 +266,18 @@ function ID() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-function addEventListeners(){
+function addEventListeners() {
 
     $(".configInputText").on("focusout", function () {
-        if($(this).val() === ""){
+        if ($(this).val() === "") {
             $($(this).siblings().get(0)).trigger("click");
         }
         writeToButton(this);
     });
 
     $(".configInputCheckbox").on("click", function () {
-        if(this.checked === false ) {
-            if($(this).parent().text().trim().toLowerCase() === "tags") {
+        if (this.checked === false) {
+            if ($(this).parent().text().trim().toLowerCase() === "tags") {
                 $(this).next().val("");
             }
         }
