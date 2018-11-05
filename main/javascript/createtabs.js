@@ -47,15 +47,21 @@ function createTab(service, version, id, internal) {
 
     let allCheckbox = createCheckBox("addAllToList(this);");
     $(allCheckbox).data("childCheckboxes", 0);
+    $(allCheckbox).data("maxChildren", 0);
     $(allCheckbox).data("internal", internal);
-    let url = createInputText(null, "url=" + service);
-    let versionInput = createInputText(null, "vers=" + service);
-
     ul.append(allCheckbox);
-    ul.append(document.createTextNode("\t\t Url = "));
-    ul.append(url);
-    ul.append(document.createTextNode("\t\t version = "));
-    ul.append(versionInput);
+
+    if(internal === false){
+        let url = createInputText(null, "url=" + service);
+        let versionInput = createInputText(null, "vers=" + service);
+
+
+        ul.append(document.createTextNode("\t\t Url = "));
+        ul.append(url);
+        ul.append(document.createTextNode("\t\t version = "));
+        ul.append(versionInput);
+    }
+
     return ul;
 }
 

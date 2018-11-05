@@ -17,7 +17,7 @@ function createInternalApisTab() {
     //let ul = $('<ul>');
     let ul = createTab("internalApis", "", "internal", true);
     let button = $('<button>');
-    button.attr("");
+    button.attr("class", "pull-right");
     button.html("Add internalApi Endpoint");
     button.attr("data-toggle", "modal")
         .attr("data-target", "#addInternalPath")

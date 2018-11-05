@@ -128,6 +128,11 @@ function addInternalPath() {
     internalPathsList.append($(pathEntry));
     internalPathsList.show();
 
+    let outerCheckbox = $(internalPathsList.parent().children(':checkbox'));
+    outerCheckbox.data("maxChildren" , outerCheckbox.data("maxChildren") + 1);
+    outerCheckbox.data("childCheckboxes", outerCheckbox.data("childCheckboxes") +1);
+
+
     $('#addInternalPath').modal('toggle');
 
 }
@@ -137,10 +142,7 @@ function importInternalPaths(internalEndpoints) {
     for (endpoint in internalEndpoints) {
         let pathEntry = getPathEntry(internalEndpoints[endpoint].endpoint, internalEndpoints[endpoint].method, "internalApis", true);
         internalPathsList.append($(pathEntry));
-/*        let checkbox = $(pathEntry).children().get(0);
-        $(checkbox).trigger("click");*/
     }
-    internalPathsList.show();
     let outerCheckbox = internalPathsList.parent().children(':checkbox');
     $(outerCheckbox).data("maxChildren", internalPathsList.children().length);
     $(outerCheckbox).data("childCheckboxes", internalPathsList.children().length);
@@ -148,4 +150,6 @@ function importInternalPaths(internalEndpoints) {
         let checkbox = $(this).children().get(0);
         $(checkbox).trigger("click");
     });
+    internalPathsList.show();
+
 }

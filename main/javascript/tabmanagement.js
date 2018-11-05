@@ -8,7 +8,7 @@ function closeTab(closeTabButton) {
     if (first !== undefined) {
         $(first).tab('show');
     }
-    list[$(tabContentId).data("service")] = [];
+    list[tabContentId.replace("#div","")] = [];
     generate();
 
     let resetOutputArea = true;
