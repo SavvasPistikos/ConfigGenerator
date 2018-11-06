@@ -23,7 +23,6 @@ function generate() {
                     endpoint: "",
                     method: "",
                     authorize: false,
-                    trnsTypeId: ""
                 };
 
                 basePath = (jsonList[apiName] !== undefined && jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
@@ -45,7 +44,9 @@ function generate() {
                     path.display = list[p][i].display;
                 }
                 path.authorize = list[p][i].authorize;
-                path.trnsTypeId = list[p][i].trnstypeid;
+                if(list[p][i].trnstypeid !== "") {
+                    path.trnsTypeId = list[p][i].trnstypeid;
+                }
 
                 apiList.apis[apiName].paths.push(path);
             }

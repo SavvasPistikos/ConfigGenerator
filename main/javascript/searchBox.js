@@ -16,13 +16,13 @@ $(document).ready(function () {
 
             buttons.each(function () {
                 if ($(this).text().trim().includes(value)) {
-                    $(this).parent().fadeIn (100);
+                    $(this).parent().fadeIn (150);
                     let tagUl = $(this).parent().parent();
                     if (tagUl.is(':hidden')) {
                         tagUl.siblings(':button').trigger('click');
                     }
                 } else {
-                    $(this).parent().fadeOut(100);
+                    $(this).parent().fadeOut(150);
                 }
             });
         });

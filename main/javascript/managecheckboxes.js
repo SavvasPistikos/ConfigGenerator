@@ -90,7 +90,7 @@ function triggerAllTagsToList(tagCheckBoxElement) {
 function manageParentCheckboxes(parentCheckbox) {
     let grandParentCheckBox = $(parentCheckbox).parent().siblings().get(0);
     let previousState = parentCheckbox.checked;
-    parentCheckbox.checked = $(parentCheckbox).data("childCheckboxes") === 0;
+    parentCheckbox.checked = $(parentCheckbox).data("childCheckboxes") === 0 && $(parentCheckbox).data("maxChildren") > 0 ;
 
     if (grandParentCheckBox !== undefined) {
         if (parentCheckbox.checked === true && $(parentCheckbox).data("childCheckboxes") === 0) {
@@ -130,7 +130,7 @@ function updatePath(outercheckbox, attributeName) {
     let serviceList = list[outercheckbox.data("service")];
     if (serviceList !== undefined) {
         for (path of  serviceList) {
-            if (path.path === outercheckbox.data("path")) {
+            if (path.path === outercheckbox.data("path") && path.method === outercheckbox.data("method")) {
                 if (attributeName === "tags") {
                     let tags = outercheckbox.data(attributeName).split(",");
                     path[attributeName] = (tags.length === 1 && tags[0] === "") ? "" : tags;

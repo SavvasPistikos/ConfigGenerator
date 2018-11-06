@@ -245,24 +245,45 @@ function trimId(tag) {
 
 function createAllOptionsCheckbox(tagliElement, tag) {
     let authorizeCheckbox = createCheckBox("AuthorizeAllSubTagEndpoints(this);", tag, "");
+    authorizeCheckbox.checked = true;
     let authorizeTextNode = document.createTextNode("Authorize All");
     tagliElement.append(authorizeCheckbox);
     tagliElement.append(authorizeTextNode);
 
     let displayCheckbox = createCheckBox("DisplayAllSubTagEndpoints(this);", tag, "");
+    displayCheckbox.checked = true;
     let displayTextNode = document.createTextNode("Display All");
     tagliElement.append(displayCheckbox);
     tagliElement.append(displayTextNode);
 
 }
 
-function AuthorizeAllSubTagEndpoints(authorizeAllElement) {
-    let authCheckboxes = document.getElementsByClassName(authorizeAllElement.className);
-    let arrayAuthCheckboxes = Array.from(authCheckboxes).filter(getOnlyAuthCheckboxes);
+//TODO same function the next 2 with little difference so i need to think a way to make them 1.
 
-    for (ach in arrayAuthCheckboxes) {
-        arrayAuthCheckboxes[ach].checked = authorizeAllElement.checked;
-    }
+function AuthorizeAllSubTagEndpoints(authorizeAllElement) {
+    let tagCollapse = $(authorizeAllElement).prev();
+    let dataTarget = $(tagCollapse).attr("data-target");
+    let targetUl = $(dataTarget);
+
+    $(targetUl).children('li').each(function () {
+        let ul = $(this).children('ul');
+        let li = $(ul).children().get(0);
+        let checkbox = $(li).children().get(0);
+        checkbox.checked = authorizeAllElement.checked;
+    });
+}
+
+function DisplayAllSubTagEndpoints(displayAllElement) {
+    let tagCollapse = $(displayAllElement).siblings().get(1);
+    let dataTarget = $(tagCollapse).attr("data-target");
+    let targetUl = $(dataTarget);
+
+    $(targetUl).children('li').each(function () {
+        let ul = $(this).children('ul');
+        let li = $(ul).children().get(1);
+        let checkbox = $(li).children().get(0);
+        checkbox.checked = displayAllElement.checked;
+    });
 }
 
 /**

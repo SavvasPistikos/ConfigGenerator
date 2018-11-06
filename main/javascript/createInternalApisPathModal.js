@@ -127,7 +127,8 @@ function addInternalPath() {
     let removeButton = document.createElement("button");
     removeButton.className = "btn btn-danger btn-sm pull-right";
     removeButton.innerHTML = "<span class=\"glyphicon glyphicon-remove\"></span>";
-    pathEntry.append($(removeButton));
+    removeButton.setAttribute("onclick", "removeInternalPath(this);");
+    $(removeButton).insertBefore(pathEntry.children('ul'));
 
     internalPathsList.append($(pathEntry));
     internalPathsList.show();
@@ -141,10 +142,31 @@ function addInternalPath() {
 
 }
 
+function removeInternalPath(removeButton){
+    let internalPathsList = $("#internalPathsList");
+    let checkbox = $(removeButton).siblings().get(0);
+    let liParent = $(removeButton).parent();
+    let outerCheckbox = $(internalPathsList.parent().children(':checkbox'));
+    outerCheckbox.data("maxChildren", outerCheckbox.data("maxChildren") - 1);
+    outerCheckbox.data("childCheckboxes", outerCheckbox.data("childCheckboxes") - 1);
+    if(checkbox.checked === true){
+        $(checkbox).trigger("click");
+    }
+    $(liParent).remove();
+    if(internalPathsList.children().length === 0){
+        internalPathsList.hide();
+    }
+}
+
 function importInternalPaths(internalEndpoints) {
     let internalPathsList = $("#internalPathsList");
     for (endpoint in internalEndpoints) {
         let pathEntry = getPathEntry(internalEndpoints[endpoint].endpoint, internalEndpoints[endpoint].method, "internalApis", true);
+        let removeButton = document.createElement("button");
+        removeButton.className = "btn btn-danger btn-sm pull-right";
+        removeButton.innerHTML = "<span class=\"glyphicon glyphicon-remove\"></span>";
+        removeButton.setAttribute("onclick", "removeInternalPath(this);");
+        $(removeButton).insertBefore(pathEntry.children('ul'));
         internalPathsList.append($(pathEntry));
     }
     let outerCheckbox = internalPathsList.parent().children(':checkbox');
