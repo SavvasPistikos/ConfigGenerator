@@ -72,6 +72,10 @@
         .buttonss {
             float: bottom;
         }
+        input[type=checkbox] {
+            margin: 4px 0px 0px 4px;
+        }
+
     </style>
 
 </head>
@@ -97,12 +101,12 @@
                     <ul id="services" class="nav nav-tabs">
                         <li id="generate">
                             <div id="buttons">
-                                <button type="button" class="btn btn-outline-secondary" onclick=generate(this)>
+                                <button type="button" style="margin: 5px 5px 5px 5px" class="btn btn-outline-secondary" onclick=generate(this)>
                                     Generate
                                 </button>
                             </div>
                         </li>
-                        <li class = "pull-right"><input class="form-control" id="myInput" type="text" placeholder="Search.."></li>
+                        <li class = "pull-right" style="margin: 5px 5px 5px 5px"><input class="form-control" id="myInput" type="text" placeholder="Search.."></li>
                     </ul>
                     <div class="tab-content" id="swaggers">
                     </div>

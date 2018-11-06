@@ -114,6 +114,7 @@ function createInsertRow() {
 
 function addCrudButtons(trElement, serviceId) {
     let del = document.createElement("button");
+    del.style.margin = "0 5px 0 0";
     del.setAttribute("class", "btn btn-danger");
     del.innerText = "Delete";
 
@@ -132,6 +133,7 @@ function addCrudButtons(trElement, serviceId) {
     });
 
     let info = document.createElement("button");
+    info.style.margin = "0 5px 0 0";
     $(info).data("id", serviceId);
     info.setAttribute("class", "btn btn-info");
     info.innerText = "Info";
@@ -140,6 +142,7 @@ function addCrudButtons(trElement, serviceId) {
     info.setAttribute("onclick", "generateModal(this);");
 
     let upd = document.createElement("button");
+    upd.style.margin = "0 5px 0 0";
     $(upd).data("id", serviceId);
     upd.setAttribute("class", "btn btn-primary");
     upd.innerText = "Update";

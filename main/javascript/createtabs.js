@@ -41,7 +41,7 @@ function createTab(service, version, id, internal) {
         li.html("<a data-toggle=\"tab\" href=\"#divinternalApis" + "\">"
             + tabName + "</a>");
     }
-
+    li.css("margin", "5px 0 0 0");
     servicesul.append(li);
     let ul = $('<ul>');
 
@@ -51,7 +51,7 @@ function createTab(service, version, id, internal) {
     $(allCheckbox).data("internal", internal);
     ul.append(allCheckbox);
 
-    if(internal === false){
+    if (internal === false) {
         let url = createInputText(null, "url=" + service);
         let versionInput = createInputText(null, "vers=" + service);
 
@@ -161,6 +161,7 @@ function groupByTagsDraw(groupedPaths, ul, di, service, allCheckBoxElem) {
         elementsid = (elementsid === "default") ? service + elementsid : elementsid;
 
         let tagli = $('<li>');
+        tagli.css("margin", "5px 0");
         let tagCheckbox = $('<input>');
         tagCheckbox.attr("type", "checkbox")
             .attr("onchange", "triggerAllTagsToList(this);");
@@ -222,8 +223,7 @@ function createInputText(value, idString) {
 }
 
 function displayInputText(endpointOptionsCheckbox) {
-    let inputElement = $(endpointOptionsCheckbox).parent()
-        .children().get(1);
+    let inputElement = $(endpointOptionsCheckbox).next().get(0);
 
     if (endpointOptionsCheckbox.checked === true) {
         inputElement.style.display = "inline";

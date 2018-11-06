@@ -4,9 +4,9 @@ function getPathEntry(path, method, service, internal) {
     let checkbox = generateCheckbox(path, method, service);
     let basePath = "";
 
-    if(internal === false){
-    basePath = (jsonList[service].basePath === undefined) ? "" : jsonList[service].basePath;
-    basePath = (basePath === "/") ? "" : basePath;
+    if (internal === false) {
+        basePath = (jsonList[service].basePath === undefined) ? "" : jsonList[service].basePath;
+        basePath = (basePath === "/") ? "" : basePath;
     }
 
     let b = generateButton(path, method, basePath);
@@ -14,7 +14,7 @@ function getPathEntry(path, method, service, internal) {
     pathsli.append(checkbox);
     pathsli.append(b);
     pathsli.append(createOptionsUL(b.data("toggleId"), checkbox, internal));
-
+    pathsli.css("margin", "5px 0");
     return pathsli;
 }
 
@@ -101,16 +101,16 @@ function createOptionsUL(id, checkbox, internal) {
     tagsIn.setAttribute("type", "text");
     tagsIn.setAttribute("onfocusout", "writeToButton(this)");
 
-    if(internal === false) {
+    if (internal === false) {
         eval("tempPath" + " = " + "jsonList[\"" + checkbox.data("service") + "\"].paths[\"" + checkbox.data("path") + "\"]."
             + checkbox.data("method").toLocaleLowerCase() + ";");
         if (tempPath.tags !== undefined) {
             tagsIn.value = tempPath.tags.toString();
             checkbox.data("tags", tempPath.tags.toString());
         }
-        tagsIn.style.display = "none";
-        tagsLi.appendChild(tagsIn);
     }
+    tagsIn.style.display = "none";
+    tagsLi.appendChild(tagsIn);
 
     let trnsTypeIdLi = document.createElement("li");
     let trnsTypeIdCheckBox = createCheckBox("displayInputText(this);");

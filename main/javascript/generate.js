@@ -28,13 +28,14 @@ function generate() {
 
                 basePath = (jsonList[apiName] !== undefined && jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
                     ? jsonList[apiName].basePath
-                    : "";
+                    : "/api";
 
                 if (list[p][i].path !== list[p][i].endpoint) {
-                    path.path = basePath + list[p][i].path;
-                    path.endpoint = (list[p][i].endpoint === "") ? path.path : list[p][i].endpoint;
+                    path.path = (list[p][i].path.startsWith(basePath)) ? list[p][i].path : basePath + list[p][i].path;
+                    path.endpoint = (list[p][i].endpoint === "") ? path.path :
+                        (list[p][i].endpoint.startsWith(basePath)) ? list[p][i].endpoint : basePath + list[p][i].endpoint;
                 } else {
-                    path.endpoint = list[p][i].endpoint;
+                    path.endpoint = basePath + list[p][i].endpoint;
                 }
                 if (list[p][i].tags !== "" && list[p][i].tags.length > 0) {
                     path.tags = list[p][i].tags;

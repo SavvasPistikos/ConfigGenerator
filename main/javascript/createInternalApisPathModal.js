@@ -73,7 +73,6 @@ function createBody() {
     divFormGroup.appendChild(label);
     divFormGroup.appendChild(input);
 
-
     let divFormGroupMethod = document.createElement("div");
     divFormGroupMethod.className = "form-group";
 
@@ -125,12 +124,17 @@ function addInternalPath() {
 
     let pathEntry = getPathEntry(internalEndpoint, method, "internalApis", true);
 
+    let removeButton = document.createElement("button");
+    removeButton.className = "btn btn-danger btn-sm pull-right";
+    removeButton.innerHTML = "<span class=\"glyphicon glyphicon-remove\"></span>";
+    pathEntry.append($(removeButton));
+
     internalPathsList.append($(pathEntry));
     internalPathsList.show();
 
     let outerCheckbox = $(internalPathsList.parent().children(':checkbox'));
-    outerCheckbox.data("maxChildren" , outerCheckbox.data("maxChildren") + 1);
-    outerCheckbox.data("childCheckboxes", outerCheckbox.data("childCheckboxes") +1);
+    outerCheckbox.data("maxChildren", outerCheckbox.data("maxChildren") + 1);
+    outerCheckbox.data("childCheckboxes", outerCheckbox.data("childCheckboxes") + 1);
 
 
     $('#addInternalPath').modal('toggle');
