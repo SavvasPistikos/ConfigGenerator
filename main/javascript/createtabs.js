@@ -94,6 +94,7 @@ function importConfig(impJson) {
         let serviceCheckbox = document.getElementById(a + version);
         $(serviceCheckbox).trigger("click");
         document.getElementById("url=" + a).value = impJson.apis[a].url;
+        document.getElementById("vers=" + a).value = impJson.apis[a].version !== undefined ? impJson.apis[a].version : "" ;
 
         for (p in impJson.apis[a].paths) {
             let basePath = (jsonList[a].basePath === undefined) ? "" : jsonList[a].basePath;

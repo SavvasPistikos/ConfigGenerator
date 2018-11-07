@@ -7,6 +7,8 @@ function generate() {
                 if (document.getElementById("vers=" + p) !== null && document.getElementById("vers=" + p).value !== "") {
                     apiList.apis[apiName] = {url: "", version: "", paths: []};
                     apiList.apis[apiName].version = document.getElementById("vers=" + p).value;
+                } else if(apiName === "internalApis"){
+                    apiList.apis[apiName] = {internal: "true", paths: []};
                 }
                 else if (p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "") === "") {
                     apiList.apis[apiName] = {url: "", paths: []};
