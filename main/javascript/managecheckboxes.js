@@ -1,206 +1,143 @@
 function addToList(checkboxElem) {
-    writetosessionStorage(checkboxElem);
-    if (list[checkboxElem.className] == null) {
-        list[checkboxElem.className] = [];
-    }
-    let checkboxid;
-    const res = checkboxElem.id.split(",");
-    let pathi = res[0];
-    let parentpath = "parent=" + pathi;
-    if (checkboxElem.checked) {
-        let chs = [];
-        let parent = pathi.includes("parent=");
-        if (parent === true) {
-            pathi = pathi.replace("parent=", "");
-            checkboxid = pathi;
-        } else {
-            checkboxid = pathi;
-            pathi = "parent=" + checkboxid;
+    let parent = $(checkboxElem).parent();
+    let parentCheckbox;
 
-            for (let i = 0; i < verbs.length; i++) {
-                if (document.getElementById(checkboxid + "," + verbs[i]) != null) {
-                    parentpath += "," + verbs[i];
-                    chs.push(document.getElementById(checkboxid + "," + verbs[i]))
-                }
-            }
-        }
-
-        for (let i = 0; i < res.length - 1; i++) {
-            list[checkboxElem.className].push(checkboxid + "," + res[i + 1]);
-            checkboxElem.checked = true;
-            var ch = document.getElementById(pathi + "," + res[i + 1]);
-            if (ch != null) {
-                ch.checked = true;
-            }
-
-        }
-        if (checkIfparentshouldbeChecked(chs) && parent === false) {
-            ch = document.getElementById(parentpath);
-            ch.checked = true;
-        }
+    if ($(checkboxElem).data("service") === "internalApis") {
+        parentCheckbox = parent.parent().parent().children().get(0);
     } else {
-        let chs = [];
-        let parent = pathi.includes("parent=");
-        if (parent === true) {
-            pathi = pathi.replace("parent=", "");
-            checkboxid = pathi;
-        } else {
-            checkboxid = pathi;
-            pathi = "parent=" + checkboxid;
+        parentCheckbox = $(parent).parent().siblings().get(0);
+    }
 
-            for (let i = 0; i < verbs.length; i++) {
-                if (document.getElementById(checkboxid + "," + verbs[i]) != null) {
-                    parentpath += "," + verbs[i];
-                    chs.push(document.getElementById(checkboxid + "," + verbs[i]))
-                }
+    if ($(checkboxElem).data("checked") === false) {
+        let pathDTO = {
+            path: "",
+            endpoint: "",
+            method: "",
+            tags: [],
+            display: true,
+            authorize: false,
+            trnstypeid: "",
+            persist: {
+                headers: [],
+                queryParams: []
+            },
+            id: ""
+        };
+
+        pathDTO.path = $(checkboxElem).data("path");
+        pathDTO.method = $(checkboxElem).data("method");
+        pathDTO.authorize = ($(checkboxElem).data("authorize") === undefined) ? true : $(checkboxElem).data("authorize");
+        pathDTO.display = ($(checkboxElem).data("display") === undefined) ? true : $(checkboxElem).data("display");
+        pathDTO.endpoint = ($(checkboxElem).data("endpoint") === undefined) ? pathDTO.path : $(checkboxElem).data("endpoint");
+        pathDTO.trnstypeid = ($(checkboxElem).data("trnstypeid") === undefined) ? "" : $(checkboxElem).data("trnstypeid");
+
+        if ($(checkboxElem).data("tags") !== undefined) {
+            let tags = $(checkboxElem).data("tags").split(",");
+            for (let i in tags) {
+                pathDTO.tags.push(tags[i]);
             }
         }
-        for (let j = 0; j < res.length - 1; j++) {
-            checkboxid = pathi + "," + res[j + 1];
-            list[checkboxElem.className] = removeA(
-                list[checkboxElem.className], checkboxid.replace("parent=", "")
-            );
-            ch = document.getElementById(checkboxid);
-            if (ch != null) {
-                ch.checked = false;
-            }
+        pathDTO.id = $(checkboxElem).data("pathId");
+
+        if (list[$(checkboxElem).data("service")] === undefined) {
+            list[$(checkboxElem).data("service")] = [];
         }
-        if (checkIfparentshouldbeUnChecked(chs) && parent === false) {
-            ch = document.getElementById(parentpath);
-            ch.checked = false;
-        }
-    }
-    checkIfAllTagsCheckboxShouldBeChecked(checkboxElem);
-    checkIfAllCheckboxShouldBeChecked(checkboxElem);
-}
 
-function checkIfparentshouldbeChecked(children) {
-    var set = true;
-    for (let i = 0; i < children.length; i++) {
-        set = set & children[i].checked;
-    }
-    return set;
-}
+        list[$(checkboxElem).data("service")].push(pathDTO);
+        $(checkboxElem).data("checked", true);
 
-function checkIfAllCheckboxShouldBeChecked(checkboxElem) {
-    let checked = true;
-    let allcheck = document.getElementsByClassName(checkboxElem.className);
-    var arrallch = Array.from(allcheck);
-
-    for (x in arrallch) {
-        if (arrallch[x].id !== "") {
-            checked = checked & arrallch[x].checked;
-        }
+        $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") - 1);
+        manageParentCheckboxes(parentCheckbox);
+    } else if ($(checkboxElem).data("checked") === true) {
+        list[$(checkboxElem).data("service")] = list[$(checkboxElem).data("service")]
+            .filter(function (item) {
+                return item.id !== $(checkboxElem).data("pathId");
+            });
+        $(checkboxElem).data("checked", false);
+        $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") + 1);
+        manageParentCheckboxes(parentCheckbox);
     }
-    arrallch[0].checked = checked;
-}
-
-function checkIfparentshouldbeUnChecked(children) {
-    var set = false;
-    for (let i = 0; i < children.length; i++) {
-        set = set || children[i].checked;
-    }
-    return set;
-}
-
-function removeA(arr) {
-    var what, a = arguments, L = a.length, ax;
-    while (L > 1 && arr.length) {
-        what = a[--L];
-        while ((ax = arr.indexOf(what)) !== -1) {
-            arr.splice(ax, 1);
-        }
-    }
-    return arr;
 }
 
 function addAllToList(allCheckBoxElement) {
-    const checked = allCheckBoxElement.checked;
-    let checkboxes = document.getElementsByClassName(allCheckBoxElement.className);
-    let arr = (allCheckBoxElement.checked === true) ? Array.from(checkboxes).filter(getOnlyChildCheckboxes)
-        : Array.from(checkboxes).filter(getOnlyChildCheckboxesToBeremoved);
-
-    for (ch in arr) {
-        arr[ch].checked = checked;
-        addToList(arr[ch]);
+    let parent;
+    if ($(allCheckBoxElement).data("internal") === true) {
+        parent = $(allCheckBoxElement).siblings('li');
+    } else {
+        parent = $(allCheckBoxElement).parent();
     }
-    allCheckBoxElement.checked = checked;
-
-    for (let tag in tagList[allCheckBoxElement.className]) {
-        let checkboxid = tagList[allCheckBoxElement.className][tag].replace(/\s/g, '');
-        checkboxid = checkboxid.replace(".", "_");
-        checkboxid = checkboxid.replace(/["'()]/g, "");
-        $("#btr" + checkboxid).click();
-    }
-
+    jQuery.each($(parent).children("li"), function (i, child) {
+        let fchild = $(child).children().get(0);
+        if (fchild.checked === false || allCheckBoxElement.checked === false)
+            $(fchild).trigger("click");
+    });
 }
 
-function addAllTagsToList(tagCheckBoxElement) {
-    const initialCheck = tagCheckBoxElement.checked;
-
-    let id = tagCheckBoxElement.id.split(",")[1];
-    let tag = tagCheckBoxElement.id.split(",")[0];
-
-    for (let p in allGroupedByTags[id][tag]) {
-        let checkboxId = "parent" + "=" + allGroupedByTags[id][tag][p].endpoint + "," + allGroupedByTags[id][tag][p].methods;
-        let parentCheckbox = document.getElementById(checkboxId);
-        parentCheckbox.checked = initialCheck;
-        addToList(parentCheckbox);
-    }
-    tagCheckBoxElement.checked = initialCheck;
-    let checkboxid = tagCheckBoxElement.className.replace(/\s/g, '');
-    checkboxid = checkboxid.replace(".", "_");
-    checkboxid = checkboxid.replace(/["'()]/g, "");
-    $("#btr" + checkboxid).click();
+function triggerAllTagsToList(tagCheckBoxElement) {
+    let ul = $(tagCheckBoxElement).siblings().get(3);
+    //TODO
+    /*
+    Set it to false because cannot think of some thing better for the manageParentCheckboxes
+     */
+    tagCheckBoxElement.checked = false;
+    jQuery.each($(ul).children(), function (i, child) {
+        let fchild = $(child).children().get(0);
+        if (fchild.checked === false || tagCheckBoxElement.checked === false)
+            $(fchild).trigger("click");
+    });
 }
 
-function checkIfAllTagsCheckboxShouldBeChecked(tagChb) {
-    let foundTag;
-    let checked = true;
-    let endpoint = (tagChb.id.split("parent=")[1] != null) ? tagChb.id.split("parent=")[1].split(",")[0]
-        : tagChb.id.split("parent=")[0].split(",")[0];
+function manageParentCheckboxes(parentCheckbox) {
+    let grandParentCheckBox = $(parentCheckbox).parent().siblings().get(0);
+    let previousState = parentCheckbox.checked;
+    parentCheckbox.checked = $(parentCheckbox).data("childCheckboxes") === 0 && $(parentCheckbox).data("maxChildren") > 0 ;
 
-    for (let tag in allGroupedByTags[tagChb.className]) {
-        for (let p in allGroupedByTags[tagChb.className][tag]) {
-            if (allGroupedByTags[tagChb.className][tag][p].endpoint === endpoint) {
-                foundTag = tag;
+    if (grandParentCheckBox !== undefined) {
+        if (parentCheckbox.checked === true && $(parentCheckbox).data("childCheckboxes") === 0) {
+            $(grandParentCheckBox).data("childCheckboxes", $(grandParentCheckBox).data("childCheckboxes") - 1);
+        } else if (parentCheckbox.checked === false && ($(parentCheckbox).data("childCheckboxes") === $(parentCheckbox).data("maxChildren"))) {
+            $(grandParentCheckBox).data("childCheckboxes", $(grandParentCheckBox).data("childCheckboxes") + 1);
+        } else if (previousState && !parentCheckbox.checked && $(parentCheckbox).data("childCheckboxes") === 1) {
+            $(grandParentCheckBox).data("childCheckboxes", $(grandParentCheckBox).data("childCheckboxes") + 1);
+        } else if (!previousState && parentCheckbox.checked && ($(parentCheckbox).data("childCheckboxes") === $(parentCheckbox).data("maxChildren"))) {
+            $(grandParentCheckBox).data("childCheckboxes", $(grandParentCheckBox).data("childCheckboxes") + -1);
+        }
+        manageParentCheckboxes(grandParentCheckBox);
+    }
+}
+
+/*window.onbeforeunload = function (e) {
+    document.body = localStorage.getItem("body");
+    return 'Dialog text here.';
+};*/
+
+
+function writeToButton(element) {
+    let el = $(element);
+    let parent = $(el.parent());
+    let attributeName = parent.text().trim();
+    let outercheckbox = parent.parent().siblings().get(0);
+
+    if (el.is(":checkbox")) {
+        $(outercheckbox).data(attributeName.toLowerCase(), element.checked);
+    } else {
+        $(outercheckbox).data(attributeName.toLowerCase(), el.val());
+    }
+    updatePath($(outercheckbox), attributeName.toLowerCase());
+}
+
+function updatePath(outercheckbox, attributeName) {
+    let serviceList = list[outercheckbox.data("service")];
+    if (serviceList !== undefined) {
+        for (path of  serviceList) {
+            if (path.path === outercheckbox.data("path") && path.method === outercheckbox.data("method")) {
+                if (attributeName === "tags") {
+                    let tags = outercheckbox.data(attributeName).split(",");
+                    path[attributeName] = (tags.length === 1 && tags[0] === "") ? "" : tags;
+                    return;
+                }
+                path[attributeName] = outercheckbox.data(attributeName);
             }
         }
     }
-
-    for (let p in allGroupedByTags[tagChb.className][foundTag]) {
-        let checkbox = document.getElementById("parent=" +
-            allGroupedByTags[tagChb.className][foundTag][p].endpoint
-            + "," + allGroupedByTags[tagChb.className][foundTag][p].methods);
-        checked = checked & checkbox.checked;
-    }
-
-    document.getElementById(foundTag + "," + tagChb.className).checked = checked;
 }
-
-function getOnlyChildCheckboxes(checkboxElem) {
-    if (checkboxElem instanceof HTMLInputElement
-        && checkboxElem.getAttribute('type') === 'checkbox'
-        && checkboxElem.id !== ""
-        && !checkboxElem.id.includes("parent")
-        && checkboxElem.checked === false
-    ) {
-        return checkboxElem;
-    }
-}
-
-function getOnlyChildCheckboxesToBeremoved(checkboxElem) {
-    if (checkboxElem instanceof HTMLInputElement
-        && checkboxElem.getAttribute('type') === 'checkbox'
-        && checkboxElem.id !== ""
-        && !checkboxElem.id.includes("parent")
-        && checkboxElem.checked === true
-    ) {
-        return checkboxElem;
-    }
-}
-
-window.onbeforeunload = function (e) {
-    document.body = localStorage.getItem("body");
-    return 'Dialog text here.';
-};

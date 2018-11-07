@@ -1,68 +1,85 @@
 function importJson(liItem) {
-    let jliItem = $('#' + liItem.id);
-    let tabName = jliItem.data("service") + jliItem.data("version");
-    buttonIdWithout = jliItem.data("service");
-    js = JSON.parse(readJson(jliItem.data("id")).content);
+    let jliItem = $(liItem);
+    js = JSON.parse(getSwaggerJsonFromDatabase(jliItem.data("id")).content);
 
-    if (document.getElementById("div" + liItem.id) == null) {
-        jsonList[buttonIdWithout] = js;
-        let servicesul = document.getElementById("services");
+    if (document.getElementById("div" + jliItem.data("service") + jliItem.data("version")) == null) {
+        jsonList[jliItem.data("service")] = js;
+        let di = $('<div>');
+        di.attr("class", "tab-pane fade active in")
+            .attr("id", jliItem.data("service"));
 
-        let li = document.createElement("li");
-        li.innerHTML = "<a data-toggle=\"tab\" href=\"#div" + liItem.id.replace(".", "_") + "\">"
-            + "<button class=\"close closeTab\" type=\"button\" >×</button>"
-            + tabName + "</a>";
-        li.id = "close" + liItem.id;
-
-        servicesul.appendChild(li);
-        let ul = document.createElement("ul");
-        let di = document.createElement("div");
-        di.setAttribute("class", "tab-pane fade active in");
-        di.setAttribute("id", "div" + liItem.id.replace(".", "_"));
-
+        let ul = createTab(jliItem.data("service"), jliItem.data("version"), jliItem.attr("id"), false);
+        let allCheckbox = $(ul).children().get(0);
         let groupedPaths = groupByTags(buttonIdWithout);
         allGroupedByTags[buttonIdWithout] = groupedPaths;
 
-        let allCheckbox = createCheckBox("addAllToList(this);", buttonIdWithout, null);
-        let url = createInputText(null, "url=" + buttonIdWithout);
-        let version = createInputText(null, "vers=" + buttonIdWithout);
-
-        ul.appendChild(allCheckbox);
-        ul.appendChild(document.createTextNode("\t\t Url = "));
-        ul.appendChild(url);
-        ul.appendChild(document.createTextNode("\t\t version = "));
-        ul.appendChild(version);
-
-        let dum = document.getElementById("swaggers");
-        groupByTagsDraw(groupedPaths, ul, dum, liItem.id.replace(".", "_"));
+        groupByTagsDraw(groupedPaths, ul, $("#swaggers"), jliItem.data("service"), allCheckbox);
+        $(allCheckbox).data("maxChildren", $(allCheckbox).data("childCheckboxes"));
         $("#" + di.id).data("service", jliItem.data("service"));
+        $($("#services").children().get(3)).tab('show');
     } else {
-        $('#close' + liItem.id).remove();
-        $('#div' + liItem.id).remove();
+        $('#close' + jliItem.data("service")).remove();
+        $('#div' + jliItem.data("service")).remove();
     }
+    addEventListeners();
 }
 
-function handleFileSelect(evt) {
-    //Retrieve the first (and only!) File from the FileList object
-    var f = evt.target.files[0];
+function createTab(service, version, id, internal) {
+    let servicesul = $("#services");
+    let tabName = service + version;
+    let li;
 
-    if (f) {
-        var r = new FileReader();
-        r.onload = function (e) {
-            importedJsonConfig = e.target.result;
-            var impJson = JSON.parse(importedJsonConfig);
-            importConfig(impJson);
-            document.getElementById("upload").value = "";
-        };
-        r.readAsText(f);
+    if (internal === false) {
+        li = $('<li>');
+        li.html("<a data-toggle=\"tab\" href=\"#div" + service + "\">"
+            + "<button class=\"close closeTab\" type=\"button\" onclick=\"closeTab(this)\" >×</button>"
+            + tabName + "</a>");
+        li.attr("id", "close" + service);
+        li.data("checkboxId", id);
     } else {
-        alert("Failed to load file");
+        li = $('<li>');
+        li.html("<a data-toggle=\"tab\" href=\"#divinternalApis" + "\">"
+            + tabName + "</a>");
     }
+    li.css("margin", "5px 0 0 0");
+    servicesul.append(li);
+    let ul = $('<ul>');
+
+    let allCheckbox = createCheckBox("addAllToList(this);");
+    $(allCheckbox).data("childCheckboxes", 0);
+    $(allCheckbox).data("maxChildren", 0);
+    $(allCheckbox).data("internal", internal);
+    ul.append(allCheckbox);
+
+    if (internal === false) {
+        let url = createInputText(null, "url=" + service);
+        let versionInput = createInputText(null, "vers=" + service);
+
+
+        ul.append(document.createTextNode("\t\t Url = "));
+        ul.append(url);
+        ul.append(document.createTextNode("\t\t version = "));
+        ul.append(versionInput);
+    }
+
+    return ul;
 }
 
 function handleCopyPaste() {
+    let url = host + basePath + "/yaml";
     let config = $("#input-field").val();
-    let impJson = JSON.parse(config);
+    let impJson;
+    $.ajax({
+        'async': false,
+        'global': false,
+        'url': url,
+        'type': 'POST',
+        'contentType': 'application/json',
+        'data': config,
+        'success': function (data) {
+            impJson = data;
+        }
+    });
     importConfig(impJson);
 }
 
@@ -70,30 +87,25 @@ function importConfig(impJson) {
     for (a in impJson.apis) {
         apiList.apis[a] = impJson.apis[a];
         if (a === "internalApis") {
+            importInternalPaths(impJson.apis[a].paths);
             continue;
         }
         let version = (impJson.apis[a].version != null) ? impJson.apis[a].version : "";
-        importJson(document.getElementById(a + version.replace(".", "_")));
+        let serviceCheckbox = document.getElementById(a + version);
+        $(serviceCheckbox).trigger("click");
         document.getElementById("url=" + a).value = impJson.apis[a].url;
+        document.getElementById("vers=" + a).value = impJson.apis[a].version !== undefined ? impJson.apis[a].version : "" ;
 
         for (p in impJson.apis[a].paths) {
-            let checkbox;
-            if (impJson.apis[a].paths[p].path != null && impJson.apis[a].paths[p].endpoint != null) {
-                checkbox = document.getElementById(impJson.apis[a].paths[p].path.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method);
-                if (checkbox == null) {
-                    checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
-                }
-            } else {
-                if (impJson.apis[a].paths[p].path == null) {
-                    checkbox = (jsonList[a].basePath !== null) ?
-                        document.getElementById(impJson.apis[a].paths[p].endpoint.replace(jsonList[a].basePath, "") + "," + impJson.apis[a].paths[p].method)
-                        : document.getElementById(impJson.apis[a].paths[p].endpoint + "," + impJson.apis[a].paths[p].method);
-                } else {
-                    checkbox = document.getElementById(impJson.apis[a].paths[p].path + "," + impJson.apis[a].paths[p].method);
-                }
-            }
-            checkbox.checked = true;
-            addToList(checkbox);
+            let basePath = (jsonList[a].basePath === undefined) ? "" : jsonList[a].basePath;
+            basePath = (basePath === "/") ? "" : basePath;
+            let pathString = (impJson.apis[a].paths[p].path === undefined) ?
+                impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].endpoint
+                : impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].path;
+            pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
+            let button = $('.btn:contains(' + pathString + ')');
+            let checkbox = $(button).siblings().get(0);
+            $(checkbox).trigger("click", checkbox);
         }
     }
     generate();
@@ -144,80 +156,58 @@ function groupByTags(jsonFileName) {
     return groupedPaths;
 }
 
-function groupByTagsDraw(groupedPaths, ul, di, tabid) {
+function groupByTagsDraw(groupedPaths, ul, di, service, allCheckBoxElem) {
     for (let tag in groupedPaths) {
         let elementsid = trimId(tag);
+        elementsid = (elementsid === "default") ? service + elementsid : elementsid;
 
-        let tagli = document.createElement("li");
-        let tagCheckbox = document.createElement("input");
-        tagCheckbox.type = "checkbox";
-        tagCheckbox.setAttribute("onchange", "addAllTagsToList(this);");
-        tagCheckbox.setAttribute("class", tag);
-        tagCheckbox.setAttribute("id", tag + "," + buttonIdWithout);
-        tagli.appendChild(tagCheckbox);
+        let tagli = $('<li>');
+        tagli.css("margin", "5px 0");
+        let tagCheckbox = $('<input>');
+        tagCheckbox.attr("type", "checkbox")
+            .attr("onchange", "triggerAllTagsToList(this);");
+        tagCheckbox.data("childCheckboxes", 0);
+        tagli.append(tagCheckbox);
 
-        let tagButton = document.createElement("button");
-        tagButton.setAttribute("id", "btr" + elementsid);
-        tagButton.setAttribute("data-toggle", "collapse");
-        tagButton.setAttribute("data-target", "#ul" + elementsid);
-        tagButton.innerHTML = tag;
-        tagli.appendChild(tagButton);
+        let tagButton = $('<button>');
+        tagButton.attr("id", "btr" + elementsid)
+            .attr("data-toggle", "collapse")
+            .attr("data-target", "#ul" + elementsid);
+        tagButton.html(tag);
+        tagli.append(tagButton);
 
         createAllOptionsCheckbox(tagli, tag);
 
-        var pathsul = document.createElement("ul");
-        pathsul.setAttribute("class", "panel-collapse collapse");
-        pathsul.setAttribute("id", "ul" + elementsid);
+        let pathsul = $('<ul>');
+        pathsul.attr("class", "panel-collapse collapse")
+            .attr("id", "ul" + elementsid);
 
         for (let path in groupedPaths[tag]) {
-            var pathli = document.createElement("li");
-            pathli.setAttribute("class", "list-group");
-            var internalpathul = document.createElement("ul");
-
-
             for (let i in groupedPaths[tag][path].methods) {
-                var ili = document.createElement("li");
-
-                let icheckbox = createCheckBox("addToList(this);",
-                    buttonIdWithout
-                    , groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods[i]);
-
-                ili.appendChild(icheckbox);
-                ili.appendChild(document.createTextNode(groupedPaths[tag][path].methods[i]));
-                ili.appendChild(createOptionsUL(groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods[i], tag));
-                internalpathul.appendChild(ili);
+                tagCheckbox.data("childCheckboxes", tagCheckbox.data("childCheckboxes") + 1);
+                let pathsli = getPathEntry(groupedPaths[tag][path].endpoint, groupedPaths[tag][path].methods[i], service, false);
+                pathsul.append(pathsli);
             }
-
-            let checkbox = createCheckBox("addToList(this);", buttonIdWithout
-                , "parent" + "=" + groupedPaths[tag][path].endpoint + "," + groupedPaths[tag][path].methods);
-
-            text = (js.basePath !== "/" && js.basePath != null) ? js.basePath + groupedPaths[tag][path].endpoint : groupedPaths[tag][path].endpoint;
-            pathli.appendChild(checkbox);
-            pathli.appendChild(document.createTextNode(text));
-
-            pathli.appendChild(internalpathul);
-            pathsul.appendChild(pathli);
-            tagli.appendChild(pathsul);
-
-            ul.appendChild(tagli);
+            tagli.append(pathsul);
+            ul.append(tagli);
         }
+        $(tagCheckbox).data("maxChildren", tagCheckbox.data("childCheckboxes"));
+        $(allCheckBoxElem).data("childCheckboxes", $(allCheckBoxElem).data("childCheckboxes") + 1);
     }
     let tabpanediv = document.createElement("div");
     tabpanediv.setAttribute("class", "tab-pane fade active in");
-    tabpanediv.setAttribute("id", "div" + tabid);
-    tabpanediv.appendChild(ul);
-    di.appendChild(tabpanediv);
+    tabpanediv.setAttribute("id", "div" + service);
+    $(tabpanediv).data("service", service);
+    $(tabpanediv).append(ul);
+    di.append(tabpanediv);
     hideOtherTabs(tabpanediv);
 }
 
-function createCheckBox(onChangeFunction, classString, idString) {
+
+function createCheckBox(onChangeFunction) {
     let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
 
-    if (idString != null)
-        checkbox.id = idString;
-    if (classString !== "")
-        checkbox.className = classString;
     if (onChangeFunction != null)
         checkbox.setAttribute("onchange", onChangeFunction);
     return checkbox;
@@ -233,91 +223,8 @@ function createInputText(value, idString) {
     return inputext;
 }
 
-function createOptionsUL(classString, tag) {
-    let optionsUl = document.createElement("ul");
-
-    let authorizeLi = document.createElement("li");
-    let authorizeCheckbox = createCheckBox(null, tag, "");
-    authorizeCheckbox.className = tag;
-    authorizeCheckbox.id = "auth" + classString;
-    let authorizeTextNode = document.createTextNode("Authorize");
-    authorizeLi.appendChild(authorizeCheckbox);
-    authorizeLi.appendChild(authorizeTextNode);
-
-    let displayLi = document.createElement("li");
-    let displayCheckBox = createCheckBox(null, tag, "");
-    displayCheckBox.className = tag;
-    displayCheckBox.checked = true;
-    displayCheckBox.id = "disp" + classString;
-    let displayTextNode = document.createTextNode("Display");
-    displayLi.appendChild(displayCheckBox);
-    displayLi.appendChild(displayTextNode);
-
-/*    let idepondentLi = document.createElement("li");
-    let idepondentCheckBox = createCheckBox(null, tag, "");
-    idepondentCheckBox .className = tag;
-    idepondentCheckBox .id = "disp" + classString;
-    let idepondentTextNode = document.createTextNode("Idepondent");
-    idepondentLi.appendChild(idepondentCheckBox );
-    idepondentLi.appendChild(idepondentTextNode);*/
-
-    let endpointLi = document.createElement("li");
-    let endpointCheckBox = createCheckBox("displayInputText(this);", classString, "end" + classString);
-    endpointLi.appendChild(endpointCheckBox);
-    endpointLi.appendChild(document.createTextNode("\t\t Endpoint"));
-    let endpointIn = document.createElement("input");
-    endpointIn.className = tag;
-    endpointIn.id = "end=" + classString;
-    endpointIn.setAttribute("type", "text");
-    endpointIn.value = "";
-    endpointIn.style.display = "none";
-    endpointLi.appendChild(endpointIn);
-
-
-    let tagsLi = document.createElement("li");
-    let tagsCheckBox = createCheckBox("displayInputText(this);", classString, "tag" + classString);
-    tagsLi.appendChild(tagsCheckBox);
-    tagsLi.appendChild(document.createTextNode("\t\t Tags"));
-    let tagsIn = document.createElement("input");
-    tagsIn.className = tag;
-    tagsIn.id = "tags=" + classString;
-    tagsIn.setAttribute("type", "text");
-    tagsIn.value = "";
-    tagsIn.style.display = "none";
-    tagsLi.appendChild(tagsIn);
-
-    let trnsTypeIdLi = document.createElement("li");
-    let trnsTypeIdCheckBox = createCheckBox("displayInputText(this);", classString, "trns" + classString);
-    trnsTypeIdLi.appendChild(trnsTypeIdCheckBox);
-    trnsTypeIdLi.appendChild(document.createTextNode("\t\t TransactionType Id"));
-    let trnsTypeIdIn = document.createElement("input");
-    trnsTypeIdIn.className = tag;
-    trnsTypeIdIn.id = "trns=" + classString;
-    trnsTypeIdIn.setAttribute("type", "text");
-    trnsTypeIdIn.value = "";
-    trnsTypeIdIn.style.display = "none";
-    trnsTypeIdLi.appendChild(trnsTypeIdIn);
-
-    optionsUl.appendChild(authorizeLi);
-    optionsUl.appendChild(displayLi);
-    //optionsUl.appendChild(idepondentLi);
-    optionsUl.appendChild(trnsTypeIdLi);
-    optionsUl.appendChild(endpointLi);
-    optionsUl.appendChild(tagsLi);
-
-    return optionsUl;
-}
-
 function displayInputText(endpointOptionsCheckbox) {
-    let inputElement;
-
-    if (endpointOptionsCheckbox.id.includes("end")) {
-        inputElement = document.getElementById("end=" + endpointOptionsCheckbox.className);
-    } else if (endpointOptionsCheckbox.id.includes("tags")) {
-        inputElement = document.getElementById("tags=" + endpointOptionsCheckbox.className);
-    } else if (endpointOptionsCheckbox.id.includes("trns")) {
-        inputElement = document.getElementById("trns=" + endpointOptionsCheckbox.className);
-    }
+    let inputElement = $(endpointOptionsCheckbox).next().get(0);
 
     if (endpointOptionsCheckbox.checked === true) {
         inputElement.style.display = "inline";
@@ -326,8 +233,8 @@ function displayInputText(endpointOptionsCheckbox) {
         inputElement.value = "";
         inputElement.style.display = "none";
     }
-
 }
+
 
 function trimId(tag) {
     let elementId;
@@ -339,74 +246,69 @@ function trimId(tag) {
 
 function createAllOptionsCheckbox(tagliElement, tag) {
     let authorizeCheckbox = createCheckBox("AuthorizeAllSubTagEndpoints(this);", tag, "");
-    authorizeCheckbox.className = tag;
+    authorizeCheckbox.checked = true;
     let authorizeTextNode = document.createTextNode("Authorize All");
-    tagliElement.appendChild(authorizeCheckbox);
-    tagliElement.appendChild(authorizeTextNode);
+    tagliElement.append(authorizeCheckbox);
+    tagliElement.append(authorizeTextNode);
 
     let displayCheckbox = createCheckBox("DisplayAllSubTagEndpoints(this);", tag, "");
-    displayCheckbox.className = tag;
+    displayCheckbox.checked = true;
     let displayTextNode = document.createTextNode("Display All");
-    tagliElement.appendChild(displayCheckbox);
-    tagliElement.appendChild(displayTextNode);
+    tagliElement.append(displayCheckbox);
+    tagliElement.append(displayTextNode);
 
 }
 
-
-function LogAllSubTagEndpoints(logAllElement) {
-    let logCheckboxes = document.getElementsByClassName(logAllElement.className);
-    let arrayLogCheckboxes = Array.from(logCheckboxes).filter(getOnlyLogCheckboxes);
-
-    for (ach in arrayLogCheckboxes) {
-        arrayLogCheckboxes[ach].checked = logAllElement.checked;
-    }
-}
-
-function getOnlyLogCheckboxes(logCheckboxElem) {
-    if (logCheckboxElem instanceof HTMLInputElement
-        && logCheckboxElem.getAttribute('type') === 'checkbox'
-        && logCheckboxElem.id !== ""
-        && logCheckboxElem.id.includes("log")
-    ) {
-        return logCheckboxElem;
-    }
-}
-
+//TODO same function the next 2 with little difference so i need to think a way to make them 1.
 
 function AuthorizeAllSubTagEndpoints(authorizeAllElement) {
-    let authCheckboxes = document.getElementsByClassName(authorizeAllElement.className);
-    let arrayAuthCheckboxes = Array.from(authCheckboxes).filter(getOnlyAuthCheckboxes);
+    let tagCollapse = $(authorizeAllElement).prev();
+    let dataTarget = $(tagCollapse).attr("data-target");
+    let targetUl = $(dataTarget);
 
-    for (ach in arrayAuthCheckboxes) {
-        arrayAuthCheckboxes[ach].checked = authorizeAllElement.checked;
-    }
-}
-
-function getOnlyAuthCheckboxes(authCheckboxElem) {
-    if (authCheckboxElem instanceof HTMLInputElement
-        && authCheckboxElem.getAttribute('type') === 'checkbox'
-        && authCheckboxElem.id !== ""
-        && authCheckboxElem.id.includes("auth")
-    ) {
-        return authCheckboxElem;
-    }
+    $(targetUl).children('li').each(function () {
+        let ul = $(this).children('ul');
+        let li = $(ul).children().get(0);
+        let checkbox = $(li).children().get(0);
+        checkbox.checked = authorizeAllElement.checked;
+    });
 }
 
 function DisplayAllSubTagEndpoints(displayAllElement) {
-    let dispCheckboxes = document.getElementsByClassName(displayAllElement.className);
-    let arrayDispCheckboxes = Array.from(dispCheckboxes).filter(getOnlyDispCheckboxes);
+    let tagCollapse = $(displayAllElement).siblings().get(1);
+    let dataTarget = $(tagCollapse).attr("data-target");
+    let targetUl = $(dataTarget);
 
-    for (ach in arrayDispCheckboxes) {
-        arrayDispCheckboxes[ach].checked = displayAllElement.checked;
-    }
+    $(targetUl).children('li').each(function () {
+        let ul = $(this).children('ul');
+        let li = $(ul).children().get(1);
+        let checkbox = $(li).children().get(0);
+        checkbox.checked = displayAllElement.checked;
+    });
 }
 
-function getOnlyDispCheckboxes(dispCheckboxElem) {
-    if (dispCheckboxElem instanceof HTMLInputElement
-        && dispCheckboxElem.getAttribute('type') === 'checkbox'
-        && dispCheckboxElem.id !== ""
-        && dispCheckboxElem.id.includes("disp")
-    ) {
-        return dispCheckboxElem;
-    }
+/**
+ * @return {string}
+ */
+function ID() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function addEventListeners() {
+
+    $(".configInputText").on("focusout", function () {
+        if ($(this).val() === "") {
+            $($(this).siblings().get(0)).trigger("click");
+        }
+        writeToButton(this);
+    });
+
+    $(".configInputCheckbox").on("click", function () {
+        if (this.checked === false) {
+            if ($(this).parent().text().trim().toLowerCase() === "tags") {
+                $(this).next().val("");
+            }
+        }
+        writeToButton($(this).next());
+    });
 }

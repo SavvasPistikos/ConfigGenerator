@@ -4,61 +4,54 @@ function generate() {
             let basePath;
             let apiName = p.replace(",", "/").split("/")[0];
             if (apiList.apis[apiName] == null) {
-                if (document.getElementById("vers=" + p).value !== "") {
+                if (document.getElementById("vers=" + p) !== null && document.getElementById("vers=" + p).value !== "") {
                     apiList.apis[apiName] = {url: "", version: "", paths: []};
                     apiList.apis[apiName].version = document.getElementById("vers=" + p).value;
+                } else if(apiName === "internalApis"){
+                    apiList.apis[apiName] = {internal: "true", paths: []};
                 }
                 else if (p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "") === "") {
                     apiList.apis[apiName] = {url: "", paths: []};
                 }
 
-                apiList.apis[apiName].url = document.getElementById("url=" + apiName).value;
+                if (document.getElementById("url=" + apiName) !== null) {
+                    apiList.apis[apiName].url = document.getElementById("url=" + apiName).value;
+                }
             }
             apiList.apis[apiName].paths = [];
 
             for (let i in list[p]) {
                 let path = {
-                    path: "",
                     endpoint: "",
                     method: "",
-                    tags: [],
-                    display: true,
                     authorize: false,
-                    transactionTypeId: ""
                 };
-                let res = list[p][i].split(",");
 
-                basePath = (jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
+                basePath = (jsonList[apiName] !== undefined && jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
                     ? jsonList[apiName].basePath
-                    : "";
+                    : "/api";
 
-                path.display = document.getElementById("disp" + list[p][i]).checked;
-                path.authorize = document.getElementById("auth" + list[p][i]).checked;
-
-                if (document.getElementById("trns" + list[p][i]).checked === true) {
-                    path.transactionLog = document.getElementById("trns=" + list[p][i]).value;
-                }
-                path.path = basePath + res[0];
-                if (document.getElementById("end" + list[p][i]).checked === true) {
-                    path.endpoint = document.getElementById("end=" + list[p][i]).value;
+                if (list[p][i].path !== list[p][i].endpoint) {
+                    path.path = (list[p][i].path.startsWith(basePath)) ? list[p][i].path : basePath + list[p][i].path;
+                    path.endpoint = (list[p][i].endpoint === "") ? path.path :
+                        (list[p][i].endpoint.startsWith(basePath)) ? list[p][i].endpoint : basePath + list[p][i].endpoint;
                 } else {
-                    path.endpoint = path.path;
+                    path.endpoint = basePath + list[p][i].endpoint;
                 }
-                eval("tempPath" + " = " + "jsonList[\"" + apiName + "\"].paths[\"" + res[0] + "\"]."
-                    + res[1].toLocaleLowerCase() + ";");
-
-                if (document.getElementById("tag" + list[p][i]).checked === true) {
-                    path.tags.push(document.getElementById("tags=" + list[p][i]).value);
-                } else {
-                    if (tempPath.tags != null) {
-                        path.tags = tempPath.tags;
-                    }
+                if (list[p][i].tags !== "" && list[p][i].tags.length > 0) {
+                    path.tags = list[p][i].tags;
                 }
-                path.method = res[1];
+                path.method = list[p][i].method;
+                if (list[p][i].display === false) {
+                    path.display = list[p][i].display;
+                }
+                path.authorize = list[p][i].authorize;
+                if(list[p][i].trnstypeid !== "") {
+                    path.trnsTypeId = list[p][i].trnstypeid;
+                }
 
                 apiList.apis[apiName].paths.push(path);
             }
-
         }
     }
 
