@@ -1,7 +1,8 @@
 function closeTab(closeTabButton) {
     //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
     var tabContentId = $(closeTabButton).parent().attr("href");
-    $('#' + $(closeTabButton).parent().parent().data("checkboxId")).prop('checked', false);
+    document.getElementById($(closeTabButton).parent().parent().data("checkboxId")).checked = false;
+    //$('#' + $(closeTabButton).parent().parent().data("checkboxId")).prop('checked', false);
     $(closeTabButton).parent().parent().remove(); //remove li of tab
     $(tabContentId).remove(); //remove respective tab content
     let first = $('#services a:first'); // Select first tab

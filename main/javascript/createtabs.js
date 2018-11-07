@@ -2,7 +2,7 @@ function importJson(liItem) {
     let jliItem = $(liItem);
     js = JSON.parse(getSwaggerJsonFromDatabase(jliItem.data("id")).content);
 
-    if (document.getElementById("div" + jliItem.data("service")) == null) {
+    if (document.getElementById("div" + jliItem.data("service") + jliItem.data("version")) == null) {
         jsonList[jliItem.data("service")] = js;
         let di = $('<div>');
         di.attr("class", "tab-pane fade active in")
