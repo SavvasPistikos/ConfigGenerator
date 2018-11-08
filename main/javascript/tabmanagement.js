@@ -11,7 +11,12 @@ function closeTab(closeTabButton) {
     if (first !== undefined) {
         $(first).tab('show');
     }
-    list[tabContentId.replace("#div","")] = [];
+
+    resetOutput(tabContentId.replace("#div",""));
+}
+
+function resetOutput(tabContentId){
+    list[tabContentId] = [];
     generate();
 
     let resetOutputArea = true;

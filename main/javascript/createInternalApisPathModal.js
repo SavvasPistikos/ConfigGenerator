@@ -3,8 +3,8 @@ function generateInterApiPathModal() {
     if (document.getElementById("addInternalPath") !== null) {
         let pathInput = document.getElementById("internalSwaggerPath");
         pathInput.value = "";
-        let methodInput = document.getElementById("internalSwaggerPathMethod");
-        methodInput.value = "";
+        let methodInput = document.getElementById("method");
+        methodInput.value = "GET";
         return;
     }
 
@@ -78,16 +78,34 @@ function createBody() {
 
     let labelMethod = document.createElement("label");
     labelMethod.setAttribute("for", "method");
-    labelMethod.innerText = "Method";
+    //labelMethod.innerText = "Method";
 
-    let inputMethod = document.createElement("input");
+    let select = document.createElement("select");
+    select.className = "form-control";
+    select.id = "method";
+
+    let getOption = document.createElement("option");
+    getOption.innerText = "GET";
+    let postOption = document.createElement("option");
+    postOption.innerText = "POST";
+    let putOption = document.createElement("option");
+    putOption.innerText = "PUT";
+    let deleteOption = document.createElement("option");
+    deleteOption.innerText = "DELETE";
+
+    select.appendChild(getOption);
+    select.appendChild(postOption);
+    select.appendChild(putOption);
+    select.appendChild(deleteOption);
+
+    /*let inputMethod = document.createElement("input");
     inputMethod.setAttribute("type", "text");
     inputMethod.className = "form-control";
     inputMethod.id = "internalSwaggerPathMethod";
-    inputMethod.placeholder = "Method";
+    inputMethod.placeholder = "Method";*/
 
     divFormGroupMethod.appendChild(labelMethod);
-    divFormGroupMethod.appendChild(inputMethod);
+    divFormGroupMethod.appendChild(select);
 
     div.appendChild(divFormGroup);
     div.appendChild(divFormGroupMethod);
@@ -119,7 +137,8 @@ function createFooter() {
 function addInternalPath() {
 
     let internalEndpoint = document.getElementById("internalSwaggerPath").value;
-    let method = document.getElementById("internalSwaggerPathMethod").value;
+    let method = document.getElementById("method").value;
+    document.getElementById("method").value = "GET";
     let internalPathsList = $("#internalPathsList");
 
     let pathEntry = getPathEntry(internalEndpoint, method, "internalApis", true);

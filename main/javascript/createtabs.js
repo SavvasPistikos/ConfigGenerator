@@ -22,6 +22,7 @@ function importJson(liItem) {
     } else {
         liItem.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>";
         liItem.className = "btn btn-secondary btn-sm";
+        resetOutput(jliItem.data("service"));
         $('#close' + jliItem.data("service")).remove();
         $('#div' + jliItem.data("service")).remove();
     }
