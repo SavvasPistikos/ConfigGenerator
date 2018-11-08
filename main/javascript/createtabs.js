@@ -1,4 +1,6 @@
 function importJson(liItem) {
+    liItem.innerHTML = "<span class=\"glyphicon glyphicon-ok\"></span>";
+    liItem.className = "btn btn-success btn-sm";
     let jliItem = $(liItem);
     js = JSON.parse(getSwaggerJsonFromDatabase(jliItem.data("id")).content);
 
@@ -18,6 +20,8 @@ function importJson(liItem) {
         $("#" + di.id).data("service", jliItem.data("service"));
         $($("#services").children().get(3)).tab('show');
     } else {
+        liItem.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>";
+        liItem.className = "btn btn-secondary btn-sm";
         $('#close' + jliItem.data("service")).remove();
         $('#div' + jliItem.data("service")).remove();
     }
@@ -103,6 +107,7 @@ function importConfig(impJson) {
                 impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].endpoint
                 : impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].path;
             pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
+            pathString.replace("/api","");
             let button = $('.btn:contains(' + pathString + ')');
             let checkbox = $(button).siblings().get(0);
             $(checkbox).trigger("click", checkbox);
@@ -172,7 +177,8 @@ function groupByTagsDraw(groupedPaths, ul, di, service, allCheckBoxElem) {
         let tagButton = $('<button>');
         tagButton.attr("id", "btr" + elementsid)
             .attr("data-toggle", "collapse")
-            .attr("data-target", "#ul" + elementsid);
+            .attr("data-target", "#ul" + elementsid)
+            .attr("class", "btn btn-info");
         tagButton.html(tag);
         tagli.append(tagButton);
 
@@ -295,7 +301,6 @@ function ID() {
 }
 
 function addEventListeners() {
-
     $(".configInputText").on("focusout", function () {
         if ($(this).val() === "") {
             $($(this).siblings().get(0)).trigger("click");

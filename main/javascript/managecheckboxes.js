@@ -48,6 +48,11 @@ function addToList(checkboxElem) {
 
         $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") - 1);
         manageParentCheckboxes(parentCheckbox);
+
+        if ($(parentCheckbox).data("childCheckboxes") !== $(parentCheckbox).data("maxChildren")) {
+            $(parentCheckbox).next().css("background-color", "darksalmon");
+        }
+
     } else if ($(checkboxElem).data("checked") === true) {
         list[$(checkboxElem).data("service")] = list[$(checkboxElem).data("service")]
             .filter(function (item) {
@@ -56,6 +61,9 @@ function addToList(checkboxElem) {
         $(checkboxElem).data("checked", false);
         $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") + 1);
         manageParentCheckboxes(parentCheckbox);
+        if ($(parentCheckbox).data("childCheckboxes") === $(parentCheckbox).data("maxChildren")) {
+            $(parentCheckbox).next().css("background-color", "");
+        }
     }
 }
 
@@ -90,7 +98,7 @@ function triggerAllTagsToList(tagCheckBoxElement) {
 function manageParentCheckboxes(parentCheckbox) {
     let grandParentCheckBox = $(parentCheckbox).parent().siblings().get(0);
     let previousState = parentCheckbox.checked;
-    parentCheckbox.checked = $(parentCheckbox).data("childCheckboxes") === 0 && $(parentCheckbox).data("maxChildren") > 0 ;
+    parentCheckbox.checked = $(parentCheckbox).data("childCheckboxes") === 0 && $(parentCheckbox).data("maxChildren") > 0;
 
     if (grandParentCheckBox !== undefined) {
         if (parentCheckbox.checked === true && $(parentCheckbox).data("childCheckboxes") === 0) {
