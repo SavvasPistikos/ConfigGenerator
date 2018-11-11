@@ -136,3 +136,14 @@ function createOptionsUL(id, checkbox, internal) {
 
     return $(optionsUl);
 }
+
+function displayInputText(endpointOptionsCheckbox) {
+    let inputElement = $(endpointOptionsCheckbox).next().get(0);
+
+    if (endpointOptionsCheckbox.checked === true) {
+        inputElement.style.display = "inline";
+    }
+    else {
+        inputElement.style.display = "none";
+    }
+}

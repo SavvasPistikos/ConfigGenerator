@@ -15,7 +15,7 @@ function importJson(liItem) {
         let groupedPaths = groupByTags(buttonIdWithout);
         allGroupedByTags[buttonIdWithout] = groupedPaths;
 
-        groupByTagsDraw(groupedPaths, ul, $("#swaggers"), jliItem.data("service"), allCheckbox);
+        groupByTagsDraw(groupedPaths, ul, $("#swaggers"), jliItem.data("service"), jliItem.data("version"), allCheckbox);
         $(allCheckbox).data("maxChildren", $(allCheckbox).data("childCheckboxes"));
         $("#" + di.id).data("service", jliItem.data("service"));
         $($("#services").children().get(3)).tab('show');
@@ -23,8 +23,11 @@ function importJson(liItem) {
         liItem.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>";
         liItem.className = "btn btn-secondary btn-sm";
         resetOutput(jliItem.data("service"));
-        $('#close' + jliItem.data("service")).remove();
-        $('#div' + jliItem.data("service")).remove();
+        let div = document.getElementById("div" + jliItem.data("service") +  jliItem.data("version"));
+        let close = document.getElementById("close" + jliItem.data("service") +  jliItem.data("version"));
+
+        $(div).remove();
+        $(close).remove();
     }
     addEventListeners();
 }
@@ -39,7 +42,7 @@ function createTab(service, version, id, internal) {
         li.html("<a data-toggle=\"tab\" href=\"#div" + service + "\">"
             + "<button class=\"close closeTab\" type=\"button\" onclick=\"closeTab(this)\" >×</button>"
             + tabName + "</a>");
-        li.attr("id", "close" + service);
+        li.attr("id", "close" + service + version);
         li.data("checkboxId", id);
     } else {
         li = $('<li>');
@@ -162,7 +165,7 @@ function groupByTags(jsonFileName) {
     return groupedPaths;
 }
 
-function groupByTagsDraw(groupedPaths, ul, di, service, allCheckBoxElem) {
+function groupByTagsDraw(groupedPaths, ul, di, service, version, allCheckBoxElem) {
     for (let tag in groupedPaths) {
         let elementsid = trimId(tag);
         elementsid = (elementsid === "default") ? service + elementsid : elementsid;
@@ -203,7 +206,7 @@ function groupByTagsDraw(groupedPaths, ul, di, service, allCheckBoxElem) {
     }
     let tabpanediv = document.createElement("div");
     tabpanediv.setAttribute("class", "tab-pane fade active in");
-    tabpanediv.setAttribute("id", "div" + service);
+    tabpanediv.setAttribute("id", "div" + service + version);
     $(tabpanediv).data("service", service);
     $(tabpanediv).append(ul);
     di.append(tabpanediv);
@@ -228,18 +231,6 @@ function createInputText(value, idString) {
         inputext.id = idString;
     inputext.value = value;
     return inputext;
-}
-
-function displayInputText(endpointOptionsCheckbox) {
-    let inputElement = $(endpointOptionsCheckbox).next().get(0);
-
-    if (endpointOptionsCheckbox.checked === true) {
-        inputElement.style.display = "inline";
-    }
-    else {
-        inputElement.value = "";
-        inputElement.style.display = "none";
-    }
 }
 
 
@@ -312,7 +303,8 @@ function addEventListeners() {
     $(".configInputCheckbox").on("click", function () {
         if (this.checked === false) {
             if ($(this).parent().text().trim().toLowerCase() === "tags") {
-                $(this).next().val("");
+                let pathCheckbox = $(this).parent().parent().siblings().get(0);
+                $(this).next().val($(pathCheckbox).data("tags"));
             }
         }
         writeToButton($(this).next());

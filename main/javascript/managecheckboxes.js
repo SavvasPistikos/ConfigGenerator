@@ -49,7 +49,7 @@ function addToList(checkboxElem) {
         $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") - 1);
         manageParentCheckboxes(parentCheckbox);
 
-        if ($(parentCheckbox).data("childCheckboxes") !== $(parentCheckbox).data("maxChildren")) {
+        if ($(parentCheckbox).data("childCheckboxes") !== $(parentCheckbox).data("maxChildren") && $(checkboxElem).data("service") !== "internalApis") {
             $(parentCheckbox).next().css("background-color", "darksalmon");
         }
 
