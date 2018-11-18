@@ -297,7 +297,7 @@ function addEventListeners() {
         if ($(this).val() === "") {
             $($(this).siblings().get(0)).trigger("click");
         }
-        writeToButton(this);
+        writeToButton(this, $(this).val());
     });
 
     $(".configInputCheckbox").on("click", function () {
@@ -305,8 +305,13 @@ function addEventListeners() {
             if ($(this).parent().text().trim().toLowerCase() === "tags") {
                 let pathCheckbox = $(this).parent().parent().siblings().get(0);
                 $(this).next().val($(pathCheckbox).data("tags"));
+                writeToButton($(this).next(),$(this).next().val());
+                return;
             }
+            writeToButton($(this).next(),"");
+        }else{
+            writeToButton($(this).next(), $(this).next().val());
+
         }
-        writeToButton($(this).next());
     });
 }

@@ -17,10 +17,11 @@ function createInternalApisTab() {
     //let ul = $('<ul>');
     let ul = createTab("internalApis", "", "internal", true);
     ul.css("margin", "5px 0");
-    let button = $('<button>');
-    button.attr("class", "pull-right");
-    button.html("Add internalApi Endpoint");
-    button.attr("data-toggle", "modal")
+
+    let button = document.createElement("button");
+    button.className = "btn btn-success pull-right";
+    button.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span> Add";
+    $(button).attr("data-toggle", "modal")
         .attr("data-target", "#addInternalPath")
         .attr("onclick", "generateInterApiPathModal();");
 
@@ -28,7 +29,7 @@ function createInternalApisTab() {
     internalPathsList.attr("id", "internalPathsList");
     internalPathsList.hide();
 
-    ul.append(button);
+    ul.append($(button));
     ul.append(internalPathsList);
     tabpanediv.append(ul);
     internalApisTabContent.append(tabpanediv);

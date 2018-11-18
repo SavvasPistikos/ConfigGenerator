@@ -126,7 +126,7 @@ function createFooter() {
     let addButton = document.createElement("button");
     addButton.className = "btn btn-primary";
     addButton.setAttribute("onclick", "addInternalPath();");
-    addButton.innerText = "Add Path";
+    addButton.innerText = "Save";
 
     div.appendChild(addButton);
     div.appendChild(closeButton);

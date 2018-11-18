@@ -145,5 +145,6 @@ function displayInputText(endpointOptionsCheckbox) {
     }
     else {
         inputElement.style.display = "none";
+
     }
 }

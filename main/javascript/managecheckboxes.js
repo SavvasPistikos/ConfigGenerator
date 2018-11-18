@@ -120,17 +120,18 @@ function manageParentCheckboxes(parentCheckbox) {
 };*/
 
 
-function writeToButton(element) {
+function writeToButton(element, value) {
     let el = $(element);
     let parent = $(el.parent());
     let attributeName = parent.text().trim();
     let outercheckbox = parent.parent().siblings().get(0);
 
-    if (el.is(":checkbox")) {
+/*    if (el.is(":checkbox")) {
         $(outercheckbox).data(attributeName.toLowerCase(), element.checked);
     } else {
         $(outercheckbox).data(attributeName.toLowerCase(), el.val());
-    }
+    }*/
+    $(outercheckbox).data(attributeName.toLowerCase(),value);
     updatePath($(outercheckbox), attributeName.toLowerCase());
 }
 
