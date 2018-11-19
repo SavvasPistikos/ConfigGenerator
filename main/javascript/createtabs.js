@@ -305,8 +305,6 @@ function addEventListeners() {
             if ($(this).parent().text().trim().toLowerCase() === "tags") {
                 let pathCheckbox = $(this).parent().parent().siblings().get(0);
                 $(this).next().val($(pathCheckbox).data("tags"));
-                writeToButton($(this).next(),$(this).next().val());
-                return;
             }
             writeToButton($(this).next(),"");
         }else{

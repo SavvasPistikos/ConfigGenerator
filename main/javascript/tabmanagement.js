@@ -5,11 +5,13 @@ function closeTab(closeTabButton) {
     checkbox.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>";
     checkbox.className = "btn btn-secondary btn-sm";
     //$('#' + $(closeTabButton).parent().parent().data("checkboxId")).prop('checked', false);
+    let tabLi  = $(closeTabButton).parent().parent();
+    let previousTab = $(tabLi).prev().children('a');
+
     $(closeTabButton).parent().parent().remove(); //remove li of tab
     $(tabContentId).remove(); //remove respective tab content
-    let first = $('#services a:first'); // Select first tab
-    if (first !== undefined) {
-        $(first).tab('show');
+    if(previousTab !== undefined){
+        $(previousTab).tab('show');
     }
 
     resetOutput(tabContentId.replace("#div",""));
