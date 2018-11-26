@@ -126,11 +126,48 @@ function createOptionsUL(id, checkbox, internal) {
     trnsTypeIdIn.style.display = "none";
     trnsTypeIdLi.appendChild(trnsTypeIdIn);
 
+    let persistLi = document.createElement("li");
+    let persistCheckBox = createCheckBox("displayInputText(this);");
+    persistCheckBox.className = "configInputCheckbox";
+    persistLi.appendChild(persistCheckBox);
+    persistLi.appendChild(document.createTextNode("\t\t persist"));
+
+    let persistInputUl = document.createElement("ul");
+    let persistHeaderLi = document.createElement("li");
+    persistHeaderLi.appendChild(document.createTextNode("\t\t headers :"));
+    let persistHeaderIn = document.createElement("input");
+    persistHeaderIn.className = "configInputText";
+    persistHeaderIn.id = "persHeader=" + "";
+    persistHeaderIn.setAttribute("type", "text");
+    persistHeaderIn.setAttribute("onfocusout", "writeToButton(this)");
+    persistHeaderIn.value = "";
+    persistHeaderIn.style.display = "inline";
+    persistHeaderLi.appendChild(persistHeaderIn);
+
+    let persistQueryLi = document.createElement("li");
+    persistQueryLi.appendChild(document.createTextNode("\t\t queryParams :"));
+
+    let persistQueryIn = document.createElement("input");
+    persistQueryIn.className = "configInputText";
+    persistQueryIn.id = "persQuery=" + "";
+    persistQueryIn.setAttribute("type", "text");
+    persistQueryIn.setAttribute("onfocusout", "writeToButton(this)");
+    persistQueryIn.value = "";
+    persistQueryIn.style.display = "inline";
+    persistQueryLi.appendChild(persistQueryIn);
+
+
+    persistInputUl.appendChild(persistHeaderLi);
+    persistInputUl.appendChild(persistQueryLi);
+
+    persistLi.appendChild(persistInputUl);
+
     optionsUl.appendChild(authorizeLi);
     optionsUl.appendChild(displayLi);
     optionsUl.appendChild(endpointLi);
     optionsUl.appendChild(trnsTypeIdLi);
     optionsUl.appendChild(tagsLi);
+    optionsUl.appendChild(persistLi);
 
     optionsUl.setAttribute("class", "panel-collapse collapse");
 
