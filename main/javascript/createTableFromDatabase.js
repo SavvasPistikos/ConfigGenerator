@@ -65,11 +65,12 @@ function createInsertRow() {
     let conTd = document.createElement("td");
     let verTd = document.createElement("td");
 
-    srvTd.appendChild(createInputText("", "srvTd"));
-    conTd.appendChild(createInputText("", "conTd"));
-    verTd.appendChild(createInputText("", "verTd"));
+    srvTd.appendChild(createInputForm("Service", "srvTd"));
+    conTd.appendChild(createInputForm("Content", "conTd"));
+    verTd.appendChild(createInputForm("Version", "verTd"));
 
     let add = document.createElement("button");
+    add.style.margin = "9px 0px 0px 0px";
     add.setAttribute("class", "btn btn-default");
     add.innerText = "Add";
 

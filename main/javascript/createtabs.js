@@ -57,17 +57,19 @@ function createTab(service, version, id, internal) {
     $(allCheckbox).data("childCheckboxes", 0);
     $(allCheckbox).data("maxChildren", 0);
     $(allCheckbox).data("internal", internal);
-    ul.append(allCheckbox);
 
     if (internal === false) {
-        let url = createInputText(null, "url=" + service);
-        let versionInput = createInputText(null, "vers=" + service);
+        let url = createInputForm("Url", "url=" + service);
+        let versionInput = createInputForm("Version", "vers=" + service);
 
+        let formDiv = document.createElement("form");
+        formDiv.className = "form-inline";
 
-        ul.append(document.createTextNode("\t\t Url = "));
-        ul.append(url);
-        ul.append(document.createTextNode("\t\t version = "));
-        ul.append(versionInput);
+        formDiv.appendChild(allCheckbox);
+        formDiv.appendChild(url);
+        formDiv.appendChild(versionInput);
+
+        ul.append($(formDiv));
     }
 
     return ul;
@@ -231,6 +233,19 @@ function createInputText(value, idString) {
         inputext.id = idString;
     inputext.value = value;
     return inputext;
+}
+
+function createInputForm(value, idString) {
+    let formDiv = document.createElement("div");
+    formDiv.className = "form-group mx-sm-3 mb-2";
+    let formInput = document.createElement("input");
+    formInput.setAttribute("type", "text");
+    formInput.id = idString;
+    formInput.className = "form-control";
+    formInput.setAttribute("placeholder", value);
+    formDiv.appendChild(formInput);
+
+    return formDiv;
 }
 
 
