@@ -51,6 +51,8 @@ function generateCheckbox(path, method, service) {
     checkbox.data("pathId", ID());
     checkbox.data("checked", false);
     checkbox.data("service", service);
+    checkbox.data("headers", "");
+    checkbox.data("queryParams", "");
 
     return checkbox;
 }
@@ -134,32 +136,36 @@ function createOptionsUL(id, checkbox, internal) {
 
     let persistInputUl = document.createElement("ul");
     let persistHeaderLi = document.createElement("li");
-    persistHeaderLi.appendChild(document.createTextNode("\t\t headers :"));
+    persistHeaderLi.appendChild(document.createTextNode("\t\t headers "));
     let persistHeaderIn = document.createElement("input");
     persistHeaderIn.className = "configInputText";
     persistHeaderIn.id = "persHeader=" + "";
     persistHeaderIn.setAttribute("type", "text");
-    persistHeaderIn.setAttribute("onfocusout", "writeToButton(this)");
+    persistHeaderIn.setAttribute("onfocusout", "writeToButton($(this).parent())");
     persistHeaderIn.value = "";
-    persistHeaderIn.style.display = "inline";
     persistHeaderLi.appendChild(persistHeaderIn);
 
     let persistQueryLi = document.createElement("li");
-    persistQueryLi.appendChild(document.createTextNode("\t\t queryParams :"));
+    persistQueryLi.appendChild(document.createTextNode("\t\t queryParams "));
 
     let persistQueryIn = document.createElement("input");
-    persistQueryIn.className = "configInputText";
+    //persistQueryIn.className = "configInputText";
     persistQueryIn.id = "persQuery=" + "";
     persistQueryIn.setAttribute("type", "text");
-    persistQueryIn.setAttribute("onfocusout", "writeToButton(this)");
+    $(persistQueryIn).focusout(function () {
+        if ($(this).val() === "") {
+            $($(this).siblings().get(0)).trigger("click");
+        }
+        writeToButton($(this).parent().parent(), $(this).val());
+    });
+    //persistQueryIn.setAttribute("onfocusout", "writeToButton($(this).parent())");
     persistQueryIn.value = "";
-    persistQueryIn.style.display = "inline";
     persistQueryLi.appendChild(persistQueryIn);
-
 
     persistInputUl.appendChild(persistHeaderLi);
     persistInputUl.appendChild(persistQueryLi);
 
+    $(persistInputUl).hide();
     persistLi.appendChild(persistInputUl);
 
     optionsUl.appendChild(authorizeLi);
@@ -178,10 +184,10 @@ function displayInputText(endpointOptionsCheckbox) {
     let inputElement = $(endpointOptionsCheckbox).next().get(0);
 
     if (endpointOptionsCheckbox.checked === true) {
-        inputElement.style.display = "inline";
+        $(inputElement).show();
     }
     else {
-        inputElement.style.display = "none";
+        $(inputElement).hide();
 
     }
 }

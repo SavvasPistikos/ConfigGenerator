@@ -37,6 +37,21 @@ function addToList(checkboxElem) {
                 pathDTO.tags.push(tags[i]);
             }
         }
+
+        if ($(checkboxElem).data("headers") !== undefined) {
+            let headers = $(checkboxElem).data("headers").split(",");
+            for (let i in headers) {
+                pathDTO.persist.headers.push(headers[i]);
+            }
+        }
+
+        if ($(checkboxElem).data("queryParams") !== undefined) {
+            let queryParams = $(checkboxElem).data("queryParams").split(",");
+            for (let i in queryParams) {
+                pathDTO.persist.queryParams.push(queryParams[i]);
+            }
+        }
+
         pathDTO.id = $(checkboxElem).data("pathId");
 
         if (list[$(checkboxElem).data("service")] === undefined) {
