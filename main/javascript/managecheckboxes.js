@@ -140,15 +140,13 @@ function writeToButton(element, value) {
     let parent = $(el.parent());
     let attributeName = parent.text().trim();
     let outercheckbox = findOuterCheckbox(el);
-    //let outercheckbox = parent.parent().siblings().get(0);
 
-/*    if (el.is(":checkbox")) {
-        $(outercheckbox).data(attributeName.toLowerCase(), element.checked);
-    } else {
-        $(outercheckbox).data(attributeName.toLowerCase(), el.val());
-    }*/
-    $(outercheckbox).data(attributeName.toLowerCase(), value);
-    updatePath($(outercheckbox), attributeName.toLowerCase());
+    if(attributeName.includes("headers") && attributeName.includes("queryParams")){
+        updatePersist($(outercheckbox), attributeName.toLowerCase());
+    } else{
+        $(outercheckbox).data(attributeName.toLowerCase(), value);
+        updatePath($(outercheckbox), attributeName.toLowerCase());
+    }
 }
 
 function updatePath(outercheckbox, attributeName) {
@@ -160,6 +158,15 @@ function updatePath(outercheckbox, attributeName) {
                     let tags = outercheckbox.data(attributeName).split(",");
                     path[attributeName] = (tags.length === 1 && tags[0] === "") ? "" : tags;
                     return;
+                } else if(attributeName === "headers") {
+                    let headers = outercheckbox.data(attributeName).split(",");
+                    path.persist[attributeName] = (headers.length === 1 && headers[0] === "") ? "" : headers;
+                    return;
+
+                } else if(attributeName === "queryparams") {
+                    let queryparams = outercheckbox.data(attributeName).split(",");
+                    path.persist[attributeName] = (queryparams.length === 1 && queryparams[0] === "") ? "" : queryparams;
+                    return;
                 }
                 path[attributeName] = outercheckbox.data(attributeName);
             }
@@ -168,10 +175,24 @@ function updatePath(outercheckbox, attributeName) {
 }
 
 function findOuterCheckbox(element){
-
     if((element.attr("id") !== undefined) && element.attr("id").startsWith("_")){
         return $(element.parent()).children().get(0);
     } else {
         return findOuterCheckbox($(element.parent()));
+    }
+}
+
+function updatePersist(outercheckbox) {
+    let serviceList = list[outercheckbox.data("service")];
+    if (serviceList !== undefined) {
+        for (path of  serviceList) {
+            if (path.path === outercheckbox.data("path") && path.method === outercheckbox.data("method")) {
+                let headers = outercheckbox.data(attributeName).split(",");
+                path.persist[attributeName] = (headers.length === 1 && headers[0] === "") ? "" : headers;
+                let queryparams = outercheckbox.data(attributeName).split(",");
+                path.persist[attributeName] = (queryparams.length === 1 && queryparams[0] === "") ? "" : queryparams;
+            }
+
+        }
     }
 }
