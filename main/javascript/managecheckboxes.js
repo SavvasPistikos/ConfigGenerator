@@ -19,7 +19,7 @@ function addToList(checkboxElem) {
             trnstypeid: "",
             persist: {
                 headers: [],
-                queryParams: []
+                queryparams: []
             },
             id: ""
         };
@@ -45,10 +45,10 @@ function addToList(checkboxElem) {
             }
         }
 
-        if ($(checkboxElem).data("queryParams") !== undefined) {
-            let queryParams = $(checkboxElem).data("queryParams").split(",");
-            for (let i in queryParams) {
-                pathDTO.persist.queryParams.push(queryParams[i]);
+        if ($(checkboxElem).data("queryparams") !== undefined) {
+            let queryparams = $(checkboxElem).data("queryparams").split(",");
+            for (let i in queryparams) {
+                pathDTO.persist.queryparams.push(queryparams[i]);
             }
         }
 
@@ -139,14 +139,15 @@ function writeToButton(element, value) {
     let el = $(element);
     let parent = $(el.parent());
     let attributeName = parent.text().trim();
-    let outercheckbox = parent.parent().siblings().get(0);
+    let outercheckbox = findOuterCheckbox(el);
+    //let outercheckbox = parent.parent().siblings().get(0);
 
 /*    if (el.is(":checkbox")) {
         $(outercheckbox).data(attributeName.toLowerCase(), element.checked);
     } else {
         $(outercheckbox).data(attributeName.toLowerCase(), el.val());
     }*/
-    $(outercheckbox).data(attributeName.toLowerCase(),value);
+    $(outercheckbox).data(attributeName.toLowerCase(), value);
     updatePath($(outercheckbox), attributeName.toLowerCase());
 }
 
@@ -163,5 +164,14 @@ function updatePath(outercheckbox, attributeName) {
                 path[attributeName] = outercheckbox.data(attributeName);
             }
         }
+    }
+}
+
+function findOuterCheckbox(element){
+
+    if((element.attr("id") !== undefined) && element.attr("id").startsWith("_")){
+        return $(element.parent()).children().get(0);
+    } else {
+        return findOuterCheckbox($(element.parent()));
     }
 }

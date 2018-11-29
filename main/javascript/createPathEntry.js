@@ -52,7 +52,7 @@ function generateCheckbox(path, method, service) {
     checkbox.data("checked", false);
     checkbox.data("service", service);
     checkbox.data("headers", "");
-    checkbox.data("queryParams", "");
+    checkbox.data("queryparams", "");
 
     return checkbox;
 }
@@ -156,7 +156,7 @@ function createOptionsUL(id, checkbox, internal) {
         if ($(this).val() === "") {
             $($(this).siblings().get(0)).trigger("click");
         }
-        writeToButton($(this).parent().parent(), $(this).val());
+        writeToButton(this, $(this).val());
     });
     //persistQueryIn.setAttribute("onfocusout", "writeToButton($(this).parent())");
     persistQueryIn.value = "";
