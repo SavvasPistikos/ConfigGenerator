@@ -123,7 +123,6 @@ function createOptionsUL(id, checkbox, internal) {
     trnsTypeIdIn.className = "configInputText";
     trnsTypeIdIn.id = "trns=" + "";
     trnsTypeIdIn.setAttribute("type", "text");
-    trnsTypeIdIn.setAttribute("onfocusout", "writeToButton(this)");
     trnsTypeIdIn.value = "";
     trnsTypeIdIn.style.display = "none";
     trnsTypeIdLi.appendChild(trnsTypeIdIn);
@@ -141,7 +140,6 @@ function createOptionsUL(id, checkbox, internal) {
     persistHeaderIn.className = "configInputText";
     persistHeaderIn.id = "persHeader=" + "";
     persistHeaderIn.setAttribute("type", "text");
-    persistHeaderIn.setAttribute("onfocusout", "writeToButton($(this).parent())");
     persistHeaderIn.value = "";
     persistHeaderLi.appendChild(persistHeaderIn);
 
@@ -149,16 +147,9 @@ function createOptionsUL(id, checkbox, internal) {
     persistQueryLi.appendChild(document.createTextNode("\t\t queryParams "));
 
     let persistQueryIn = document.createElement("input");
-    //persistQueryIn.className = "configInputText";
+    persistQueryIn.className = "configInputText";
     persistQueryIn.id = "persQuery=" + "";
     persistQueryIn.setAttribute("type", "text");
-    $(persistQueryIn).focusout(function () {
-        if ($(this).val() === "") {
-            $($(this).siblings().get(0)).trigger("click");
-        }
-        writeToButton(this, $(this).val());
-    });
-    //persistQueryIn.setAttribute("onfocusout", "writeToButton($(this).parent())");
     persistQueryIn.value = "";
     persistQueryLi.appendChild(persistQueryIn);
 

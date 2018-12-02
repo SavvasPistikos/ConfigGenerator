@@ -309,22 +309,32 @@ function ID() {
 
 function addEventListeners() {
     $(".configInputText").on("focusout", function () {
-        if ($(this).val() === "") {
-            $($(this).siblings().get(0)).trigger("click");
+        let parentOfInput = $(this).parent();
+
+        if(parentOfInput.text() /*!== undefined && parentOfInput.text().trim() === "queryParams" || parentOfInput.text().trim() === "headers"*/){
+            let attributeName = parentOfInput.text().trim().toLocaleLowerCase();
+            let value = $(this).val();
+            writeToButton(this, attributeName, value);
         }
-        writeToButton(this, $(this).val());
     });
 
     $(".configInputCheckbox").on("click", function () {
         if (this.checked === false) {
-            if ($(this).parent().text().trim().toLowerCase() === "tags") {
-                let pathCheckbox = $(this).parent().parent().siblings().get(0);
+            let attributeName = $(this).parent().text().trim().toLowerCase();
+            if (attributeName.toLowerCase() === "tags") {
+                let pathCheckbox = findOuterCheckbox($(this));
                 $(this).next().val($(pathCheckbox).data("tags"));
+            } else if(attributeName.includes("headers") || attributeName.includes("queryparams")){
+                writeToButton(this,"headers", "");
+                writeToButton(this,"queryparams", "");
+                return;
             }
-            writeToButton($(this).next(),"");
-        }else{
-            writeToButton($(this).next(), $(this).next().val());
-
+            writeToButton($(this).next(), "");
+        } else if(this.checked === true) {
+            let parentOfInput = $(this).parent();
+            let attributeName = parentOfInput.text().trim().toLocaleLowerCase();
+            let value = $(this).val();
+            writeToButton(this, attributeName, value);
         }
     });
 }
