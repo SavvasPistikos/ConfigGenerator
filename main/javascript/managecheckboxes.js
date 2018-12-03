@@ -89,7 +89,7 @@ function addAllToList(allCheckBoxElement) {
     if ($(allCheckBoxElement).data("internal") === true) {
         parent = $(allCheckBoxElement).siblings('li');
     } else {
-        parent = $(allCheckBoxElement).parent();
+        parent = $(allCheckBoxElement).closest("ul");
     }
     jQuery.each($(parent).children("li"), function (i, child) {
         let fchild = $(child).children().get(0);
