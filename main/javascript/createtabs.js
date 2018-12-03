@@ -23,8 +23,8 @@ function importJson(liItem) {
         liItem.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>";
         liItem.className = "btn btn-secondary btn-sm";
         resetOutput(jliItem.data("service"));
-        let div = document.getElementById("div" + jliItem.data("service") +  jliItem.data("version"));
-        let close = document.getElementById("close" + jliItem.data("service") +  jliItem.data("version"));
+        let div = document.getElementById("div" + jliItem.data("service") + jliItem.data("version"));
+        let close = document.getElementById("close" + jliItem.data("service") + jliItem.data("version"));
 
         $(div).remove();
         $(close).remove();
@@ -104,7 +104,7 @@ function importConfig(impJson) {
         let serviceCheckbox = document.getElementById(a + version);
         $(serviceCheckbox).trigger("click");
         document.getElementById("url=" + a).value = impJson.apis[a].url;
-        document.getElementById("vers=" + a).value = impJson.apis[a].version !== undefined ? impJson.apis[a].version : "" ;
+        document.getElementById("vers=" + a).value = impJson.apis[a].version !== undefined ? impJson.apis[a].version : "";
 
         for (p in impJson.apis[a].paths) {
             let basePath = (jsonList[a].basePath === undefined) ? "" : jsonList[a].basePath;
@@ -113,7 +113,7 @@ function importConfig(impJson) {
                 impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].endpoint
                 : impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].path;
             pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
-            pathString.replace("/api","");
+            pathString.replace("/api", "");
             let button = $('.btn:contains(' + pathString + ')');
             let checkbox = $(button).siblings().get(0);
             $(checkbox).trigger("click", checkbox);
@@ -311,7 +311,7 @@ function addEventListeners() {
     $(".configInputText").on("focusout", function () {
         let parentOfInput = $(this).parent();
 
-        if(parentOfInput.text() /*!== undefined && parentOfInput.text().trim() === "queryParams" || parentOfInput.text().trim() === "headers"*/){
+        if (parentOfInput.text() /*!== undefined && parentOfInput.text().trim() === "queryParams" || parentOfInput.text().trim() === "headers"*/) {
             let attributeName = parentOfInput.text().trim().toLocaleLowerCase();
             let value = $(this).val();
             writeToButton(this, attributeName, value);
@@ -324,17 +324,27 @@ function addEventListeners() {
             if (attributeName.toLowerCase() === "tags") {
                 let pathCheckbox = findOuterCheckbox($(this));
                 $(this).next().val($(pathCheckbox).data("tags"));
-            } else if(attributeName.includes("headers") || attributeName.includes("queryparams")){
-                writeToButton(this,"headers", "");
-                writeToButton(this,"queryparams", "");
-                return;
+                writeToButton($(this).next(), "");
+            } else if (attributeName.includes("headers") || attributeName.includes("queryparams")) {
+                writeToButton(this, "headers", "");
+                writeToButton(this, "queryparams", "");
+            } else {
+                writeToButton(this, attributeName, this.checked);
             }
-            writeToButton($(this).next(), "");
-        } else if(this.checked === true) {
+        } else if (this.checked === true) {
             let parentOfInput = $(this).parent();
             let attributeName = parentOfInput.text().trim().toLocaleLowerCase();
-            let value = $(this).val();
-            writeToButton(this, attributeName, value);
+            let textInputChildren = parentOfInput.find('.configInputText');
+            if (textInputChildren.length === 0) {
+                let value = this.checked;
+                writeToButton(this, attributeName, value);
+            } else if (textInputChildren.length > 0) {
+                for (let t=0 ; t < textInputChildren.length ; t++) {
+                    let attributeNames = attributeName.split("\t\t");
+                    let value = textInputChildren[t].value;
+                    writeToButton(this, attributeNames[t+1].trim(), value);
+                }
+            }
         }
     });
 }

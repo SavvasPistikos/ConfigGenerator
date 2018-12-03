@@ -62,8 +62,8 @@ function createOptionsUL(id, checkbox, internal) {
     let optionsUl = document.createElement("ul");
     optionsUl.id = id;
     let authorizeLi = document.createElement("li");
-    let authorizeCheckbox = createCheckBox("writeToButton(this);", "", "");
-    authorizeCheckbox.className = "";
+    let authorizeCheckbox = createCheckBox("", "", "");
+    authorizeCheckbox.className = "configInputCheckbox";
     authorizeCheckbox.checked = true;
     authorizeCheckbox.id = "auth" + "";
     let authorizeTextNode = document.createTextNode("Authorize");
@@ -71,8 +71,8 @@ function createOptionsUL(id, checkbox, internal) {
     authorizeLi.appendChild(authorizeTextNode);
 
     let displayLi = document.createElement("li");
-    let displayCheckBox = createCheckBox("writeToButton(this);", "", "");
-    displayCheckBox.className = "";
+    let displayCheckBox = createCheckBox("", "", "");
+    displayCheckBox.className = "configInputCheckbox";
     displayCheckBox.checked = true;
     displayCheckBox.id = "disp" + "";
     let displayTextNode = document.createTextNode("Display");
@@ -179,6 +179,5 @@ function displayInputText(endpointOptionsCheckbox) {
     }
     else {
         $(inputElement).hide();
-
     }
 }

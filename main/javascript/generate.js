@@ -7,7 +7,7 @@ function generate() {
                 if (document.getElementById("vers=" + p) !== null && document.getElementById("vers=" + p).value !== "") {
                     apiList.apis[apiName] = {url: "", version: "", paths: []};
                     apiList.apis[apiName].version = document.getElementById("vers=" + p).value;
-                } else if(apiName === "internalApis"){
+                } else if (apiName === "internalApis") {
                     apiList.apis[apiName] = {internal: "true", paths: []};
                 }
                 else if (p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "") === "") {
@@ -46,8 +46,15 @@ function generate() {
                     path.display = list[p][i].display;
                 }
                 path.authorize = list[p][i].authorize;
-                if(list[p][i].trnstypeid !== "") {
+                if (list[p][i].trnstypeid !== "") {
                     path.trnsTypeId = list[p][i].trnstypeid;
+                }
+                if (list[p][i].persist.headers.length > 0) {
+                    path.persist = {"headers": [], "queryParams": []};
+                    path.persist.headers = list[p][i].persist.headers;
+                }
+                if (list[p][i].persist.queryparams.length > 0 ) {
+                    path.persist.queryParams = list[p][i].persist.queryparams;
                 }
 
                 apiList.apis[apiName].paths.push(path);

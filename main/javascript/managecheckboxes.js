@@ -41,13 +41,15 @@ function addToList(checkboxElem) {
         if ($(checkboxElem).data("headers") !== undefined) {
             let headers = $(checkboxElem).data("headers").split(",");
             for (let i in headers) {
-                pathDTO.persist.headers.push(headers[i]);
+                if(headers[i] !== "")
+                    pathDTO.persist.headers.push(headers[i]);
             }
         }
 
         if ($(checkboxElem).data("queryparams") !== undefined) {
             let queryparams = $(checkboxElem).data("queryparams").split(",");
             for (let i in queryparams) {
+                if(queryparams[i] !== "")
                 pathDTO.persist.queryparams.push(queryparams[i]);
             }
         }
