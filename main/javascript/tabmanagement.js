@@ -8,7 +8,7 @@ function closeTab(closeTabButton) {
     let tabLi  = $(closeTabButton).parent().parent();
     let previousTab = $(tabLi).prev().children('a');
 
-    $(closeTabButton).parent().parent().remove(); //remove li of tab
+    tabLi.remove(); //remove li of tab
     $(tabContentId).remove(); //remove respective tab content
     if(previousTab !== undefined){
         $(previousTab).tab('show');

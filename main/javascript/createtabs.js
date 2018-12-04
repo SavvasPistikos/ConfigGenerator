@@ -3,28 +3,28 @@ function importJson(liItem) {
     liItem.className = "btn btn-success btn-sm";
     let jliItem = $(liItem);
     js = JSON.parse(getSwaggerJsonFromDatabase(jliItem.data("id")).content);
-
-    if (document.getElementById("div" + jliItem.data("service") + jliItem.data("version")) == null) {
+    let version = jliItem.data("version").replace(".","S");
+    if (document.getElementById("div" + jliItem.data("service") + version) == null) {
         jsonList[jliItem.data("service")] = js;
         let di = $('<div>');
         di.attr("class", "tab-pane fade active in")
-            .attr("id", jliItem.data("service"));
+            .attr("id", jliItem.data("service") + version);
 
         let ul = createTab(jliItem.data("service"), jliItem.data("version"), jliItem.attr("id"), false);
         let allCheckbox = $(ul).children().get(0);
         let groupedPaths = groupByTags(buttonIdWithout);
         allGroupedByTags[buttonIdWithout] = groupedPaths;
 
-        groupByTagsDraw(groupedPaths, ul, $("#swaggers"), jliItem.data("service"), jliItem.data("version"), allCheckbox);
+        groupByTagsDraw(groupedPaths, ul, $("#swaggers"), jliItem.data("service"), version, allCheckbox);
         $(allCheckbox).data("maxChildren", $(allCheckbox).data("childCheckboxes"));
-        $("#" + di.id).data("service", jliItem.data("service"));
+        $("#" + di.id).data("service", jliItem.data("service") + version);
         $($("#services").children().get(3)).tab('show');
     } else {
         liItem.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>";
         liItem.className = "btn btn-secondary btn-sm";
         resetOutput(jliItem.data("service"));
-        let div = document.getElementById("div" + jliItem.data("service") + jliItem.data("version"));
-        let close = document.getElementById("close" + jliItem.data("service") + jliItem.data("version"));
+        let div = document.getElementById("div" + jliItem.data("service") + version);
+        let close = document.getElementById("close" + jliItem.data("service") + version);
 
         $(div).remove();
         $(close).remove();
@@ -36,10 +36,13 @@ function createTab(service, version, id, internal) {
     let servicesul = $("#services");
     let tabName = service + version;
     let li;
+    //TODO do something smarter naaab,
+    let initialVersion = version;
+    version = version.replace(".","S");
 
     if (internal === false) {
         li = $('<li>');
-        li.html("<a data-toggle=\"tab\" href=\"#div" + service + "\">"
+        li.html("<a data-toggle=\"tab\" href=\"#div" + service + version + "\">"
             + "<button class=\"close closeTab\" type=\"button\" onclick=\"closeTab(this)\" >×</button>"
             + tabName + "</a>");
         li.attr("id", "close" + service + version);
@@ -59,8 +62,8 @@ function createTab(service, version, id, internal) {
     $(allCheckbox).data("internal", internal);
 
     if (internal === false) {
-        let url = createInputForm("Url", "url=" + service);
-        let versionInput = createInputForm("Version", "vers=" + service);
+        let url = createInputForm("Url", "url=" + service, );
+        let versionInput = createInputForm("Version", "vers=" + service, initialVersion);
 
         let formDiv = document.createElement("form");
         formDiv.className = "form-inline";
@@ -235,11 +238,13 @@ function createInputText(value, idString) {
     return inputext;
 }
 
-function createInputForm(value, idString) {
+function createInputForm(value, idString, initialValue) {
     let formDiv = document.createElement("div");
     formDiv.className = "form-group mx-sm-3 mb-2";
     let formInput = document.createElement("input");
     formInput.setAttribute("type", "text");
+    if(initialValue !== undefined)
+    formInput.value = initialValue;
     formInput.id = idString;
     formInput.className = "form-control";
     formInput.setAttribute("placeholder", value);
