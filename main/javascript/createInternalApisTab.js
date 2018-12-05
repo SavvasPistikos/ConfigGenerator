@@ -30,6 +30,8 @@ function createInternalApisTab() {
     internalPathsList.hide();
 
     ul.append($(button));
+    //FAIL apending BR.. to incrase space....
+    ul.append($('<br>').css('line-height', '38px'));
     ul.append(internalPathsList);
     tabpanediv.append(ul);
     internalApisTabContent.append(tabpanediv);

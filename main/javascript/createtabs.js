@@ -119,10 +119,15 @@ function importConfig(impJson) {
             pathString.replace("/api", "");
             let button = $('.btn:contains(' + pathString + ')');
             let checkbox = $(button).siblings().get(0);
+            setOptionsUl($(button).siblings().get(1), impJson.apis[a].paths[p].path);
             $(checkbox).trigger("click", checkbox);
         }
     }
     generate();
+}
+
+function setOptionsUl(optionsUL, path){
+
 }
 
 function groupByTags(jsonFileName) {
