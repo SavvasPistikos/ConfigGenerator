@@ -119,7 +119,7 @@ function importConfig(impJson) {
             pathString.replace("/api", "");
             let button = $('.btn:contains(' + pathString + ')');
             let checkbox = $(button).siblings().get(0);
-            setOptionsUl($(button).siblings().get(1), impJson.apis[a].paths[p].path);
+            setOptionsUl($(button).siblings().get(1), impJson.apis[a].paths[p]);
             $(checkbox).trigger("click", checkbox);
         }
     }
@@ -127,6 +127,15 @@ function importConfig(impJson) {
 }
 
 function setOptionsUl(optionsUL, path){
+    let pathAttributes = Object.keys(path);
+    $(optionsUL).children().each(function () {
+        let liChildren  = $(this).children();
+        let attributeName = $(this).text().toLowerCase().trim();
+        if(pathAttributes.includes(attributeName)){
+         console.log(attributeName);
+        }
+    });
+
 
 }
 
