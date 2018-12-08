@@ -187,6 +187,7 @@ function importInternalPaths(internalEndpoints) {
         removeButton.setAttribute("onclick", "removeInternalPath(this);");
         $(removeButton).insertBefore(pathEntry.children('ul'));
         internalPathsList.append($(pathEntry));
+        setOptionsUl($(pathEntry).children('ul'), internalEndpoints[endpoint]);
     }
     let outerCheckbox = internalPathsList.parent().children(':checkbox');
     $(outerCheckbox).data("maxChildren", internalPathsList.children().length);

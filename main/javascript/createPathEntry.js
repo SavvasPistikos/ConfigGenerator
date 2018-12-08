@@ -52,7 +52,7 @@ function generateCheckbox(path, method, service) {
     checkbox.data("checked", false);
     checkbox.data("service", service);
     checkbox.data("headers", "");
-    checkbox.data("queryparams", "");
+    checkbox.data("queryParams", "");
 
     return checkbox;
 }
@@ -66,7 +66,7 @@ function createOptionsUL(id, checkbox, internal) {
     authorizeCheckbox.className = "configInputCheckbox";
     authorizeCheckbox.checked = true;
     authorizeCheckbox.id = "auth" + "";
-    let authorizeTextNode = document.createTextNode("Authorize");
+    let authorizeTextNode = document.createTextNode("authorize");
     authorizeLi.appendChild(authorizeCheckbox);
     authorizeLi.appendChild(authorizeTextNode);
 
@@ -75,7 +75,7 @@ function createOptionsUL(id, checkbox, internal) {
     displayCheckBox.className = "configInputCheckbox";
     displayCheckBox.checked = true;
     displayCheckBox.id = "disp" + "";
-    let displayTextNode = document.createTextNode("Display");
+    let displayTextNode = document.createTextNode("display");
     displayLi.appendChild(displayCheckBox);
     displayLi.appendChild(displayTextNode);
 
@@ -83,7 +83,7 @@ function createOptionsUL(id, checkbox, internal) {
     let endpointCheckBox = createCheckBox("displayInputText(this);");
     endpointCheckBox.className = "configInputCheckbox";
     endpointLi.appendChild(endpointCheckBox);
-    endpointLi.appendChild(document.createTextNode("\t\t Endpoint"));
+    endpointLi.appendChild(document.createTextNode("\t\t endpoint"));
     let endpointIn = document.createElement("input");
     endpointIn.className = "configInputText";
     endpointIn.id = "end=" + "";
@@ -96,7 +96,7 @@ function createOptionsUL(id, checkbox, internal) {
     let tagsCheckBox = createCheckBox("displayInputText(this);");
     tagsCheckBox.className = "configInputCheckbox";
     tagsLi.appendChild(tagsCheckBox);
-    tagsLi.appendChild(document.createTextNode("\t\t Tags"));
+    tagsLi.appendChild(document.createTextNode("\t\t tags"));
     let tagsIn = document.createElement("input");
     tagsIn.className = "configInputText";
     tagsIn.id = "tags=" + "";

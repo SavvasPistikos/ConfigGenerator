@@ -127,16 +127,30 @@ function importConfig(impJson) {
 }
 
 function setOptionsUl(optionsUL, path){
-    let pathAttributes = Object.keys(path);
     $(optionsUL).children().each(function () {
+        let pathAttributes = Object.keys(path);
         let liChildren  = $(this).children();
-        let attributeName = $(this).text().toLowerCase().trim();
+        let attributeName = $(this).text().trim();
+        let value = path[attributeName];
+
         if(pathAttributes.includes(attributeName)){
-         console.log(attributeName);
+            handleOption(attributeName, liChildren, value);
         }
     });
+}
 
-
+function handleOption(attributeName, children, value){
+    let firstChild = children.get(0);
+    if($(firstChild).is(':checkbox') && $(children).length === 1) {
+        if(value === false && $(firstChild).prop('checked') === true){
+            $(firstChild).trigger("click");
+        }
+    }
+    else if($(firstChild).is(':checkbox') && $(children).length === 2){
+        let inputText = children.get(1);
+        $(inputText).val(value);
+        $(firstChild).trigger("click");
+    }
 }
 
 function groupByTags(jsonFileName) {
@@ -331,7 +345,7 @@ function addEventListeners() {
         let parentOfInput = $(this).parent();
 
         if (parentOfInput.text() /*!== undefined && parentOfInput.text().trim() === "queryParams" || parentOfInput.text().trim() === "headers"*/) {
-            let attributeName = parentOfInput.text().trim().toLocaleLowerCase();
+            let attributeName = parentOfInput.text().trim();
             let value = $(this).val();
             writeToButton(this, attributeName, value);
         }
@@ -339,7 +353,7 @@ function addEventListeners() {
 
     $(".configInputCheckbox").on("click", function () {
         if (this.checked === false) {
-            let attributeName = $(this).parent().text().trim().toLowerCase();
+            let attributeName = $(this).parent().text().trim();
             if (attributeName.toLowerCase() === "tags") {
                 let pathCheckbox = findOuterCheckbox($(this));
                 $(this).next().val($(pathCheckbox).data("tags"));
@@ -352,7 +366,7 @@ function addEventListeners() {
             }
         } else if (this.checked === true) {
             let parentOfInput = $(this).parent();
-            let attributeName = parentOfInput.text().trim().toLocaleLowerCase();
+            let attributeName = parentOfInput.text().trim();
             let textInputChildren = parentOfInput.find('.configInputText');
             if (textInputChildren.length === 0) {
                 let value = this.checked;
@@ -361,7 +375,8 @@ function addEventListeners() {
                 for (let t=0 ; t < textInputChildren.length ; t++) {
                     let attributeNames = attributeName.split("\t\t");
                     let value = textInputChildren[t].value;
-                    writeToButton(this, attributeNames[t+1].trim(), value);
+                    let attribute = attributeNames[t+1] !== undefined ? attributeNames[t+1] : attributeNames[t];
+                    writeToButton(this, attribute.trim(), value);
                 }
             }
         }

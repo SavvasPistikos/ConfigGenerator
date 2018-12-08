@@ -46,15 +46,15 @@ function generate() {
                     path.display = list[p][i].display;
                 }
                 path.authorize = list[p][i].authorize;
-                if (list[p][i].trnstypeid !== "") {
-                    path.trnsTypeId = list[p][i].trnstypeid;
+                if (list[p][i].trnsTypeId !== "") {
+                    path.trnsTypeId = list[p][i].trnsTypeId;
                 }
                 if (list[p][i].persist.headers.length > 0) {
                     path.persist = {"headers": [], "queryParams": []};
                     path.persist.headers = list[p][i].persist.headers;
                 }
-                if (list[p][i].persist.queryparams.length > 0 ) {
-                    path.persist.queryParams = list[p][i].persist.queryparams;
+                if (list[p][i].persist.queryParams.length > 0 ) {
+                    path.persist.queryParams = list[p][i].persist.queryParams;
                 }
 
                 apiList.apis[apiName].paths.push(path);

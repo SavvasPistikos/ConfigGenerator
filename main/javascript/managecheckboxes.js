@@ -16,10 +16,10 @@ function addToList(checkboxElem) {
             tags: [],
             display: true,
             authorize: false,
-            trnstypeid: "",
+            trnsTypeId: "",
             persist: {
                 headers: [],
-                queryparams: []
+                queryParams: []
             },
             id: ""
         };
@@ -29,7 +29,7 @@ function addToList(checkboxElem) {
         pathDTO.authorize = ($(checkboxElem).data("authorize") === undefined) ? true : $(checkboxElem).data("authorize");
         pathDTO.display = ($(checkboxElem).data("display") === undefined) ? true : $(checkboxElem).data("display");
         pathDTO.endpoint = ($(checkboxElem).data("endpoint") === undefined) ? pathDTO.path : $(checkboxElem).data("endpoint");
-        pathDTO.trnstypeid = ($(checkboxElem).data("trnstypeid") === undefined) ? "" : $(checkboxElem).data("trnstypeid");
+        pathDTO.trnsTypeId = ($(checkboxElem).data("trnsTypeId") === undefined) ? "" : $(checkboxElem).data("trnsTypeId");
 
         if ($(checkboxElem).data("tags") !== undefined) {
             let tags = $(checkboxElem).data("tags").split(",");
@@ -46,11 +46,11 @@ function addToList(checkboxElem) {
             }
         }
 
-        if ($(checkboxElem).data("queryparams") !== undefined) {
-            let queryparams = $(checkboxElem).data("queryparams").split(",");
+        if ($(checkboxElem).data("queryParams") !== undefined) {
+            let queryparams = $(checkboxElem).data("queryParams").split(",");
             for (let i in queryparams) {
                 if(queryparams[i] !== "")
-                pathDTO.persist.queryparams.push(queryparams[i]);
+                pathDTO.persist.queryParams.push(queryparams[i]);
             }
         }
 
@@ -155,7 +155,7 @@ function updatePath(outercheckbox, attributeName, value) {
                     let tags = outercheckbox.data(attributeName).split(",");
                     path[attributeName] = (tags.length === 1 && tags[0] === "") ? "" : tags;
                     return;
-                } else if(attributeName === "headers" || attributeName === "queryparams") {
+                } else if(attributeName === "headers" || attributeName === "queryParams") {
                     let attrs = outercheckbox.data(attributeName).split(",");
                     path.persist[attributeName] = (attrs.length === 1 && attrs[0] === "") ? "" : attrs;
                     return;
