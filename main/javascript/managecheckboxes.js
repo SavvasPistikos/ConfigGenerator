@@ -16,7 +16,7 @@ function addToList(checkboxElem) {
             tags: [],
             display: true,
             authorize: false,
-            trnstypeid: "",
+            trnsTypeId: "",
             persist: {
                 headers: [],
                 queryParams: []
@@ -29,7 +29,7 @@ function addToList(checkboxElem) {
         pathDTO.authorize = ($(checkboxElem).data("authorize") === undefined) ? true : $(checkboxElem).data("authorize");
         pathDTO.display = ($(checkboxElem).data("display") === undefined) ? true : $(checkboxElem).data("display");
         pathDTO.endpoint = ($(checkboxElem).data("endpoint") === undefined) ? pathDTO.path : $(checkboxElem).data("endpoint");
-        pathDTO.trnstypeid = ($(checkboxElem).data("trnstypeid") === undefined) ? "" : $(checkboxElem).data("trnstypeid");
+        pathDTO.trnsTypeId = ($(checkboxElem).data("trnsTypeId") === undefined) ? "" : $(checkboxElem).data("trnsTypeId");
 
         if ($(checkboxElem).data("tags") !== undefined) {
             let tags = $(checkboxElem).data("tags").split(",");
@@ -37,6 +37,23 @@ function addToList(checkboxElem) {
                 pathDTO.tags.push(tags[i]);
             }
         }
+
+        if ($(checkboxElem).data("headers") !== undefined) {
+            let headers = $(checkboxElem).data("headers").split(",");
+            for (let i in headers) {
+                if(headers[i] !== "")
+                    pathDTO.persist.headers.push(headers[i]);
+            }
+        }
+
+        if ($(checkboxElem).data("queryParams") !== undefined) {
+            let queryparams = $(checkboxElem).data("queryParams").split(",");
+            for (let i in queryparams) {
+                if(queryparams[i] !== "")
+                pathDTO.persist.queryParams.push(queryparams[i]);
+            }
+        }
+
         pathDTO.id = $(checkboxElem).data("pathId");
 
         if (list[$(checkboxElem).data("service")] === undefined) {
@@ -48,6 +65,11 @@ function addToList(checkboxElem) {
 
         $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") - 1);
         manageParentCheckboxes(parentCheckbox);
+
+        if ($(parentCheckbox).data("childCheckboxes") !== $(parentCheckbox).data("maxChildren") && $(checkboxElem).data("service") !== "internalApis") {
+            $(parentCheckbox).next().css("background-color", "darksalmon");
+        }
+
     } else if ($(checkboxElem).data("checked") === true) {
         list[$(checkboxElem).data("service")] = list[$(checkboxElem).data("service")]
             .filter(function (item) {
@@ -56,6 +78,9 @@ function addToList(checkboxElem) {
         $(checkboxElem).data("checked", false);
         $(parentCheckbox).data("childCheckboxes", $(parentCheckbox).data("childCheckboxes") + 1);
         manageParentCheckboxes(parentCheckbox);
+        if ($(parentCheckbox).data("childCheckboxes") === $(parentCheckbox).data("maxChildren")) {
+            $(parentCheckbox).next().css("background-color", "");
+        }
     }
 }
 
@@ -64,7 +89,7 @@ function addAllToList(allCheckBoxElement) {
     if ($(allCheckBoxElement).data("internal") === true) {
         parent = $(allCheckBoxElement).siblings('li');
     } else {
-        parent = $(allCheckBoxElement).parent();
+        parent = $(allCheckBoxElement).closest("ul");
     }
     jQuery.each($(parent).children("li"), function (i, child) {
         let fchild = $(child).children().get(0);
@@ -90,7 +115,7 @@ function triggerAllTagsToList(tagCheckBoxElement) {
 function manageParentCheckboxes(parentCheckbox) {
     let grandParentCheckBox = $(parentCheckbox).parent().siblings().get(0);
     let previousState = parentCheckbox.checked;
-    parentCheckbox.checked = $(parentCheckbox).data("childCheckboxes") === 0 && $(parentCheckbox).data("maxChildren") > 0 ;
+    parentCheckbox.checked = $(parentCheckbox).data("childCheckboxes") === 0 && $(parentCheckbox).data("maxChildren") > 0;
 
     if (grandParentCheckBox !== undefined) {
         if (parentCheckbox.checked === true && $(parentCheckbox).data("childCheckboxes") === 0) {
@@ -112,21 +137,16 @@ function manageParentCheckboxes(parentCheckbox) {
 };*/
 
 
-function writeToButton(element) {
-    let el = $(element);
-    let parent = $(el.parent());
-    let attributeName = parent.text().trim();
-    let outercheckbox = parent.parent().siblings().get(0);
+function writeToButton(element, attributeName, value) {
+    let outercheckbox = findOuterCheckbox($(element));
+    updateOuterCheckbox(outercheckbox, attributeName, value);
 
-    if (el.is(":checkbox")) {
-        $(outercheckbox).data(attributeName.toLowerCase(), element.checked);
-    } else {
-        $(outercheckbox).data(attributeName.toLowerCase(), el.val());
+    if(outercheckbox.checked === true){
+        updatePath($(outercheckbox), attributeName, value);
     }
-    updatePath($(outercheckbox), attributeName.toLowerCase());
 }
 
-function updatePath(outercheckbox, attributeName) {
+function updatePath(outercheckbox, attributeName, value) {
     let serviceList = list[outercheckbox.data("service")];
     if (serviceList !== undefined) {
         for (path of  serviceList) {
@@ -135,9 +155,26 @@ function updatePath(outercheckbox, attributeName) {
                     let tags = outercheckbox.data(attributeName).split(",");
                     path[attributeName] = (tags.length === 1 && tags[0] === "") ? "" : tags;
                     return;
+                } else if(attributeName === "headers" || attributeName === "queryParams") {
+                    let attrs = outercheckbox.data(attributeName).split(",");
+                    path.persist[attributeName] = (attrs.length === 1 && attrs[0] === "") ? "" : attrs;
+                    return;
                 }
                 path[attributeName] = outercheckbox.data(attributeName);
             }
         }
     }
+}
+
+function findOuterCheckbox(element){
+    if((element.attr("id") !== undefined) && element.attr("id").startsWith("_")){
+        return $(element.parent()).children().get(0);
+    } else {
+        return findOuterCheckbox($(element.parent()));
+    }
+}
+
+function updateOuterCheckbox(outercheckbox, attributeName, value) {
+    let name = attributeName.split(".")[1] !== undefined ? attributeName.split(".")[1] : attributeName;
+    $(outercheckbox).data(name, value);
 }

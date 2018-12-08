@@ -22,8 +22,14 @@ function setDbResults(services) {
         let tr = document.createElement("tr");
 
         let tdCheckbox = document.createElement("td");
-        let importCheckbox = document.createElement("input");
-        importCheckbox.setAttribute("onchange", "importJson(this)");
+        let importCheckbox = document.createElement("button");
+        importCheckbox.className = "btn btn-secondary btn-sm";
+        let div = document.createElement("div");
+        let span = document.createElement("span");
+        span.className = "glyphicon glyphicon-plus";
+        importCheckbox.appendChild(span);
+        //importCheckbox.innerHTML = "<span class=\"glyphicon glyphicon-stop\"></span>";
+        importCheckbox.setAttribute("onclick", "importJson(this)");
         importCheckbox.setAttribute("type", "checkbox");
         importCheckbox.id = services[s].service + services[s].version;
 
@@ -59,11 +65,12 @@ function createInsertRow() {
     let conTd = document.createElement("td");
     let verTd = document.createElement("td");
 
-    srvTd.appendChild(createInputText("", "srvTd"));
-    conTd.appendChild(createInputText("", "conTd"));
-    verTd.appendChild(createInputText("", "verTd"));
+    srvTd.appendChild(createInputForm("Service", "srvTd"));
+    conTd.appendChild(createInputForm("Content", "conTd"));
+    verTd.appendChild(createInputForm("Version", "verTd"));
 
     let add = document.createElement("button");
+    add.style.margin = "9px 0px 0px 0px";
     add.setAttribute("class", "btn btn-default");
     add.innerText = "Add";
 

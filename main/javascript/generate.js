@@ -7,7 +7,7 @@ function generate() {
                 if (document.getElementById("vers=" + p) !== null && document.getElementById("vers=" + p).value !== "") {
                     apiList.apis[apiName] = {url: "", version: "", paths: []};
                     apiList.apis[apiName].version = document.getElementById("vers=" + p).value;
-                } else if(apiName === "internalApis"){
+                } else if (apiName === "internalApis") {
                     apiList.apis[apiName] = {internal: "true", paths: []};
                 }
                 else if (p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "") === "") {
@@ -31,12 +31,12 @@ function generate() {
                     ? jsonList[apiName].basePath
                     : "/api";
 
-                if (list[p][i].path !== list[p][i].endpoint) {
+                if (list[p][i].endpoint !== "" && list[p][i].path !== list[p][i].endpoint) {
                     path.path = (list[p][i].path.startsWith(basePath)) ? list[p][i].path : basePath + list[p][i].path;
                     path.endpoint = (list[p][i].endpoint === "") ? path.path :
                         (list[p][i].endpoint.startsWith(basePath)) ? list[p][i].endpoint : basePath + list[p][i].endpoint;
                 } else {
-                    path.endpoint = basePath + list[p][i].endpoint;
+                    path.endpoint = list[p][i].path.startsWith("/api") ? list[p][i].path : basePath + list[p][i].path;
                 }
                 if (list[p][i].tags !== "" && list[p][i].tags.length > 0) {
                     path.tags = list[p][i].tags;
@@ -46,8 +46,15 @@ function generate() {
                     path.display = list[p][i].display;
                 }
                 path.authorize = list[p][i].authorize;
-                if(list[p][i].trnstypeid !== "") {
-                    path.trnsTypeId = list[p][i].trnstypeid;
+                if (list[p][i].trnsTypeId !== "") {
+                    path.trnsTypeId = list[p][i].trnsTypeId;
+                }
+                if (list[p][i].persist.headers.length > 0) {
+                    path.persist = {"headers": [], "queryParams": []};
+                    path.persist.headers = list[p][i].persist.headers;
+                }
+                if (list[p][i].persist.queryParams.length > 0 ) {
+                    path.persist.queryParams = list[p][i].persist.queryParams;
                 }
 
                 apiList.apis[apiName].paths.push(path);

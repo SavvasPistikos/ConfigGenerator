@@ -1,25 +1,33 @@
 function importJson(liItem) {
+    liItem.innerHTML = "<span class=\"glyphicon glyphicon-ok\"></span>";
+    liItem.className = "btn btn-success btn-sm";
     let jliItem = $(liItem);
     js = JSON.parse(getSwaggerJsonFromDatabase(jliItem.data("id")).content);
-
-    if (document.getElementById("div" + jliItem.data("service") + jliItem.data("version")) == null) {
+    let version = jliItem.data("version").replace(".","S");
+    if (document.getElementById("div" + jliItem.data("service") + version) == null) {
         jsonList[jliItem.data("service")] = js;
         let di = $('<div>');
         di.attr("class", "tab-pane fade active in")
-            .attr("id", jliItem.data("service"));
+            .attr("id", jliItem.data("service") + version);
 
         let ul = createTab(jliItem.data("service"), jliItem.data("version"), jliItem.attr("id"), false);
         let allCheckbox = $(ul).children().get(0);
         let groupedPaths = groupByTags(buttonIdWithout);
         allGroupedByTags[buttonIdWithout] = groupedPaths;
 
-        groupByTagsDraw(groupedPaths, ul, $("#swaggers"), jliItem.data("service"), allCheckbox);
+        groupByTagsDraw(groupedPaths, ul, $("#swaggers"), jliItem.data("service"), version, allCheckbox);
         $(allCheckbox).data("maxChildren", $(allCheckbox).data("childCheckboxes"));
-        $("#" + di.id).data("service", jliItem.data("service"));
+        $("#" + di.id).data("service", jliItem.data("service") + version);
         $($("#services").children().get(3)).tab('show');
     } else {
-        $('#close' + jliItem.data("service")).remove();
-        $('#div' + jliItem.data("service")).remove();
+        liItem.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>";
+        liItem.className = "btn btn-secondary btn-sm";
+        resetOutput(jliItem.data("service"));
+        let div = document.getElementById("div" + jliItem.data("service") + version);
+        let close = document.getElementById("close" + jliItem.data("service") + version);
+
+        $(div).remove();
+        $(close).remove();
     }
     addEventListeners();
 }
@@ -28,13 +36,16 @@ function createTab(service, version, id, internal) {
     let servicesul = $("#services");
     let tabName = service + version;
     let li;
+    //TODO do something smarter naaab,
+    let initialVersion = version;
+    version = version.replace(".","S");
 
     if (internal === false) {
         li = $('<li>');
-        li.html("<a data-toggle=\"tab\" href=\"#div" + service + "\">"
+        li.html("<a data-toggle=\"tab\" href=\"#div" + service + version + "\">"
             + "<button class=\"close closeTab\" type=\"button\" onclick=\"closeTab(this)\" >×</button>"
             + tabName + "</a>");
-        li.attr("id", "close" + service);
+        li.attr("id", "close" + service + version);
         li.data("checkboxId", id);
     } else {
         li = $('<li>');
@@ -49,17 +60,19 @@ function createTab(service, version, id, internal) {
     $(allCheckbox).data("childCheckboxes", 0);
     $(allCheckbox).data("maxChildren", 0);
     $(allCheckbox).data("internal", internal);
-    ul.append(allCheckbox);
 
     if (internal === false) {
-        let url = createInputText(null, "url=" + service);
-        let versionInput = createInputText(null, "vers=" + service);
+        let url = createInputForm("Url", "url=" + service, );
+        let versionInput = createInputForm("Version", "vers=" + service, initialVersion);
 
+        let formDiv = document.createElement("form");
+        formDiv.className = "form-inline";
 
-        ul.append(document.createTextNode("\t\t Url = "));
-        ul.append(url);
-        ul.append(document.createTextNode("\t\t version = "));
-        ul.append(versionInput);
+        formDiv.appendChild(allCheckbox);
+        formDiv.appendChild(url);
+        formDiv.appendChild(versionInput);
+
+        ul.append($(formDiv));
     }
 
     return ul;
@@ -94,7 +107,7 @@ function importConfig(impJson) {
         let serviceCheckbox = document.getElementById(a + version);
         $(serviceCheckbox).trigger("click");
         document.getElementById("url=" + a).value = impJson.apis[a].url;
-        document.getElementById("vers=" + a).value = impJson.apis[a].version !== undefined ? impJson.apis[a].version : "" ;
+        document.getElementById("vers=" + a).value = impJson.apis[a].version !== undefined ? impJson.apis[a].version : "";
 
         for (p in impJson.apis[a].paths) {
             let basePath = (jsonList[a].basePath === undefined) ? "" : jsonList[a].basePath;
@@ -103,12 +116,41 @@ function importConfig(impJson) {
                 impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].endpoint
                 : impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].path;
             pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
+            pathString.replace("/api", "");
             let button = $('.btn:contains(' + pathString + ')');
             let checkbox = $(button).siblings().get(0);
+            setOptionsUl($(button).siblings().get(1), impJson.apis[a].paths[p]);
             $(checkbox).trigger("click", checkbox);
         }
     }
     generate();
+}
+
+function setOptionsUl(optionsUL, path){
+    $(optionsUL).children().each(function () {
+        let pathAttributes = Object.keys(path);
+        let liChildren  = $(this).children();
+        let attributeName = $(this).text().trim();
+        let value = path[attributeName];
+
+        if(pathAttributes.includes(attributeName)){
+            handleOption(attributeName, liChildren, value);
+        }
+    });
+}
+
+function handleOption(attributeName, children, value){
+    let firstChild = children.get(0);
+    if($(firstChild).is(':checkbox') && $(children).length === 1) {
+        if(value === false && $(firstChild).prop('checked') === true){
+            $(firstChild).trigger("click");
+        }
+    }
+    else if($(firstChild).is(':checkbox') && $(children).length === 2){
+        let inputText = children.get(1);
+        $(inputText).val(value);
+        $(firstChild).trigger("click");
+    }
 }
 
 function groupByTags(jsonFileName) {
@@ -156,7 +198,7 @@ function groupByTags(jsonFileName) {
     return groupedPaths;
 }
 
-function groupByTagsDraw(groupedPaths, ul, di, service, allCheckBoxElem) {
+function groupByTagsDraw(groupedPaths, ul, di, service, version, allCheckBoxElem) {
     for (let tag in groupedPaths) {
         let elementsid = trimId(tag);
         elementsid = (elementsid === "default") ? service + elementsid : elementsid;
@@ -172,7 +214,8 @@ function groupByTagsDraw(groupedPaths, ul, di, service, allCheckBoxElem) {
         let tagButton = $('<button>');
         tagButton.attr("id", "btr" + elementsid)
             .attr("data-toggle", "collapse")
-            .attr("data-target", "#ul" + elementsid);
+            .attr("data-target", "#ul" + elementsid)
+            .attr("class", "btn btn-info");
         tagButton.html(tag);
         tagli.append(tagButton);
 
@@ -196,7 +239,7 @@ function groupByTagsDraw(groupedPaths, ul, di, service, allCheckBoxElem) {
     }
     let tabpanediv = document.createElement("div");
     tabpanediv.setAttribute("class", "tab-pane fade active in");
-    tabpanediv.setAttribute("id", "div" + service);
+    tabpanediv.setAttribute("id", "div" + service + version);
     $(tabpanediv).data("service", service);
     $(tabpanediv).append(ul);
     di.append(tabpanediv);
@@ -223,16 +266,19 @@ function createInputText(value, idString) {
     return inputext;
 }
 
-function displayInputText(endpointOptionsCheckbox) {
-    let inputElement = $(endpointOptionsCheckbox).next().get(0);
+function createInputForm(value, idString, initialValue) {
+    let formDiv = document.createElement("div");
+    formDiv.className = "form-group mx-sm-3 mb-2";
+    let formInput = document.createElement("input");
+    formInput.setAttribute("type", "text");
+    if(initialValue !== undefined)
+    formInput.value = initialValue;
+    formInput.id = idString;
+    formInput.className = "form-control";
+    formInput.setAttribute("placeholder", value);
+    formDiv.appendChild(formInput);
 
-    if (endpointOptionsCheckbox.checked === true) {
-        inputElement.style.display = "inline";
-    }
-    else {
-        inputElement.value = "";
-        inputElement.style.display = "none";
-    }
+    return formDiv;
 }
 
 
@@ -295,20 +341,44 @@ function ID() {
 }
 
 function addEventListeners() {
-
     $(".configInputText").on("focusout", function () {
-        if ($(this).val() === "") {
-            $($(this).siblings().get(0)).trigger("click");
+        let parentOfInput = $(this).parent();
+
+        if (parentOfInput.text() /*!== undefined && parentOfInput.text().trim() === "queryParams" || parentOfInput.text().trim() === "headers"*/) {
+            let attributeName = parentOfInput.text().trim();
+            let value = $(this).val();
+            writeToButton(this, attributeName, value);
         }
-        writeToButton(this);
     });
 
     $(".configInputCheckbox").on("click", function () {
         if (this.checked === false) {
-            if ($(this).parent().text().trim().toLowerCase() === "tags") {
-                $(this).next().val("");
+            let attributeName = $(this).parent().text().trim();
+            if (attributeName.toLowerCase() === "tags") {
+                let pathCheckbox = findOuterCheckbox($(this));
+                $(this).next().val($(pathCheckbox).data("tags"));
+                writeToButton($(this).next(), "");
+            } else if (attributeName.includes("headers") || attributeName.includes("queryparams")) {
+                writeToButton(this, "headers", "");
+                writeToButton(this, "queryparams", "");
+            } else {
+                writeToButton(this, attributeName, this.checked);
+            }
+        } else if (this.checked === true) {
+            let parentOfInput = $(this).parent();
+            let attributeName = parentOfInput.text().trim();
+            let textInputChildren = parentOfInput.find('.configInputText');
+            if (textInputChildren.length === 0) {
+                let value = this.checked;
+                writeToButton(this, attributeName, value);
+            } else if (textInputChildren.length > 0) {
+                for (let t=0 ; t < textInputChildren.length ; t++) {
+                    let attributeNames = attributeName.split("\t\t");
+                    let value = textInputChildren[t].value;
+                    let attribute = attributeNames[t+1] !== undefined ? attributeNames[t+1] : attributeNames[t];
+                    writeToButton(this, attribute.trim(), value);
+                }
             }
         }
-        writeToButton($(this).next());
     });
 }

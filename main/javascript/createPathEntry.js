@@ -51,6 +51,8 @@ function generateCheckbox(path, method, service) {
     checkbox.data("pathId", ID());
     checkbox.data("checked", false);
     checkbox.data("service", service);
+    checkbox.data("headers", "");
+    checkbox.data("queryParams", "");
 
     return checkbox;
 }
@@ -60,20 +62,20 @@ function createOptionsUL(id, checkbox, internal) {
     let optionsUl = document.createElement("ul");
     optionsUl.id = id;
     let authorizeLi = document.createElement("li");
-    let authorizeCheckbox = createCheckBox("writeToButton(this);", "", "");
-    authorizeCheckbox.className = "";
+    let authorizeCheckbox = createCheckBox("", "", "");
+    authorizeCheckbox.className = "configInputCheckbox";
     authorizeCheckbox.checked = true;
     authorizeCheckbox.id = "auth" + "";
-    let authorizeTextNode = document.createTextNode("Authorize");
+    let authorizeTextNode = document.createTextNode("authorize");
     authorizeLi.appendChild(authorizeCheckbox);
     authorizeLi.appendChild(authorizeTextNode);
 
     let displayLi = document.createElement("li");
-    let displayCheckBox = createCheckBox("writeToButton(this);", "", "");
-    displayCheckBox.className = "";
+    let displayCheckBox = createCheckBox("", "", "");
+    displayCheckBox.className = "configInputCheckbox";
     displayCheckBox.checked = true;
     displayCheckBox.id = "disp" + "";
-    let displayTextNode = document.createTextNode("Display");
+    let displayTextNode = document.createTextNode("display");
     displayLi.appendChild(displayCheckBox);
     displayLi.appendChild(displayTextNode);
 
@@ -81,7 +83,7 @@ function createOptionsUL(id, checkbox, internal) {
     let endpointCheckBox = createCheckBox("displayInputText(this);");
     endpointCheckBox.className = "configInputCheckbox";
     endpointLi.appendChild(endpointCheckBox);
-    endpointLi.appendChild(document.createTextNode("\t\t Endpoint"));
+    endpointLi.appendChild(document.createTextNode("\t\t endpoint"));
     let endpointIn = document.createElement("input");
     endpointIn.className = "configInputText";
     endpointIn.id = "end=" + "";
@@ -94,7 +96,7 @@ function createOptionsUL(id, checkbox, internal) {
     let tagsCheckBox = createCheckBox("displayInputText(this);");
     tagsCheckBox.className = "configInputCheckbox";
     tagsLi.appendChild(tagsCheckBox);
-    tagsLi.appendChild(document.createTextNode("\t\t Tags"));
+    tagsLi.appendChild(document.createTextNode("\t\t tags"));
     let tagsIn = document.createElement("input");
     tagsIn.className = "configInputText";
     tagsIn.id = "tags=" + "";
@@ -121,18 +123,61 @@ function createOptionsUL(id, checkbox, internal) {
     trnsTypeIdIn.className = "configInputText";
     trnsTypeIdIn.id = "trns=" + "";
     trnsTypeIdIn.setAttribute("type", "text");
-    trnsTypeIdIn.setAttribute("onfocusout", "writeToButton(this)");
     trnsTypeIdIn.value = "";
     trnsTypeIdIn.style.display = "none";
     trnsTypeIdLi.appendChild(trnsTypeIdIn);
+
+    let persistLi = document.createElement("li");
+    let persistCheckBox = createCheckBox("displayInputText(this);");
+    persistCheckBox.className = "configInputCheckbox";
+    persistLi.appendChild(persistCheckBox);
+    persistLi.appendChild(document.createTextNode("\t\t persist"));
+
+    let persistInputUl = document.createElement("ul");
+    let persistHeaderLi = document.createElement("li");
+    persistHeaderLi.appendChild(document.createTextNode("\t\t headers "));
+    let persistHeaderIn = document.createElement("input");
+    persistHeaderIn.className = "configInputText";
+    persistHeaderIn.id = "persHeader=" + "";
+    persistHeaderIn.setAttribute("type", "text");
+    persistHeaderIn.value = "";
+    persistHeaderLi.appendChild(persistHeaderIn);
+
+    let persistQueryLi = document.createElement("li");
+    persistQueryLi.appendChild(document.createTextNode("\t\t queryParams "));
+
+    let persistQueryIn = document.createElement("input");
+    persistQueryIn.className = "configInputText";
+    persistQueryIn.id = "persQuery=" + "";
+    persistQueryIn.setAttribute("type", "text");
+    persistQueryIn.value = "";
+    persistQueryLi.appendChild(persistQueryIn);
+
+    persistInputUl.appendChild(persistHeaderLi);
+    persistInputUl.appendChild(persistQueryLi);
+
+    $(persistInputUl).hide();
+    persistLi.appendChild(persistInputUl);
 
     optionsUl.appendChild(authorizeLi);
     optionsUl.appendChild(displayLi);
     optionsUl.appendChild(endpointLi);
     optionsUl.appendChild(trnsTypeIdLi);
     optionsUl.appendChild(tagsLi);
+    optionsUl.appendChild(persistLi);
 
     optionsUl.setAttribute("class", "panel-collapse collapse");
 
     return $(optionsUl);
+}
+
+function displayInputText(endpointOptionsCheckbox) {
+    let inputElement = $(endpointOptionsCheckbox).next().get(0);
+
+    if (endpointOptionsCheckbox.checked === true) {
+        $(inputElement).show();
+    }
+    else {
+        $(inputElement).hide();
+    }
 }
