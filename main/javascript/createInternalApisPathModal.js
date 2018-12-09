@@ -65,13 +65,23 @@ function createBody() {
     label.innerText = "Endpoint";
 
     let input = document.createElement("input");
+    input.setAttribute("list", "internalP");
     input.setAttribute("type", "text");
     input.className = "form-control";
     input.id = "internalSwaggerPath";
     input.placeholder = "Internal Endpoint Path";
 
+    $(input).on('input', function () {
+        let p = this.value;
+        let method = ($('#internalP option').filter(function () {
+           return   this.value === p ? $(this) : null;
+        })).data("method");
+        $("#method").val(method !== undefined ? method : "GET");
+    });
+
     divFormGroup.appendChild(label);
     divFormGroup.appendChild(input);
+    divFormGroup.appendChild(createDataList());
 
     let divFormGroupMethod = document.createElement("div");
     divFormGroupMethod.className = "form-group";
@@ -111,6 +121,21 @@ function createBody() {
     div.appendChild(divFormGroupMethod);
 
     return div;
+}
+
+function createDataList(){
+    let datalist = document.createElement("datalist");
+    datalist.id = "internalP";
+    let internalPaths = getInternalPaths();
+
+    for(let i in internalPaths){
+        let option = document.createElement("option");
+        option.value = internalPaths[i].endpoint;
+        $(option).data("method", internalPaths[i].method);
+        datalist.appendChild(option);
+    }
+
+    return datalist;
 }
 
 function createFooter() {
@@ -156,8 +181,12 @@ function addInternalPath() {
     outerCheckbox.data("maxChildren", outerCheckbox.data("maxChildren") + 1);
     outerCheckbox.data("childCheckboxes", outerCheckbox.data("childCheckboxes") + 1);
 
-
     $('#addInternalPath').modal('toggle');
+
+    let internalPath = {endpoint: "", method: ""};
+    internalPath.endpoint = internalEndpoint;
+    internalPath.method = method;
+    writeToDatabase(internalPath);
 
 }
 
@@ -188,6 +217,7 @@ function importInternalPaths(internalEndpoints) {
         $(removeButton).insertBefore(pathEntry.children('ul'));
         internalPathsList.append($(pathEntry));
         setOptionsUl($(pathEntry).children('ul'), internalEndpoints[endpoint]);
+        writeToDatabase(internalEndpoints[endpoint]);
     }
     let outerCheckbox = internalPathsList.parent().children(':checkbox');
     $(outerCheckbox).data("maxChildren", internalPathsList.children().length);
@@ -198,4 +228,30 @@ function importInternalPaths(internalEndpoints) {
     });
     internalPathsList.show();
 
+}
+
+function writeToDatabase(internalPath){
+    $.ajax({
+        'async': false,
+        'global': false,
+        'url': "http://localhost:8080/api/v1.0/internal",
+        'type': 'POST',
+        'contentType': 'application/json',
+        'data': JSON.stringify(internalPath, null, 2)
+    });
+}
+
+function getInternalPaths(){
+    let internalPaths = null;
+
+    $.ajax({
+        'async': false,
+        'global': false,
+        'url': "http://localhost:8080/api/v1.0/internal",
+        'dataType': "json",
+        'success': function (data) {
+            internalPaths = data;
+        }
+    });
+    return internalPaths;
 }
