@@ -73,10 +73,12 @@ function createBody() {
 
     $(input).on('input', function () {
         let p = this.value;
-        let method = ($('#internalP option').filter(function () {
-           return   this.value === p ? $(this) : null;
-        })).data("method");
+        let option = ($('#internalP option').filter(function () {
+            return   this.value === p ? $(this) : null;
+        }));
+        let method = option.data("method");
         $("#method").val(method !== undefined ? method : "GET");
+        $(this).data("id", option.data("id"));
     });
 
     divFormGroup.appendChild(label);
@@ -132,6 +134,7 @@ function createDataList(){
         let option = document.createElement("option");
         option.value = internalPaths[i].endpoint;
         $(option).data("method", internalPaths[i].method);
+        $(option).data("id", internalPaths[i].id);
         datalist.appendChild(option);
     }
 
@@ -161,7 +164,9 @@ function createFooter() {
 
 function addInternalPath() {
 
-    let internalEndpoint = document.getElementById("internalSwaggerPath").value;
+    let currentPath = $('#internalSwaggerPath');
+    let id = currentPath.data("id");
+    let internalEndpoint = currentPath.val();
     let method = document.getElementById("method").value;
     document.getElementById("method").value = "GET";
     let internalPathsList = $("#internalPathsList");
@@ -183,11 +188,15 @@ function addInternalPath() {
 
     $('#addInternalPath').modal('toggle');
 
-    let internalPath = {endpoint: "", method: ""};
-    internalPath.endpoint = internalEndpoint;
-    internalPath.method = method;
-    writeToDatabase(internalPath);
-
+    if(id === undefined) {
+        let internalPath = {endpoint: "", method: ""};
+        internalPath.endpoint = internalEndpoint;
+        internalPath.method = method;
+        writeToDatabase(internalPath);
+    } else {
+        let pathFromDb = getInternalPath(id);
+        setOptionsUl($(pathEntry).children('ul'), pathFromDb);
+    }
 }
 
 function removeInternalPath(removeButton){
@@ -254,4 +263,20 @@ function getInternalPaths(){
         }
     });
     return internalPaths;
+}
+
+function getInternalPath(id){
+    let internalPath = null;
+
+    $.ajax({
+        'async': false,
+        'global': false,
+        'url': "http://localhost:8080/api/v1.0/internal/" + id,
+        'type': "GET",
+        'dataType': "json",
+        'success': function (data) {
+            internalPath = data;
+        }
+    });
+    return internalPath;
 }

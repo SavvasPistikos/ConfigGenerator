@@ -3,7 +3,7 @@ function importJson(liItem) {
     liItem.className = "btn btn-success btn-sm";
     let jliItem = $(liItem);
     js = JSON.parse(getSwaggerJsonFromDatabase(jliItem.data("id")).content);
-    let version = jliItem.data("version").replace(".","S");
+    let version = jliItem.data("version").replace(".", "S");
     if (document.getElementById("div" + jliItem.data("service") + version) == null) {
         jsonList[jliItem.data("service")] = js;
         let di = $('<div>');
@@ -38,7 +38,7 @@ function createTab(service, version, id, internal) {
     let li;
     //TODO do something smarter naaab,
     let initialVersion = version;
-    version = version.replace(".","S");
+    version = version.replace(".", "S");
 
     if (internal === false) {
         li = $('<li>');
@@ -62,7 +62,7 @@ function createTab(service, version, id, internal) {
     $(allCheckbox).data("internal", internal);
 
     if (internal === false) {
-        let url = createInputForm("Url", "url=" + service, );
+        let url = createInputForm("Url", "url=" + service,);
         let versionInput = createInputForm("Version", "vers=" + service, initialVersion);
 
         let formDiv = document.createElement("form");
@@ -126,30 +126,44 @@ function importConfig(impJson) {
     generate();
 }
 
-function setOptionsUl(optionsUL, path){
+function setOptionsUl(optionsUL, path) {
     $(optionsUL).children().each(function () {
         let pathAttributes = Object.keys(path);
-        let liChildren  = $(this).children();
+        let liChildren = $(this).children();
         let attributeName = $(this).text().trim();
         let value = path[attributeName];
 
-        if(pathAttributes.includes(attributeName)){
+        if (attributeName.includes("persist")) {
+            if (path.persist.headers !== undefined && path.persist.headers !== null) {
+                handleOption("headers", liChildren, path.persist.headers);
+            }
+            if (path.persist.queryParams !== undefined && path.persist.queryParams !== null) {
+                handleOption("queryParams", liChildren, path.persist.queryParams);
+            }
+        } else if (pathAttributes.includes(attributeName)) {
             handleOption(attributeName, liChildren, value);
         }
     });
 }
 
-function handleOption(attributeName, children, value){
+function handleOption(attributeName, children, value) {
     let firstChild = children.get(0);
-    if($(firstChild).is(':checkbox') && $(children).length === 1) {
-        if(value === false && $(firstChild).prop('checked') === true){
+
+    if ($(firstChild).is(':checkbox') && $(children).length === 1) {
+        if (value === false && $(firstChild).prop('checked') === true) {
             $(firstChild).trigger("click");
         }
     }
-    else if($(firstChild).is(':checkbox') && $(children).length === 2){
-        let inputText = children.get(1);
-        $(inputText).val(value);
-        $(firstChild).trigger("click");
+    else if ($(firstChild).is(':checkbox') && $(children).length === 2) {
+        let inputText = $(children.get(1));
+        if(inputText.is('ul')){
+            let input = attributeName === "headers" ? $(inputText).find(':input').get(0) : $(inputText).find(':input').get(1);
+            $(input).val(value);
+            $(firstChild).trigger("click");
+        }else{
+            $(inputText).val(value);
+            $(firstChild).trigger("click");
+        }
     }
 }
 
@@ -271,8 +285,8 @@ function createInputForm(value, idString, initialValue) {
     formDiv.className = "form-group mx-sm-3 mb-2";
     let formInput = document.createElement("input");
     formInput.setAttribute("type", "text");
-    if(initialValue !== undefined)
-    formInput.value = initialValue;
+    if (initialValue !== undefined)
+        formInput.value = initialValue;
     formInput.id = idString;
     formInput.className = "form-control";
     formInput.setAttribute("placeholder", value);
@@ -372,10 +386,10 @@ function addEventListeners() {
                 let value = this.checked;
                 writeToButton(this, attributeName, value);
             } else if (textInputChildren.length > 0) {
-                for (let t=0 ; t < textInputChildren.length ; t++) {
+                for (let t = 0; t < textInputChildren.length; t++) {
                     let attributeNames = attributeName.split("\t\t");
                     let value = textInputChildren[t].value;
-                    let attribute = attributeNames[t+1] !== undefined ? attributeNames[t+1] : attributeNames[t];
+                    let attribute = attributeNames[t + 1] !== undefined ? attributeNames[t + 1] : attributeNames[t];
                     writeToButton(this, attribute.trim(), value);
                 }
             }
