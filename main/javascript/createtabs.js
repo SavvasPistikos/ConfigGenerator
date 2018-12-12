@@ -18,7 +18,7 @@ function importJson(liItem) {
         groupByTagsDraw(groupedPaths, ul, $("#swaggers"), jliItem.data("service"), version, allCheckbox);
         $(allCheckbox).data("maxChildren", $(allCheckbox).data("childCheckboxes"));
         $("#" + di.id).data("service", jliItem.data("service") + version);
-        $($("#services").children().get(3)).tab('show');
+        $($("#services").children().last()).tab('show');
     } else {
         liItem.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>";
         liItem.className = "btn btn-secondary btn-sm";

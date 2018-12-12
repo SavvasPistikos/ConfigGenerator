@@ -9,4 +9,4 @@ var js;
 var allGroupedByTags = {};
 var checkboxesStatus = {};
 var buttonIdWithout;
-var configuration = {};
+var configuration = {apigateway:{apis:{}}};
