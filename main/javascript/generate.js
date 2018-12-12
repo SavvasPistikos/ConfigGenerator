@@ -50,10 +50,16 @@ function generate() {
                     path.trnsTypeId = list[p][i].trnsTypeId;
                 }
                 if (list[p][i].persist.headers.length > 0) {
-                    path.persist = {"headers": [], "queryParams": []};
+                    if (path.persist === undefined) {
+                        path.persist = {"headers": []};
+                    }
+                    //path.persist = {"headers": [], "queryParams": []};
                     path.persist.headers = list[p][i].persist.headers;
                 }
-                if (list[p][i].persist.queryParams.length > 0 ) {
+                if (list[p][i].persist.queryParams.length > 0) {
+                    if (path.persist === undefined) {
+                        path.persist = {"queryParams": []};
+                    }
                     path.persist.queryParams = list[p][i].persist.queryParams;
                 }
 
@@ -63,9 +69,10 @@ function generate() {
     }
 
     let jsonOutput = document.getElementById("jsonOutput");
-    var yaml = json2yaml(apiList);
+    configuration.apigateway.apis = apiList.apis;
+    var yaml = json2yaml(configuration);
     jsonOutput.innerHTML = yaml;
-    console.log(JSON.stringify(apiList, null, 2));
+    //console.log(JSON.stringify(configuration, null, 2));
     apiList = {apis: {}};
     $('#generate').click(function (e) {
         e.preventDefault();

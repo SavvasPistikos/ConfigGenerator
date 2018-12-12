@@ -1,23 +1,24 @@
 function closeTab(closeTabButton) {
     //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
-    var tabContentId = $(closeTabButton).parent().attr("href");
+    //var tabContentId = $(closeTabButton).parent().attr("href");
     let checkbox = document.getElementById($(closeTabButton).parent().parent().data("checkboxId"));
+    var tabContentId = $(checkbox).parent().siblings().get(0).innerText;
     checkbox.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>";
     checkbox.className = "btn btn-secondary btn-sm";
     //$('#' + $(closeTabButton).parent().parent().data("checkboxId")).prop('checked', false);
-    let tabLi  = $(closeTabButton).parent().parent();
+    let tabLi = $(closeTabButton).parent().parent();
     let previousTab = $(tabLi).prev().children('a');
 
     tabLi.remove(); //remove li of tab
     $(tabContentId).remove(); //remove respective tab content
-    if(previousTab !== undefined){
+    if (previousTab !== undefined) {
         $(previousTab).tab('show');
     }
 
-    resetOutput(tabContentId.replace("#div",""));
+    resetOutput(tabContentId.replace("#div", ""));
 }
 
-function resetOutput(tabContentId){
+function resetOutput(tabContentId) {
     list[tabContentId] = [];
     generate();
 

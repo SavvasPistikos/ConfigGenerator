@@ -97,29 +97,31 @@ function handleCopyPaste() {
 }
 
 function importConfig(impJson) {
-    for (a in impJson.apis) {
-        apiList.apis[a] = impJson.apis[a];
+    configuration = impJson;
+
+    for (a in configuration.apigateway.apis) {
+        apiList.apis[a] = configuration.apigateway.apis[a];
         if (a === "internalApis") {
-            importInternalPaths(impJson.apis[a].paths);
+            importInternalPaths(configuration.apigateway.apis[a].paths);
             continue;
         }
-        let version = (impJson.apis[a].version != null) ? impJson.apis[a].version : "";
+        let version = (configuration.apigateway.apis[a].version != null) ? configuration.apigateway.apis[a].version : "";
         let serviceCheckbox = document.getElementById(a + version);
         $(serviceCheckbox).trigger("click");
-        document.getElementById("url=" + a).value = impJson.apis[a].url;
-        document.getElementById("vers=" + a).value = impJson.apis[a].version !== undefined ? impJson.apis[a].version : "";
+        document.getElementById("url=" + a).value = configuration.apigateway.apis[a].url;
+        document.getElementById("vers=" + a).value = configuration.apigateway.apis[a].version !== undefined ? configuration.apigateway.apis[a].version : "";
 
-        for (p in impJson.apis[a].paths) {
+        for (p in configuration.apigateway.apis[a].paths) {
             let basePath = (jsonList[a].basePath === undefined) ? "" : jsonList[a].basePath;
             basePath = (basePath === "/") ? "" : basePath;
-            let pathString = (impJson.apis[a].paths[p].path === undefined) ?
-                impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].endpoint
-                : impJson.apis[a].paths[p].method + " " + basePath + impJson.apis[a].paths[p].path;
+            let pathString = (configuration.apigateway.apis[a].paths[p].path === undefined) ?
+                configuration.apigateway.apis[a].paths[p].method + " " + basePath + configuration.apigateway.apis[a].paths[p].endpoint
+                : configuration.apigateway.apis[a].paths[p].method + " " + basePath + configuration.apigateway.apis[a].paths[p].path;
             pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
             pathString.replace("/api", "");
             let button = $('.btn:contains(' + pathString + ')');
             let checkbox = $(button).siblings().get(0);
-            setOptionsUl($(button).siblings().get(1), impJson.apis[a].paths[p]);
+            setOptionsUl($(button).siblings().get(1), configuration.apigateway.apis[a].paths[p]);
             $(checkbox).trigger("click", checkbox);
         }
     }
@@ -133,7 +135,7 @@ function setOptionsUl(optionsUL, path) {
         let attributeName = $(this).text().trim();
         let value = path[attributeName];
 
-        if (attributeName.includes("persist")) {
+        if (attributeName.includes("persist") && pathAttributes.includes("persist")) {
             if (path.persist.headers !== undefined && path.persist.headers !== null) {
                 handleOption("headers", liChildren, path.persist.headers);
             }

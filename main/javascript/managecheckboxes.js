@@ -41,7 +41,7 @@ function addToList(checkboxElem) {
         if ($(checkboxElem).data("headers") !== undefined) {
             let headers = $(checkboxElem).data("headers").split(",");
             for (let i in headers) {
-                if(headers[i] !== "")
+                if (headers[i] !== "")
                     pathDTO.persist.headers.push(headers[i]);
             }
         }
@@ -49,8 +49,8 @@ function addToList(checkboxElem) {
         if ($(checkboxElem).data("queryParams") !== undefined) {
             let queryparams = $(checkboxElem).data("queryParams").split(",");
             for (let i in queryparams) {
-                if(queryparams[i] !== "")
-                pathDTO.persist.queryParams.push(queryparams[i]);
+                if (queryparams[i] !== "")
+                    pathDTO.persist.queryParams.push(queryparams[i]);
             }
         }
 
@@ -141,7 +141,7 @@ function writeToButton(element, attributeName, value) {
     let outercheckbox = findOuterCheckbox($(element));
     updateOuterCheckbox(outercheckbox, attributeName, value);
 
-    if(outercheckbox.checked === true){
+    if (outercheckbox.checked === true) {
         updatePath($(outercheckbox), attributeName, value);
     }
 }
@@ -155,7 +155,7 @@ function updatePath(outercheckbox, attributeName, value) {
                     let tags = outercheckbox.data(attributeName).split(",");
                     path[attributeName] = (tags.length === 1 && tags[0] === "") ? "" : tags;
                     return;
-                } else if(attributeName === "headers" || attributeName === "queryParams") {
+                } else if (attributeName === "headers" || attributeName === "queryParams") {
                     let attrs = outercheckbox.data(attributeName).split(",");
                     path.persist[attributeName] = (attrs.length === 1 && attrs[0] === "") ? "" : attrs;
                     return;
@@ -166,8 +166,8 @@ function updatePath(outercheckbox, attributeName, value) {
     }
 }
 
-function findOuterCheckbox(element){
-    if((element.attr("id") !== undefined) && element.attr("id").startsWith("_")){
+function findOuterCheckbox(element) {
+    if ((element.attr("id") !== undefined) && element.attr("id").startsWith("_")) {
         return $(element.parent()).children().get(0);
     } else {
         return findOuterCheckbox($(element.parent()));
