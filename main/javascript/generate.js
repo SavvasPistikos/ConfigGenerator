@@ -4,68 +4,75 @@ function generate() {
             let basePath;
             let apiName = p.replace(",", "/").split("/")[0];
             if (apiList.apis[apiName] == null) {
-                if (document.getElementById("vers=" + p).value !== "") {
+                if (document.getElementById("vers=" + p) !== null && document.getElementById("vers=" + p).value !== "") {
                     apiList.apis[apiName] = {url: "", version: "", paths: []};
                     apiList.apis[apiName].version = document.getElementById("vers=" + p).value;
+                } else if (apiName === "internalApis") {
+                    apiList.apis[apiName] = {internal: "true", paths: []};
                 }
                 else if (p.replace(",", "/").split("/").slice(1, 15).join("/").replace(",", "") === "") {
                     apiList.apis[apiName] = {url: "", paths: []};
                 }
 
-                apiList.apis[apiName].url = document.getElementById("url=" + apiName).value;
+                if (document.getElementById("url=" + apiName) !== null) {
+                    apiList.apis[apiName].url = document.getElementById("url=" + apiName).value;
+                }
             }
             apiList.apis[apiName].paths = [];
 
             for (let i in list[p]) {
                 let path = {
-                    path: "",
                     endpoint: "",
                     method: "",
-                    tags: [],
-                    display: true,
                     authorize: false,
-                    trnsTypeId: ""
                 };
-                let res = list[p][i].split(",");
 
-                basePath = (jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
+                basePath = (jsonList[apiName] !== undefined && jsonList[apiName].basePath !== "/" && jsonList[apiName].basePath != null)
                     ? jsonList[apiName].basePath
-                    : "";
+                    : "/api";
 
-                path.display = document.getElementById("disp" + list[p][i]).checked;
-                path.authorize = document.getElementById("auth" + list[p][i]).checked;
-
-                if (document.getElementById("trns" + list[p][i]).checked === true) {
-                    path.transactionLog = document.getElementById("trns=" + list[p][i]).value;
-                }
-                path.path = basePath + res[0];
-                if (document.getElementById("end" + list[p][i]).checked === true) {
-                    path.endpoint = document.getElementById("end=" + list[p][i]).value;
+                if (list[p][i].endpoint !== "" && list[p][i].path !== list[p][i].endpoint) {
+                    path.path = (list[p][i].path.startsWith(basePath)) ? list[p][i].path : basePath + list[p][i].path;
+                    path.endpoint = (list[p][i].endpoint === "") ? path.path :
+                        (list[p][i].endpoint.startsWith(basePath)) ? list[p][i].endpoint : basePath + list[p][i].endpoint;
                 } else {
-                    path.endpoint = path.path;
+                    path.endpoint = list[p][i].path.startsWith("/api") ? list[p][i].path : basePath + list[p][i].path;
                 }
-                eval("tempPath" + " = " + "jsonList[\"" + apiName + "\"].paths[\"" + res[0] + "\"]."
-                    + res[1].toLocaleLowerCase() + ";");
-
-                if (document.getElementById("tag" + list[p][i]).checked === true) {
-                    path.tags.push(document.getElementById("tags=" + list[p][i]).value);
-                } else {
-                    if (tempPath.tags != null) {
-                        path.tags = tempPath.tags;
+                if (list[p][i].tags !== "" && list[p][i].tags.length > 0) {
+                    path.tags = list[p][i].tags;
+                }
+                path.method = list[p][i].method;
+                if (list[p][i].display === false) {
+                    path.display = list[p][i].display;
+                }
+                path.authorize = list[p][i].authorize;
+                if (list[p][i].trnsTypeId !== "") {
+                    path.trnsTypeId = list[p][i].trnsTypeId;
+                }
+                if (list[p][i].persist.headers.length > 0) {
+                    if (path.persist === undefined) {
+                        path.persist = {"headers": []};
                     }
+                    //path.persist = {"headers": [], "queryParams": []};
+                    path.persist.headers = list[p][i].persist.headers;
                 }
-                path.method = res[1];
+                if (list[p][i].persist.queryParams.length > 0) {
+                    if (path.persist === undefined) {
+                        path.persist = {"queryParams": []};
+                    }
+                    path.persist.queryParams = list[p][i].persist.queryParams;
+                }
 
                 apiList.apis[apiName].paths.push(path);
             }
-
         }
     }
 
     let jsonOutput = document.getElementById("jsonOutput");
-    var yaml = json2yaml(apiList);
+    configuration.apigateway.apis = apiList.apis;
+    var yaml = json2yaml(configuration);
     jsonOutput.innerHTML = yaml;
-    console.log(JSON.stringify(apiList, null, 2));
+    //console.log(JSON.stringify(configuration, null, 2));
     apiList = {apis: {}};
     $('#generate').click(function (e) {
         e.preventDefault();

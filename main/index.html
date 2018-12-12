@@ -5,8 +5,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="javascript/createInternalApisPathModal.js"></script>
+    <script src="javascript/createInternalApisTab.js"></script>
     <script src="javascript/globalvariables.js"></script>
-    <script src="javascript/sessionstorage.js"></script>
+    <script src="javascript/createPathEntry.js"></script>
+    <script src ="javascript/createTableFromDatabase.js"></script>
+    <script src="javascript/infoModal.js"></script>
+    <script src="javascript/searchBox.js"></script>
     <script src="javascript/managecheckboxes.js"></script>
     <script src="javascript/generate.js"></script>
     <script src="javascript/json2yaml.js"></script>
@@ -33,6 +38,10 @@
             margin: 4px 2px;
             width: 20px;
             height: 20px;
+        }
+
+        #swaggerJson {
+            resize: none;
         }
 
         .mybutton {
@@ -63,7 +72,12 @@
         .buttonss {
             float: bottom;
         }
+        input[type=checkbox] {
+            margin: 4px 0px 0px 4px;
+        }
+
     </style>
+
 </head>
 <body>
 
@@ -73,7 +87,6 @@
     <div class="tabbable boxed parentTabs">
         <ul class="nav nav-tabs" id="outer">
             <li id="databasemanager"><a data-toggle="tab" href="#manageswaggers">Manage Swaggers</a></li>
-            <li class="active"><a data-toggle="tab" href="#dropdownlist">Load Swaggers</a></li>
             <li><a data-toggle="tab" href="#manage">Edit Configuration</a></li>
             <li><a data-toggle="tab" href="#import">Import Config</a></li>
             <li><a data-toggle="tab" href="#output">Output</a></li>
@@ -82,22 +95,18 @@
         <div class="tab-content">
             <div id="manageswaggers" class="tab-pane fade">
             </div>
-            <div id="dropdownlist" class="tab-pane fade in active">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Json Files
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                    </ul>
-                </div>
-            </div>
+
             <div id="manage" class="tab-pane fade">
                 <div class="tabbable">
                     <ul id="services" class="nav nav-tabs">
                         <li id="generate">
                             <div id="buttons">
-                                <button type="button" class="btn btn-outline-secondary" onclick=generate(this)>Generate</button>
+                                <button type="button" style="margin: 5px 5px 5px 5px" class="btn btn-primary" onclick=generate(this)>
+                                    Generate
+                                </button>
                             </div>
                         </li>
+                        <li class = "pull-right" style="margin: 5px 5px 5px 5px"><input class="form-control" id="myInput" type="text" placeholder="Search.."></li>
                     </ul>
                     <div class="tab-content" id="swaggers">
                     </div>
@@ -105,7 +114,8 @@
             </div>
             <div id="import" class="tab-pane fade">
                 <div class="input-group">
-                    <textarea class="form-control custom-control" rows="30" style="resize:none" id="input-field"></textarea>
+                    <textarea class="form-control custom-control" rows="25" style="resize:none"
+                              id="input-field"></textarea>
                     <span class="input-group-addon btn btn-primary" onclick=handleCopyPaste()>Import</span>
                 </div>
             </div>
@@ -121,8 +131,9 @@
     <div class="modal fade" id="InsertOrUpdateForm" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <!-- Modal Header -->
-                <div class="modal-header">
+<!--                <div class="modal-header">
                     <button type="button" class="close"
                             data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
@@ -130,7 +141,7 @@
                     </button>
                     <h4 class="modal-title" id="InsertOrUpdateFormTitle">
                     </h4>
-                </div>
+                </div>-->
 
                 <!-- Modal Body -->
                 <div class="modal-body">
@@ -142,8 +153,14 @@
                     </div>
                     <div class="form-group">
                         <label for="swaggerJson">SwaggerJson</label>
+                        <textarea class="form-control" rows="20"
+                                  id="swaggerJson" placeholder="Swagger Json"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceSwaggerUrl">Swagger Url</label>
                         <input type="text" class="form-control"
-                               id="swaggerJson" placeholder="Swagger Json"/>
+                               id="serviceSwaggerUrl" placeholder="SwaggerUrl"/>
+                        <input id = "urlUpdate" type = "checkbox"/>
                     </div>
                     <div class="form-group">
                         <label for="serviceVersion">Version</label>
@@ -160,7 +177,7 @@
                         Close
                     </button>
                     <button type="button" class="btn btn-primary" onclick="updateService();">
-                        Save changes
+                        Update Swagger
                     </button>
                 </div>
             </div>
