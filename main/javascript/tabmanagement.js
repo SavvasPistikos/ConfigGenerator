@@ -76,28 +76,8 @@ function updateService() {
     };
 
     if (document.getElementById("urlUpdate").checked === true && service.swaggerurl !== '') {
-        $.ajax({
-            'async': false,
-            'global': false,
-            'type': 'GET',
-            'url': service.swaggerurl,
-            'dataType': "text",
-            'success': function (data) {
-                service.content = data;
-            }
-        });
+        service.content = getSwaggerFromUrl(service.swaggerurl).content;
     }
-    $.ajax({
-        'async': false,
-        'global': false,
-        'type': 'PUT',
-        'url': host + basePath + "/swaggers",
-        'data': JSON.stringify(service),
-        'contentType': 'application/json',
-        'success': function () {
-            $('#InsertOrUpdateForm').modal('toggle');
-            $("#databasemanager").trigger('click', [true]);
-        }
-    });
+    updateSwagger(service);
     document.getElementById("urlUpdate").checked = false;
 }

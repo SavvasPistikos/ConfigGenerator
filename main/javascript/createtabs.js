@@ -2,7 +2,7 @@ function importJson(liItem) {
     liItem.innerHTML = "<span class=\"glyphicon glyphicon-ok\"></span>";
     liItem.className = "btn btn-success btn-sm";
     let jliItem = $(liItem);
-    js = JSON.parse(getSwaggerJsonFromDatabase(jliItem.data("id")).content);
+    js = JSON.parse(getSwagger(jliItem.data("id")).content);
     let version = jliItem.data("version").replace(".", "S");
     if (document.getElementById("div" + jliItem.data("service") + version) == null) {
         jsonList[jliItem.data("service")] = js;
@@ -78,26 +78,8 @@ function createTab(service, version, id, internal) {
     return ul;
 }
 
-function handleCopyPaste() {
-    let url = host + basePath + "/yaml";
-    let config = $("#input-field").val();
-    let impJson;
-    $.ajax({
-        'async': false,
-        'global': false,
-        'url': url,
-        'type': 'POST',
-        'contentType': 'application/json',
-        'data': config,
-        'success': function (data) {
-            impJson = data;
-        }
-    });
-    importConfig(impJson);
-}
-
-function importConfig(impJson) {
-    configuration = impJson;
+function importConfig() {
+    configuration = getYaml();
 
     for (a in configuration.apigateway.apis) {
         apiList.apis[a] = configuration.apigateway.apis[a];

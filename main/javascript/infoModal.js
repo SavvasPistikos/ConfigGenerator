@@ -1,6 +1,6 @@
 function generateModal(infoButton) {
     let swaggerid = $(infoButton).data("id");
-    let swaggerDTO = getSwaggerJsonFromDatabase(swaggerid);
+    let swaggerDTO = getSwagger(swaggerid);
     let modalDiv = document.createElement("div");
     modalDiv.setAttribute("class", "modal fade");
     modalDiv.id = "swaggerInfo";

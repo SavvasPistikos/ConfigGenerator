@@ -1,36 +1,3 @@
-function getSwaggerJsonFromDatabase(liService) {
-    let jsontext = null;
-    let url = host + basePath + "/swaggers/" + liService;
-    /*    if (service === "internal") {
-            url = "http://localhost:8080/api/v1.0/api-swagger/internal";
-        }*/
-    $.ajax({
-        'async': false,
-        'global': false,
-        'url': url,
-        'dataType': "json",
-        'success': function (data) {
-            jsontext = data;
-        }
-    });
-    return jsontext;
-}
-
-function getAllServicesFromDatabase() {
-    var services = null;
-
-    $.ajax({
-        'async': false,
-        'global': false,
-        'url': host + basePath + "/swaggers",
-        'dataType': "json",
-        'success': function (data) {
-            services = data;
-        }
-    });
-    return services;
-}
-
 $(document).ready(function () {
     createInternalApisTab();
     $('.dropdown-menu a.test').on("click", function (e) {
@@ -46,47 +13,4 @@ $(document).ready(function () {
         $('#manageswaggers').empty();
         getItemsFromDbAndDraw();
     }
-
 });
-
-function writeToDatabase(internalPath) {
-    $.ajax({
-        'async': false,
-        'global': false,
-        'url': host + basePath + "/internal",
-        'type': 'POST',
-        'contentType': 'application/json',
-        'data': JSON.stringify(internalPath, null, 2)
-    });
-}
-
-function getInternalPaths() {
-    let internalPaths = null;
-
-    $.ajax({
-        'async': false,
-        'global': false,
-        'url': host + basePath + "/internal",
-        'dataType': "json",
-        'success': function (data) {
-            internalPaths = data;
-        }
-    });
-    return internalPaths;
-}
-
-function getInternalPath(id) {
-    let internalPath = null;
-
-    $.ajax({
-        'async': false,
-        'global': false,
-        'url': host + basePath + "/internal/" + id,
-        'type': "GET",
-        'dataType': "json",
-        'success': function (data) {
-            internalPath = data;
-        }
-    });
-    return internalPath;
-}

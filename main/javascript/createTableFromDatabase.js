@@ -9,7 +9,7 @@ function getItemsFromDbAndDraw() {
     container.appendChild(respTable);
 
     table.appendChild(setCols());
-    table.appendChild(setDbResults(getAllServicesFromDatabase()));
+    table.appendChild(setDbResults(getServices()));
     let div = document.getElementById("manageswaggers");
     div.appendChild(container);
 }
@@ -82,32 +82,9 @@ function createInsertRow() {
             'version': $('#verTd').val()
         };
         if (service.content.startsWith("http")) {
-            let url = service.content;
-            $.ajax({
-                'async': false,
-                'global': false,
-                'type': 'GET',
-                'url': url,
-                'dataType': "text",
-                'success': function (data) {
-                    service.swaggerurl = service.content;
-                    service.content = data;
-                }
-            });
+            service = getSwaggerFromUrl(service.content);
         }
-
-        $.ajax({
-            'async': false,
-            'global': false,
-            'type': 'POST',
-            'url': host + basePath + "/swaggers",
-            'data': JSON.stringify(service),
-            'contentType': 'application/json',
-            'success': function (data) {
-                $("#databasemanager").trigger('click', [true]);
-            }
-        });
-
+        saveSwagger(service);
     });
 
     tr.appendChild(checkTd);
@@ -126,17 +103,7 @@ function addCrudButtons(trElement, serviceId) {
     del.innerText = "Delete";
 
     $(del).click(function () {
-        let url = host + basePath + "/swaggers/" + serviceId;
-        $.ajax({
-            'async': false,
-            'global': false,
-            'url': url,
-            'type': 'DELETE',
-            'success': function () {
-                $(this).parent().remove();
-                $("#databasemanager").trigger('click', [true]);
-            }
-        });
+        deleteSwagger(serviceId);
     });
 
     let info = document.createElement("button");
@@ -184,7 +151,7 @@ function setCols() {
 
 function fillupModal(updateButtonElement) {
     let id = $(updateButtonElement).data("id");
-    let service = getSwaggerJsonFromDatabase(id);
+    let service = getSwagger(id);
 
     $('#serviceId').val(id);
     $('#serviceName').val(service.service);

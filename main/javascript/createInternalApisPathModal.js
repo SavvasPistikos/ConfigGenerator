@@ -187,7 +187,7 @@ function addInternalPath() {
         let internalPath = {endpoint: "", method: ""};
         internalPath.endpoint = internalEndpoint;
         internalPath.method = method;
-        writeToDatabase(internalPath);
+        saveInternalPath(internalPath);
     } else {
         let pathFromDb = getInternalPath(id);
         setOptionsUl($(pathEntry).children('ul'), pathFromDb);
@@ -221,7 +221,7 @@ function importInternalPaths(internalEndpoints) {
         $(removeButton).insertBefore(pathEntry.children('ul'));
         internalPathsList.append($(pathEntry));
         setOptionsUl($(pathEntry).children('ul'), internalEndpoints[endpoint]);
-        writeToDatabase(internalEndpoints[endpoint]);
+        saveInternalPath(internalEndpoints[endpoint]);
     }
     let outerCheckbox = internalPathsList.parent().children(':checkbox');
     $(outerCheckbox).data("maxChildren", internalPathsList.children().length);

@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="javascript/backend/internalpathscalls.js"></script>
+    <script src="javascript/backend/swaggercalls.js"></script>
     <script src="javascript/createInternalApisPathModal.js"></script>
     <script src="javascript/createInternalApisTab.js"></script>
     <script src="javascript/globalvariables.js"></script>
@@ -116,7 +118,7 @@
                 <div class="input-group">
                     <textarea class="form-control custom-control" rows="25" style="resize:none"
                               id="input-field"></textarea>
-                    <span class="input-group-addon btn btn-primary" onclick=handleCopyPaste()>Import</span>
+                    <span class="input-group-addon btn btn-primary" onclick=importConfig()>Import</span>
                 </div>
             </div>
             <div id="output" class="tab-pane fade">
