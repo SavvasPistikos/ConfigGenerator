@@ -53,7 +53,7 @@ function writeToDatabase(internalPath) {
     $.ajax({
         'async': false,
         'global': false,
-        'url': "http://localhost:8080/api/v1.0/internal",
+        'url': host + basePath + "/internal",
         'type': 'POST',
         'contentType': 'application/json',
         'data': JSON.stringify(internalPath, null, 2)
@@ -66,7 +66,7 @@ function getInternalPaths() {
     $.ajax({
         'async': false,
         'global': false,
-        'url': "http://localhost:8080/api/v1.0/internal",
+        'url': host + basePath + "/internal",
         'dataType': "json",
         'success': function (data) {
             internalPaths = data;
@@ -81,7 +81,7 @@ function getInternalPath(id) {
     $.ajax({
         'async': false,
         'global': false,
-        'url': "http://localhost:8080/api/v1.0/internal/" + id,
+        'url': host + basePath + "/internal/" + id,
         'type': "GET",
         'dataType': "json",
         'success': function (data) {
