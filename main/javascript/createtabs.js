@@ -80,30 +80,30 @@ function createTab(service, version, id, internal) {
 
 function importConfig() {
     configuration = getYaml();
-
-    for (a in configuration.apigateway.apis) {
-        apiList.apis[a] = configuration.apigateway.apis[a];
+    let apis = configuration.apigateway !== undefined ? configuration.apigateway.apis : configuration.apis;
+    for (a in apis) {
+        apiList.apis[a] = apis;
         if (a === "internalApis") {
-            importInternalPaths(configuration.apigateway.apis[a].paths);
+            importInternalPaths(apis[a].paths);
             continue;
         }
-        let version = (configuration.apigateway.apis[a].version != null) ? configuration.apigateway.apis[a].version : "";
+        let version = (apis[a].version != null) ? apis[a].version : "";
         let serviceCheckbox = document.getElementById(a + version);
         $(serviceCheckbox).trigger("click");
-        document.getElementById("url=" + a).value = configuration.apigateway.apis[a].url;
-        document.getElementById("vers=" + a).value = configuration.apigateway.apis[a].version !== undefined ? configuration.apigateway.apis[a].version : "";
+        document.getElementById("url=" + a).value = apis[a].url;
+        document.getElementById("vers=" + a).value = apis[a].version !== undefined ? apis[a].version : "";
 
-        for (p in configuration.apigateway.apis[a].paths) {
+        for (p in apis[a].paths) {
             let basePath = (jsonList[a].basePath === undefined) ? "" : jsonList[a].basePath;
             basePath = (basePath === "/") ? "" : basePath;
-            let pathString = (configuration.apigateway.apis[a].paths[p].path === undefined) ?
-                configuration.apigateway.apis[a].paths[p].method + " " + basePath + configuration.apigateway.apis[a].paths[p].endpoint
-                : configuration.apigateway.apis[a].paths[p].method + " " + basePath + configuration.apigateway.apis[a].paths[p].path;
+            let pathString = (apis[a].paths[p].path === undefined) ?
+                apis[a].paths[p].method + " " + basePath + apis[a].paths[p].endpoint
+                : apis[a].paths[p].method + " " + basePath + apis[a].paths[p].path;
             pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
             pathString.replace("/api", "");
             let button = $('.btn:contains(' + pathString + ')');
             let checkbox = $(button).siblings().get(0);
-            setOptionsUl($(button).siblings().get(1), configuration.apigateway.apis[a].paths[p]);
+            setOptionsUl($(button).siblings().get(1), apis[a].paths[p]);
             $(checkbox).trigger("click", checkbox);
         }
     }
