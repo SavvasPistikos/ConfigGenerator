@@ -70,8 +70,8 @@ function getServices() {
     return services;
 }
 
-function getSwaggerFromUrl(url) {
-    let service = null;
+function getSwaggerFromUrl(serviceName,url) {
+    let service = {service: serviceName};
 
     $.ajax({
         'async': false,
@@ -80,8 +80,10 @@ function getSwaggerFromUrl(url) {
         'url': url,
         'dataType': "text",
         'success': function (data) {
-            service.swaggerurl = service.content;
+            let swagger = JSON.parse(data);
+            service.swaggerurl = url;
             service.content = data;
+            service.version = swagger.info.version;
         }
     });
     return service;

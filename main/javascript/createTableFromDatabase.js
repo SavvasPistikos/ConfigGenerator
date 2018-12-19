@@ -82,7 +82,7 @@ function createInsertRow() {
             'version': $('#verTd').val()
         };
         if (service.content.startsWith("http")) {
-            service = getSwaggerFromUrl(service.content);
+            service = getSwaggerFromUrl(service.service, service.content);
         }
         saveSwagger(service);
     });

@@ -76,7 +76,7 @@ function updateService() {
     };
 
     if (document.getElementById("urlUpdate").checked === true && service.swaggerurl !== '') {
-        service.content = getSwaggerFromUrl(service.swaggerurl).content;
+        service.content = getSwaggerFromUrl(service.service, service.swaggerurl).content;
     }
     updateSwagger(service);
     document.getElementById("urlUpdate").checked = false;
