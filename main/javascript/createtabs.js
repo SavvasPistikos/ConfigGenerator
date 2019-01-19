@@ -360,7 +360,7 @@ function addEventListeners() {
                 writeToButton(this, "headers", "");
                 writeToButton(this, "queryparams", "");
             } else {
-                writeToButton(this, attributeName, this.checked);
+                writeToButton(this, attributeName, requiresInput(attributeName) ? "" : this.checked);
             }
         } else if (this.checked === true) {
             let parentOfInput = $(this).parent();
@@ -379,4 +379,14 @@ function addEventListeners() {
             }
         }
     });
+}
+
+function requiresInput(attributeName) {
+
+    if(attributeName === "endpoint" || attributeName === "trnsTypeId") {
+        return true;
+    } else {
+        return false;
+    }
+
 }
