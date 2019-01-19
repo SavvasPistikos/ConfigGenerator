@@ -355,10 +355,10 @@ function addEventListeners() {
             if (attributeName.toLowerCase() === "tags") {
                 let pathCheckbox = findOuterCheckbox($(this));
                 $(this).next().val($(pathCheckbox).data("tags"));
-                writeToButton($(this).next(), "");
+                writeToButton(this,attributeName, $(pathCheckbox).data("tags").split(",")[0]);
             } else if (attributeName.includes("headers") || attributeName.includes("queryparams")) {
                 writeToButton(this, "headers", "");
-                writeToButton(this, "queryparams", "");
+                writeToButton(this, "queryParams", "");
             } else {
                 writeToButton(this, attributeName, requiresInput(attributeName) ? "" : this.checked);
             }

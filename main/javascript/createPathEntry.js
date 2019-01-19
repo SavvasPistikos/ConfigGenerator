@@ -101,7 +101,6 @@ function createOptionsUL(id, checkbox, internal) {
     tagsIn.className = "configInputText";
     tagsIn.id = "tags=" + "";
     tagsIn.setAttribute("type", "text");
-    tagsIn.setAttribute("onfocusout", "writeToButton(this)");
 
     if (internal === false) {
         eval("tempPath" + " = " + "jsonList[\"" + checkbox.data("service") + "\"].paths[\"" + checkbox.data("path") + "\"]."
