@@ -62,7 +62,7 @@ function createTab(service, version, id, internal) {
     $(allCheckbox).data("internal", internal);
 
     if (internal === false) {
-        let url = createInputForm("Url", "url=" + service,);
+        let url = createInputForm("Url", "url=" + service, "http://");
         let versionInput = createInputForm("Version", "vers=" + service, initialVersion);
 
         let formDiv = document.createElement("form");
