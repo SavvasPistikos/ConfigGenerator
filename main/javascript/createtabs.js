@@ -101,7 +101,12 @@ function importConfig() {
                 : apis[a].paths[p].method + " " + basePath + apis[a].paths[p].path;
             pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
             pathString.replace("/api", "");
-            let button = $('.btn:contains(' + pathString + ')');
+            //TODO something happens in the Authentication Tag
+            let button = $('.btn:contains(' + pathString + ')')
+                .filter(function(){
+                    if(this.innerText === pathString)
+                        return this;
+                });
             let checkbox = $(button).siblings().get(0);
             setOptionsUl($(button).siblings().get(1), apis[a].paths[p]);
             $(checkbox).trigger("click", checkbox);
