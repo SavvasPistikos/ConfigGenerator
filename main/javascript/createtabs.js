@@ -34,7 +34,7 @@ function importJson(liItem) {
 
 function createTab(service, version, id, internal) {
     let servicesul = $("#services");
-    let tabName = service + version;
+    let tabName = service;
     let li;
     //TODO do something smarter naaab,
     let initialVersion = version;
@@ -94,19 +94,25 @@ function importConfig() {
         document.getElementById("vers=" + a).value = apis[a].version !== undefined ? apis[a].version : "";
 
         for (p in apis[a].paths) {
-            let basePath = (jsonList[a].basePath === undefined) ? "" : jsonList[a].basePath;
-            basePath = (basePath === "/") ? "" : basePath;
-            let pathString = (apis[a].paths[p].path === undefined) ?
-                apis[a].paths[p].method + " " + basePath + apis[a].paths[p].endpoint
-                : apis[a].paths[p].method + " " + basePath + apis[a].paths[p].path;
-            pathString = pathString.includes(basePath) ? pathString.replace(basePath, "") : pathString;
-            pathString.replace("/api", "");
+            let pathString =
+                (apis[a].paths[p].path === undefined)
+                    ? apis[a].paths[p].method + " " + apis[a].paths[p].endpoint
+                    : apis[a].paths[p].method + " " + apis[a].paths[p].path;
+
+
             //TODO something happens in the Authentication Tag
             let button = $('.btn:contains(' + pathString + ')')
                 .filter(function(){
                     if(this.innerText === pathString)
                         return this;
                 });
+            if(button.length === 0){
+                button = $('.btn:contains(' + pathString.replace(basePath, "") + ')')
+                    .filter(function(){
+                        if(this.innerText === pathString.replace(basePath, ""))
+                            return this;
+                    });
+            }
             let checkbox = $(button).siblings().get(0);
             setOptionsUl($(button).siblings().get(1), apis[a].paths[p]);
             $(checkbox).trigger("click", checkbox);
@@ -202,6 +208,7 @@ function groupByTags(jsonFileName) {
 }
 
 function groupByTagsDraw(groupedPaths, ul, di, service, version, allCheckBoxElem) {
+    $(allCheckBoxElem).data("childCheckboxes", 0);
     for (let tag in groupedPaths) {
         let elementsid = trimId(tag);
         elementsid = (elementsid === "default") ? service + elementsid : elementsid;
@@ -238,7 +245,7 @@ function groupByTagsDraw(groupedPaths, ul, di, service, version, allCheckBoxElem
             ul.append(tagli);
         }
         $(tagCheckbox).data("maxChildren", tagCheckbox.data("childCheckboxes"));
-        $(allCheckBoxElem).data("childCheckboxes", $(allCheckBoxElem).data("childCheckboxes") + 1);
+        $(allCheckBoxElem).data("childCheckboxes",  $(allCheckBoxElem).data("childCheckboxes") + 1);
     }
     let tabpanediv = document.createElement("div");
     tabpanediv.setAttribute("class", "tab-pane fade active in");

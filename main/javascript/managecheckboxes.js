@@ -104,7 +104,7 @@ function triggerAllTagsToList(tagCheckBoxElement) {
     /*
     Set it to false because cannot think of some thing better for the manageParentCheckboxes
      */
-    tagCheckBoxElement.checked = false;
+    //tagCheckBoxElement.checked = false; //TODO further check. Seems to be working.
     jQuery.each($(ul).children(), function (i, child) {
         let fchild = $(child).children().get(0);
         if (fchild.checked === false || tagCheckBoxElement.checked === false)
@@ -115,7 +115,11 @@ function triggerAllTagsToList(tagCheckBoxElement) {
 function manageParentCheckboxes(parentCheckbox) {
     let grandParentCheckBox = $(parentCheckbox).parent().siblings().get(0);
     let previousState = parentCheckbox.checked;
-    parentCheckbox.checked = $(parentCheckbox).data("childCheckboxes") === 0 && $(parentCheckbox).data("maxChildren") > 0;
+    if(grandParentCheckBox === undefined){
+        $(parentCheckbox).children(":checkbox").attr("checked", $(parentCheckbox).data("childCheckboxes") === 0 && $(parentCheckbox).data("maxChildren") > 0);
+    } else {
+        parentCheckbox.checked = $(parentCheckbox).data("childCheckboxes") === 0 && $(parentCheckbox).data("maxChildren") > 0;
+    }
 
     if (grandParentCheckBox !== undefined) {
         if (parentCheckbox.checked === true && $(parentCheckbox).data("childCheckboxes") === 0) {

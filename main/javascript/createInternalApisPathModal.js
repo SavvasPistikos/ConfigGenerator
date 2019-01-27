@@ -4,7 +4,7 @@ function generateInterApiPathModal() {
         let pathInput = document.getElementById("internalSwaggerPath");
         pathInput.value = "";
         let methodInput = document.getElementById("method");
-        methodInput.value = "GET";
+        methodInput.value = "---";
         return;
     }
 
@@ -76,9 +76,11 @@ function createBody() {
         let option = ($('#internalP option').filter(function () {
             return this.value === p ? $(this) : null;
         }));
-        let method = option.data("method");
-        $("#method").val(method !== undefined ? method : "GET");
-        $(this).data("id", option.data("id"));
+        if(option.length !== 0) {
+            let method = option.data("method");
+            $("#method").val(method !== undefined ? method : "GET");
+            $(this).data("id", option.data("id"));
+        }
     });
 
     divFormGroup.appendChild(label);
@@ -96,6 +98,8 @@ function createBody() {
     select.className = "form-control";
     select.id = "method";
 
+    let defaultOption = document.createElement("option");
+    defaultOption.innerText = "---";
     let getOption = document.createElement("option");
     getOption.innerText = "GET";
     let postOption = document.createElement("option");
@@ -105,6 +109,7 @@ function createBody() {
     let deleteOption = document.createElement("option");
     deleteOption.innerText = "DELETE";
 
+    select.appendChild(defaultOption);
     select.appendChild(getOption);
     select.appendChild(postOption);
     select.appendChild(putOption);
@@ -126,7 +131,7 @@ function createDataList() {
 
     for (let i in internalPaths) {
         let option = document.createElement("option");
-        option.value = internalPaths[i].endpoint;
+        option.value = internalPaths[i].method + " " + internalPaths[i].endpoint;
         $(option).data("method", internalPaths[i].method);
         $(option).data("id", internalPaths[i].id);
         datalist.appendChild(option);
@@ -160,37 +165,39 @@ function addInternalPath() {
 
     let currentPath = $('#internalSwaggerPath');
     let id = currentPath.data("id");
-    let internalEndpoint = currentPath.val();
     let method = document.getElementById("method").value;
-    document.getElementById("method").value = "GET";
-    let internalPathsList = $("#internalPathsList");
+    if(method !== "---") {
+        let internalEndpoint = currentPath.val().replace(method + " ", "");
+        document.getElementById("method").value = "GET";
+        let internalPathsList = $("#internalPathsList");
 
-    let pathEntry = getPathEntry(internalEndpoint, method, "internalApis", true);
+        let pathEntry = getPathEntry(internalEndpoint, method, "internalApis", true);
 
-    let removeButton = document.createElement("button");
-    removeButton.className = "btn btn-danger btn-sm pull-right";
-    removeButton.innerHTML = "<span class=\"glyphicon glyphicon-remove\"></span>";
-    removeButton.setAttribute("onclick", "removeInternalPath(this);");
-    $(removeButton).insertBefore(pathEntry.children('ul'));
+        let removeButton = document.createElement("button");
+        removeButton.className = "btn btn-danger btn-sm pull-right";
+        removeButton.innerHTML = "<span class=\"glyphicon glyphicon-remove\"></span>";
+        removeButton.setAttribute("onclick", "removeInternalPath(this);");
+        $(removeButton).insertBefore(pathEntry.children('ul'));
 
-    internalPathsList.append($(pathEntry));
-    internalPathsList.show();
+        internalPathsList.append($(pathEntry));
+        internalPathsList.show();
 
-    let outerCheckbox = $(internalPathsList.parent().children(':checkbox'));
-    outerCheckbox.data("maxChildren", outerCheckbox.data("maxChildren") + 1);
-    outerCheckbox.data("childCheckboxes", outerCheckbox.data("childCheckboxes") + 1);
+        let outerCheckbox = $(internalPathsList.parent().children(':checkbox'));
+        outerCheckbox.data("maxChildren", outerCheckbox.data("maxChildren") + 1);
+        outerCheckbox.data("childCheckboxes", outerCheckbox.data("childCheckboxes") + 1);
 
-    $('#addInternalPath').modal('toggle');
-    addEventListeners();
+        $('#addInternalPath').modal('toggle');
+        addEventListeners();
 
-    if (id === undefined) {
-        let internalPath = {endpoint: "", method: ""};
-        internalPath.endpoint = internalEndpoint;
-        internalPath.method = method;
-        saveInternalPath(internalPath);
-    } else {
-        let pathFromDb = getInternalPath(id);
-        setOptionsUl($(pathEntry).children('ul'), pathFromDb);
+        if (id === undefined) {
+            let internalPath = {endpoint: "", method: ""};
+            internalPath.endpoint = internalEndpoint;
+            internalPath.method = method;
+            saveInternalPath(internalPath);
+        } else {
+            let pathFromDb = getInternalPath(id);
+            setOptionsUl($(pathEntry).children('ul'), pathFromDb);
+        }
     }
 }
 

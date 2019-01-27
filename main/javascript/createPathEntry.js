@@ -59,6 +59,8 @@ function generateCheckbox(path, method, service) {
 
 function createOptionsUL(id, checkbox, internal) {
 
+    //Authorize Option
+
     let optionsUl = document.createElement("ul");
     optionsUl.id = id;
     let authorizeLi = document.createElement("li");
@@ -70,6 +72,8 @@ function createOptionsUL(id, checkbox, internal) {
     authorizeLi.appendChild(authorizeCheckbox);
     authorizeLi.appendChild(authorizeTextNode);
 
+    //Display option
+
     let displayLi = document.createElement("li");
     let displayCheckBox = createCheckBox("", "", "");
     displayCheckBox.className = "configInputCheckbox";
@@ -78,6 +82,8 @@ function createOptionsUL(id, checkbox, internal) {
     let displayTextNode = document.createTextNode("display");
     displayLi.appendChild(displayCheckBox);
     displayLi.appendChild(displayTextNode);
+
+    //Endpoiint Option
 
     let endpointLi = document.createElement("li");
     let endpointCheckBox = createCheckBox("displayInputText(this);");
@@ -91,6 +97,8 @@ function createOptionsUL(id, checkbox, internal) {
     endpointIn.value = "";
     endpointIn.style.display = "none";
     endpointLi.appendChild(endpointIn);
+
+    //Tags Option
 
     let tagsLi = document.createElement("li");
     let tagsCheckBox = createCheckBox("displayInputText(this);");
@@ -113,6 +121,8 @@ function createOptionsUL(id, checkbox, internal) {
     tagsIn.style.display = "none";
     tagsLi.appendChild(tagsIn);
 
+    //TrnsTypeId Option
+
     let trnsTypeIdLi = document.createElement("li");
     let trnsTypeIdCheckBox = createCheckBox("displayInputText(this);");
     trnsTypeIdCheckBox.className = "configInputCheckbox";
@@ -126,6 +136,7 @@ function createOptionsUL(id, checkbox, internal) {
     trnsTypeIdIn.style.display = "none";
     trnsTypeIdLi.appendChild(trnsTypeIdIn);
 
+    //Persist Option
     let persistLi = document.createElement("li");
     let persistCheckBox = createCheckBox("displayInputText(this);");
     persistCheckBox.className = "configInputCheckbox";
@@ -158,12 +169,20 @@ function createOptionsUL(id, checkbox, internal) {
     $(persistInputUl).hide();
     persistLi.appendChild(persistInputUl);
 
+/*
+    let controlLi = document.createElement("li");
+    let controlCheckBox = createCheckBox("displayInputText(this);");
+    controlCheckBox.className = "configInputCheckbox";
+    controlLi.appendChild(controlCheckBox);
+    controlLi.appendChild(document.createTextNode("\t\t control"));*/
+
     optionsUl.appendChild(authorizeLi);
     optionsUl.appendChild(displayLi);
     optionsUl.appendChild(endpointLi);
     optionsUl.appendChild(trnsTypeIdLi);
     optionsUl.appendChild(tagsLi);
     optionsUl.appendChild(persistLi);
+    //optionsUl.appendChild(controlLi);
 
     optionsUl.setAttribute("class", "panel-collapse collapse");
 
