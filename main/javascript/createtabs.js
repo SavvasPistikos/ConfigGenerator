@@ -87,7 +87,7 @@ function importConfig() {
             importInternalPaths(apis[a].paths);
             continue;
         }
-        let version = (apis[a].version != null) ? apis[a].version : "";
+        let version = (apis[a].version != null) ? apis[a].version : "v1.0";
         let serviceCheckbox = document.getElementById(a + version);
         $(serviceCheckbox).trigger("click");
         document.getElementById("url=" + a).value = apis[a].url;

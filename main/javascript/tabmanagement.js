@@ -5,6 +5,7 @@ function closeTab(closeTabButton) {
     var tabContentId = $(checkbox).parent().siblings().get(0).innerText;
     checkbox.innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>";
     checkbox.className = "btn btn-secondary btn-sm";
+    $(document.getElementById("div" + $(checkbox).data("service") + $(checkbox).data("version").replace(".","S"))).remove();
     //$('#' + $(closeTabButton).parent().parent().data("checkboxId")).prop('checked', false);
     let tabLi = $(closeTabButton).parent().parent();
     let previousTab = $(tabLi).prev().children('a');
