@@ -1,5 +1,3 @@
-Application to refresh my skills with UI concepts including **JavaScript**, **CSS**.
-
 For this Project **JavaScript**, **jQuery** and **BootStrap** were used.
 
 Web application for combining many swaggers and producing and yaml file for a specific spring application.
